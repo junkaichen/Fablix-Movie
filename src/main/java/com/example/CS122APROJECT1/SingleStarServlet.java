@@ -22,7 +22,7 @@ public class SingleStarServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
     // Create a dataSource which registered in web.xml
-    @Resource(name = "jdbc/moviedbexample")
+    @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
 
     /**
@@ -63,7 +63,7 @@ public class SingleStarServlet extends HttpServlet {
             while (rs.next()) {
 
                 String starId = rs.getString("starId");
-                String starName = rs.getString("name");
+                String starName = rs.getString("starname");
                 String starDob = rs.getString("birthYear");
 
                 String movieId = rs.getString("movieId");
