@@ -50,14 +50,10 @@ function handleResult(resultData) {
 
     console.log("handleResult: populating movie table from resultData");
 
-    // Populate the star table
-    // Find the empty table body by id "movie_table_body"
     let starTableBodyElement = jQuery("#star_table_body");
 
-    // Concatenate the html tags with resultData jsonObject to create table rows
-    // Iterate through resultData, no more than 10 entries
     for (let i = 0; i < resultData.length; i++) {
-        console.log(resultData[i]);
+        console.log(resultData);
         let rowHTML = "";
         // Concatenate the html tags with resultData jsonObject
         rowHTML += "<tr>";
