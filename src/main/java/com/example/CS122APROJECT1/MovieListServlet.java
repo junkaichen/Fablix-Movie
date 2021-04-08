@@ -84,6 +84,7 @@ public class MovieListServlet extends HttpServlet{
                     jsonObject.addProperty("movie_nameOfStars", movie_nameOfStars);
                     jsonObject.addProperty("movie_rating", movie_rating);
                     jsonArray.add(jsonObject);
+                    movie_id = movie_id2;
                     movie_title = movie_title2;
                     movie_year = movie_year2;
                     movie_director = movie_director2;
