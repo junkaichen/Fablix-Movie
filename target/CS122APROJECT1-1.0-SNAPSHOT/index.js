@@ -18,7 +18,7 @@ function handleMovieListResult(resultData) {
 
     // Populate the star table
     // Find the empty table body by id "star_table_body"
-    let starTableBodyElement = jQuery("#movie_list_table_body");
+    let movieListTableElement = jQuery("#movie_list_table_body");
 
     // Iterate through resultData, no more than 10 entries
     for (let i = 0; i < Math.min(20, resultData.length); i++) {
@@ -38,9 +38,9 @@ function handleMovieListResult(resultData) {
         rowHTML += "<th>" + resultData[i]["movie_nameOfGenres"] + "</th>";
         // add Stars and hrefs
         rowHTML += "<th>";
-        for (let x = 0; x < Math.min(3, resultData[i]['star_ids'].length); x++) {
-            console.log(resultData[i]);
-            console.log(i);
+
+        for (let x = 0; x < Math.min(3, resultData[i]['movie_nameOfStars'].length); x++) {
+            console.log(resultData[i]['movie_nameOfStars'])
             if(x + 1 == Math.min(3, resultData[i]['movie_nameOfStars'].length )){
                 rowHTML += '<a href="single-star.html?id=' + resultData[i]['star_ids'][x] + '">'
                     + resultData[i]['movie_nameOfStars'][x]  +
@@ -59,7 +59,7 @@ function handleMovieListResult(resultData) {
         rowHTML += "</tr>";
 
         // Append the row created to the table body, which will refresh the page
-        starTableBodyElement.append(rowHTML);
+        movieListTableElement.append(rowHTML);
     }
 }
 

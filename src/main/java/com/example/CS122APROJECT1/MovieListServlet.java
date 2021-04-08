@@ -2,7 +2,7 @@ package com.example.CS122APROJECT1;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
+import com.google.gson.Gson;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -18,7 +18,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-@WebServlet(name = "StarsServlet", urlPatterns = "/api/movielist")
+@WebServlet(name = "MovieListServlet", urlPatterns = "/api/movielist")
 public class MovieListServlet extends HttpServlet{
     private static final long serialVersionUID = 1L;
 
@@ -62,13 +62,11 @@ public class MovieListServlet extends HttpServlet{
             String movie_director = rs.getString("director");
             Double movie_rating = rs.getDouble("rating");
             String movie_nameOfGenres = rs.getString("name");
-
+            //String movie_nameOfStars = rs.getString("starname");
             // Create a Json Array for names and ids
-            ArrayList<String> movie_nameOfStars = new ArrayList<>();
             ArrayList<String> starIdList = new ArrayList<>();
             starIdList.add(rs.getString("starId"));
-            movie_nameOfStars.add(rs.getString("starname"));
-            rs.next();
+            ArrayList<String> movie_nameOfStars = new ArrayList<>();
             do {
                 String movie_id2 = rs.getString("id");
                 String movie_title2 = rs.getString("title");
@@ -78,31 +76,21 @@ public class MovieListServlet extends HttpServlet{
                 String movie_nameOfGenres2 = rs.getString("name");
                 String movie_nameOfStars2 = rs.getString("starname");
                 String star_id2 = rs.getString("starId");
-                String star_name2 = rs.getString("starname");
 
                 // if movie title isn't the same then add curJson obj and start the next one
                 if(!movie_title.equals(movie_title2))
                 {
                     JsonObject jsonObject = new JsonObject();
-                    JsonArray movie_nameOfStarsJ = new JsonArray();
-                    JsonArray star_ids = new JsonArray();
-                    for(int i = 0; i < movie_nameOfStars.size(); i++)
-                    {
-                        movie_nameOfStarsJ.add(movie_nameOfStars.get(i));
-                        star_ids.add(starIdList.get(i));
-                    }
-                    jsonObject.add("movie_nameOfStars",movie_nameOfStarsJ);
+                    JsonArray star_ids = new Gson().toJsonTree(starIdList).getAsJsonArray();
+                    JsonArray star_names = new Gson().toJsonTree(movie_nameOfStars).getAsJsonArray();
+                    jsonObject.add("movie_nameOfStars",star_names);
                     jsonObject.add("star_ids",star_ids);
                     jsonObject.addProperty("movie_id", movie_id);
                     jsonObject.addProperty("movie_title", movie_title);
                     jsonObject.addProperty("movie_year", movie_year);
                     jsonObject.addProperty("movie_director", movie_director);
                     jsonObject.addProperty("movie_nameOfGenres", movie_nameOfGenres);
-//                    jsonObject.addProperty("movie_nameOfStars",movie_nameOfStars);
                     jsonObject.addProperty("movie_rating", movie_rating);
-//                    jsonObject.add("star_names", starNameArray);
-//                    jsonObject.add("star_ids",starIdArray);
-
                     jsonArray.add(jsonObject);
                     movie_id = movie_id2;
                     movie_title = movie_title2;
@@ -112,15 +100,10 @@ public class MovieListServlet extends HttpServlet{
                     movie_nameOfGenres = movie_nameOfGenres2;
                     countGenres = 0;
                     countStars = 0;
-                    while(starIdList.size() != 0)
-                    {
-                        starIdList.remove(0);
-                        movie_nameOfStars.remove(0);
-                    }
                     starIdList.clear();
+                    starIdList.add(star_id2);
                     movie_nameOfStars.clear();
                     movie_nameOfStars.add(movie_nameOfStars2);
-                    starIdList.add(star_id2);
 
                 }
                 // Adding info about same movie
@@ -129,12 +112,12 @@ public class MovieListServlet extends HttpServlet{
                     movie_year = movie_year2;
                     movie_director = movie_director2;
                     movie_rating = movie_rating2;
-                    starIdList.add(star_id2);
+
 
                     if (countStars < 2)
                     {
-                        movie_nameOfStars.add(star_name2);
-//                        movie_nameOfStars = movie_nameOfStars + ", " + movie_nameOfStars2;
+                        starIdList.add(star_id2);
+                        movie_nameOfStars.add(movie_nameOfStars2);
                         countStars++;
                     }
                     if(countGenres < 2 && !movie_nameOfGenres.contains(movie_nameOfGenres2)){

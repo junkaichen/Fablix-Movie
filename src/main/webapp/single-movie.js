@@ -53,19 +53,33 @@ function handleResult(resultData) {
 
     // Populate the star table
     // Find the empty table body by id "movie_table_body"
-    let movieTableBodyElement = jQuery("#single_movie_table_body");
-
+    let singleMovieElement = jQuery("#single_movie_table_body");
     // Concatenate the html tags with resultData jsonObject to create table rows
-    for (let i = 0; i < Math.min(10, resultData.length); i++) {
-        let rowHTML = "";
-        rowHTML += "<tr>";
-        rowHTML += "<th>" + resultData[i]["movie_nameOfGenres"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["movie_nameOfStars"] + "</th>";
-        rowHTML += "</tr>";
+    let rowHTML = "";
+    console.log(resultData);
+    rowHTML += "<tr>";
+    rowHTML += "<th>" + resultData[0]["movie_nameOfGenres"] + "</th>";
+    rowHTML += "<th>";
+    for (let x = 0; x <resultData[0]['movie_nameOfStars'].length; x++) {
 
-        // Append the row created to the table body, which will refresh the page
-        movieTableBodyElement.append(rowHTML);
+        if(x + 1 === resultData[0]['movie_nameOfStars'].length){
+            rowHTML += '<a href="single-star.html?id=' + resultData[0]['star_ids'][x] + '">'
+                + resultData[0]['movie_nameOfStars'][x]  +
+                '</a>';
+
+        }
+        else
+        {
+            rowHTML += '<a href="single-star.html?id=' + resultData[0]['star_ids'][x] + '">'
+                + resultData[0]['movie_nameOfStars'][x] +
+                '</a>' + ", " ;
+        }
     }
+    rowHTML += "</th>";
+    rowHTML += "</tr>";
+
+    // Append the row created to the table body, which will refresh the page
+    singleMovieElement.append(rowHTML);
 }
 
 /**

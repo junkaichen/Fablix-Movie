@@ -44,7 +44,10 @@ public class SingleMovieServlet extends HttpServlet{
             Connection dbcon = dataSource.getConnection();
 
             // Construct a query with parameter represented by "?"
-            String query = "SELECT  * from movies M, genres_in_movies GM, genres G, stars_in_movies SM, stars S, ratings R WHERE M.id = GM.movieId AND GM.genreId = G.id AND M.id = SM.movieId AND SM.starId = S.id AND M.id = R.movieId AND M.id = ?";
+            String query = "SELECT  * " +
+                    "from movies M, genres_in_movies GM, genres G, stars_in_movies SM, stars S, ratings R " +
+                    "WHERE M.id = GM.movieId AND GM.genreId = G.id AND M.id = SM.movieId AND SM.starId = S.id AND " +
+                    "M.id = R.movieId AND M.id = ?";
 
             // Declare our statement
             PreparedStatement statement = dbcon.prepareStatement(query);
@@ -69,14 +72,15 @@ public class SingleMovieServlet extends HttpServlet{
             jsonObject.addProperty("movie_year", movie_year);
             jsonObject.addProperty("movie_director", movie_director);
             jsonObject.addProperty("movie_rating", movie_rating);
-
-
             JsonArray genres_array = new JsonArray();
             JsonArray stars_array = new JsonArray();
+            JsonArray star_ids = new JsonArray();
             String movie_nameOfGenres = rs.getString("name");
             String movie_nameOfStars = rs.getString("starname");
             genres_array.add(movie_nameOfGenres);
             stars_array.add(movie_nameOfStars);
+            star_ids.add(rs.getString("starId"));
+
             while(rs.next())
             {
                 movie_nameOfGenres = rs.getString("name");
@@ -106,11 +110,14 @@ public class SingleMovieServlet extends HttpServlet{
                 if(exists2 == false)
                 {
                     stars_array.add(movie_nameOfStars);
+                    star_ids.add(rs.getString("starId"));
                 }
 
             }
+            jsonObject.add("star_ids",star_ids);
             jsonObject.add("movie_nameOfGenres", genres_array);
             jsonObject.add("movie_nameOfStars", stars_array);
+
 
 
             jsonArray.add(jsonObject);
