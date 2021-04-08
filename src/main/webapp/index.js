@@ -26,9 +26,9 @@ function handleMovieListResult(resultData) {
         // Concatenate the html tags with resultData jsonObject
         let rowHTML = "";
         rowHTML += "<tr>";
+        // Add a link to single-star.html with id passed with GET url parameter
         rowHTML +=
             "<th>" +
-            // Add a link to single-star.html with id passed with GET url parameter
             '<a href="single-movie.html?id=' + resultData[i]['movie_id'] + '">'
             + resultData[i]["movie_title"] +
             '</a>' +
@@ -36,7 +36,25 @@ function handleMovieListResult(resultData) {
         rowHTML += "<th>" + resultData[i]["movie_year"] + "</th>";
         rowHTML += "<th>" + resultData[i]["movie_director"] + "</th>";
         rowHTML += "<th>" + resultData[i]["movie_nameOfGenres"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["movie_nameOfStars"] + "</th>";
+        // add Stars and hrefs
+        rowHTML += "<th>";
+        for (let x = 0; x < Math.min(3, resultData[i]['star_ids'].length); x++) {
+            console.log(resultData[i]);
+            console.log(i);
+            if(x + 1 == Math.min(3, resultData[i]['movie_nameOfStars'].length )){
+                rowHTML += '<a href="single-star.html?id=' + resultData[i]['star_ids'][x] + '">'
+                    + resultData[i]['movie_nameOfStars'][x]  +
+                    '</a>';
+
+            }
+            else
+            {
+                rowHTML += '<a href="single-star.html?id=' + resultData[i]['star_ids'][x] + '">'
+                    + resultData[i]['movie_nameOfStars'][x] +
+                    '</a>' + ", " ;
+            }
+        }
+        rowHTML += "</th>";
         rowHTML += "<th>" + resultData[i]["movie_rating"] + "</th>";
         rowHTML += "</tr>";
 

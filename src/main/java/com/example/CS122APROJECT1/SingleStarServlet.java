@@ -45,7 +45,8 @@ public class SingleStarServlet extends HttpServlet {
             Connection dbcon = dataSource.getConnection();
 
             // Construct a query with parameter represented by "?"
-            String query = "SELECT * from stars as s, stars_in_movies as sim, movies as m where m.id = sim.movieId and sim.starId = s.id and s.id = ?";
+            String query = "SELECT * from stars as s, stars_in_movies as sim, " +
+                    "movies as m where m.id = sim.movieId and sim.starId = s.id and s.id = ?";
 
             // Declare our statement
             PreparedStatement statement = dbcon.prepareStatement(query);
@@ -58,32 +59,34 @@ public class SingleStarServlet extends HttpServlet {
             ResultSet rs = statement.executeQuery();
 
             JsonArray jsonArray = new JsonArray();
-
+            rs.next();
             // Iterate through each row of rs
-            while (rs.next()) {
+            do {
 
                 String starId = rs.getString("starId");
-                String starName = rs.getString("starname");
-                String starDob = rs.getString("birthYear");
+                if(starId.equals(id)) {
+                    String starName = rs.getString("starname");
+                    String starDob = rs.getString("birthYear");
 
-                String movieId = rs.getString("movieId");
-                String movieTitle = rs.getString("title");
-                String movieYear = rs.getString("year");
-                String movieDirector = rs.getString("director");
+                    String movieId = rs.getString("movieId");
+                    String movieTitle = rs.getString("title");
+                    String movieYear = rs.getString("year");
+                    String movieDirector = rs.getString("director");
 
-                // Create a JsonObject based on the data we retrieve from rs
+                    // Create a JsonObject based on the data we retrieve from rs
 
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("star_id", starId);
-                jsonObject.addProperty("star_name", starName);
-                jsonObject.addProperty("star_dob", starDob);
-                jsonObject.addProperty("movie_id", movieId);
-                jsonObject.addProperty("movie_title", movieTitle);
-                jsonObject.addProperty("movie_year", movieYear);
-                jsonObject.addProperty("movie_director", movieDirector);
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("star_id", starId);
+                    jsonObject.addProperty("star_name", starName);
+                    jsonObject.addProperty("star_dob", starDob);
+                    jsonObject.addProperty("movie_id", movieId);
+                    jsonObject.addProperty("movie_title", movieTitle);
+                    jsonObject.addProperty("movie_year", movieYear);
+                    jsonObject.addProperty("movie_director", movieDirector);
 
-                jsonArray.add(jsonObject);
-            }
+                    jsonArray.add(jsonObject);
+                }
+            } while (rs.next());
 
             // write JSON string to output
             out.write(jsonArray.toString());

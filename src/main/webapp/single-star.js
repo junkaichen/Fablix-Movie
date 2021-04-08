@@ -55,10 +55,16 @@ function handleResult(resultData) {
     let movieTableBodyElement = jQuery("#movie_table_body");
 
     // Concatenate the html tags with resultData jsonObject to create table rows
-    for (let i = 0; i < Math.min(10, resultData.length); i++) {
+    // Iterate through resultData, no more than 10 entries
+    for (let i = 0; i < resultData.length; i++) {
+        console.log(i);
         let rowHTML = "";
+        // Concatenate the html tags with resultData jsonObject
         rowHTML += "<tr>";
-        rowHTML += "<th>" + resultData[i]["movie_title"] + "</th>";
+        // Add a link to single-star.html with id passed with GET url parameter
+        rowHTML +=
+            "<th>" + '<a href="single-movie.html?id=' + resultData[i]['movie_id'] +
+            '">' + resultData[i]["movie_title"] + '</a>' + "</th>";
         rowHTML += "<th>" + resultData[i]["movie_year"] + "</th>";
         rowHTML += "<th>" + resultData[i]["movie_director"] + "</th>";
         rowHTML += "</tr>";
