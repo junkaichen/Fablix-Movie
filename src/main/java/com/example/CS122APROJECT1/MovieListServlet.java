@@ -65,8 +65,14 @@ public class MovieListServlet extends HttpServlet{
             //String movie_nameOfStars = rs.getString("starname");
             // Create a Json Array for names and ids
             ArrayList<String> starIdList = new ArrayList<>();
-            starIdList.add(rs.getString("starId"));
             ArrayList<String> movie_nameOfStars = new ArrayList<>();
+//            starIdList.add(rs.getString("starId"));
+            String star_id = rs.getString("starId");
+            String movie_nameOfStars1 = rs.getString("starname");
+
+            movie_nameOfStars.add(movie_nameOfStars1);
+            starIdList.add(star_id);
+            rs.next();
             do {
                 String movie_id2 = rs.getString("id");
                 String movie_title2 = rs.getString("title");
@@ -76,7 +82,8 @@ public class MovieListServlet extends HttpServlet{
                 String movie_nameOfGenres2 = rs.getString("name");
                 String movie_nameOfStars2 = rs.getString("starname");
                 String star_id2 = rs.getString("starId");
-
+                starIdList.add(star_id2);
+                movie_nameOfStars.add(movie_nameOfStars2);
                 // if movie title isn't the same then add curJson obj and start the next one
                 if(!movie_title.equals(movie_title2))
                 {
@@ -101,9 +108,9 @@ public class MovieListServlet extends HttpServlet{
                     countGenres = 0;
                     countStars = 0;
                     starIdList.clear();
-                    starIdList.add(star_id2);
+//                    starIdList.add(star_id);
                     movie_nameOfStars.clear();
-                    movie_nameOfStars.add(movie_nameOfStars2);
+//                    movie_nameOfStars.add(movie_nameOfStars2);
 
                 }
                 // Adding info about same movie
@@ -114,12 +121,6 @@ public class MovieListServlet extends HttpServlet{
                     movie_rating = movie_rating2;
 
 
-                    if (countStars < 2)
-                    {
-                        starIdList.add(star_id2);
-                        movie_nameOfStars.add(movie_nameOfStars2);
-                        countStars++;
-                    }
                     if(countGenres < 2 && !movie_nameOfGenres.contains(movie_nameOfGenres2)){
                         movie_nameOfGenres = movie_nameOfGenres + ", " + movie_nameOfGenres2;
                         countGenres++;
