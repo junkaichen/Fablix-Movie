@@ -58,7 +58,7 @@ public class MovieListServlet extends HttpServlet{
                     "genres_in_movies I, genres G, stars_in_movies S, stars T " +
                     "WHERE M.id = R.movieId AND " +
                     "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId" +
-                    " AND S.starId = T.id ORDER BY rating DESC limit 185";
+                    " AND S.starId = T.id ORDER BY rating DESC limit 100";
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);

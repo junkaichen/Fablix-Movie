@@ -55,7 +55,7 @@ public class SingleMovieServlet extends HttpServlet{
             String query = "SELECT  * " +
                     "from movies M, genres_in_movies GM, genres G, stars_in_movies SM, stars S, ratings R " +
                     "WHERE M.id = GM.movieId AND GM.genreId = G.id AND M.id = SM.movieId AND SM.starId = S.id AND " +
-                    "M.id = R.movieId AND M.id = ?";
+                    "M.id = R.movieId AND M.id = ? limit 100";
 
             // Declare our statement
             PreparedStatement statement = dbcon.prepareStatement(query);
