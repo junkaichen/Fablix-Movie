@@ -2,7 +2,9 @@ package com.example.CS122APROJECT1;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import javax.annotation.Resource;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,9 +22,15 @@ import java.sql.ResultSet;
 public class SingleMovieServlet extends HttpServlet{
     private static final long serialVersionUID = 2L;
 
-    // Create a dataSource which registered in web.xml
-    @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
+
+    public void init(ServletConfig config) {
+        try {
+            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
