@@ -11,8 +11,8 @@ CREATE TABLE movies (
     );
     
 CREATE TABLE stars (
-	id			VARCHAR(10) NOT NULL,
-    starname		VARCHAR(100) NOT NULL,
+    id			VARCHAR(10) NOT NULL,
+    name		VARCHAR(100) NOT NULL,
     birthYear	INTEGER,
     PRIMARY KEY (id)
 );
