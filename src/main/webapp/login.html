@@ -7,20 +7,22 @@
     <style>
         Body {
             font-family: Calibri, Helvetica, sans-serif;
-            background-color: white;
+            background-image: url("https://images.unsplash.com/photo-1542204165-65bf26472b9b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1267&q=80");
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 500px;
+            background-color: #030101;
         }
         button {
-            background-color: #4CAF50;
+            background-color: #AEA5A5;
             width: 100%;
-            color: orange;
+            color: black;
             padding: 15px;
             margin: 10px 0px;
             border: none;
             cursor: pointer;
         }
-        form {
-            border: 3px solid #f1f1f1;
-        }
+
         input[type=text], input[type=password] {
             width: 100%;
             margin: 8px 0;
@@ -38,9 +40,20 @@
             background-color: #D7DBDD ;
         }
 
+        h2{text-align: center;}
+
+        div {
+            height: 200px;
+            width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+
     </style>
 </head>
 <body>
+
 <h2>Login to Fablix</h2>
 <!-- Set the method to POST to avoid showing the username/password in the URL
      The default action is disabled to allow your own implementation. -->
