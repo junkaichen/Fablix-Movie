@@ -37,6 +37,7 @@ function submitLoginForm(formSubmitEvent) {
     formSubmitEvent.preventDefault();
 
     $.ajax(
+        /* this will lead us to LoginServlet */
         "api/login", {
             method: "POST",
             // Serialize the login form to the data sent by POST request
