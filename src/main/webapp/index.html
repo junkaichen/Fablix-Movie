@@ -3,32 +3,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login to Fablix</title>
+    <title>Welcome to Fablix</title>
     <style>
         Body {
             font-family: Calibri, Helvetica, sans-serif;
-            background-image: url("https://images.unsplash.com/photo-1542204165-65bf26472b9b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1267&q=80");
             background-repeat: no-repeat;
             background-size: cover;
-            height: 500px;
-            background-color: #030101;
+
+            background-color: #C9B7B7 ;
         }
         button {
-            background-color: #AEA5A5;
+            background-color: #aea5a5;
             width: 100%;
             color: black;
-            padding: 15px;
-            margin: 10px 0px;
+            padding: 10px;
+            margin: 0px 0px;
             border: none;
             cursor: pointer;
         }
 
-        input[type=text], input[type=password] {
+        input[type=text] {
             width: 100%;
             margin: 8px 0;
-            padding: 12px 20px;
+            padding: 10px 10px;
             display: inline-block;
-            border: 2px #030101;
+            border: 2px  #030101;
             box-sizing: border-box;
         }
         button:hover {
@@ -36,19 +35,46 @@
         }
 
         .container {
-            padding: 25px;
+            padding: 10px;
             background-color: #D7DBDD ;
         }
 
         h2{text-align: center;}
 
         div {
-            height: 200px;
+            height: 320px;
             width: 500px;
+            padding: 20px;
             margin-left: auto;
             margin-right: auto;
         }
 
+        table th, td {
+            padding: 20px;
+            text-align: center;
+        }
+        #search_form {
+
+            display:none;
+
+        }
+        .table {
+            font-size: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            position: center
+        }
+
+        .table > tbody > tr > td {
+            vertical-align: middle;
+        }
+
+        #movie_list_table2 {
+
+            display:none;
+
+        }
 
     </style>
 </head>
@@ -57,25 +83,65 @@
 <h2>Welcome to Fablix</h2>
 <!-- Set the method to POST to avoid showing the username/password in the URL
      The default action is disabled to allow your own implementation. -->
+<button onclick="myFunction()">Click Here to Search!</button>
+
 <form id="search_form" method="get" action="#">
     <div class="container">
-        <label><b>Searching by Title</b></label>
+        <label><b>Search by Title</b></label>
         <label>
-            <input name="movietitle" placeholder="Enter movietitle" type="text">
+            <input name="title" placeholder="Enter movietitle" type="text">
         </label>
 
-        <button type="submit">Search</button>
+        <label><b>Search by Year</b></label>
+        <label>
+            <input name="year" placeholder="Enter Year" type="text">
+        </label>
+
+        <label><b>Search by Director</b></label>
+        <label>
+            <input name="director" placeholder="Enter Director" type="text">
+        </label>
+
+        <label><b>Search by Star</b></label>
+        <label>
+            <input name="star" placeholder="Enter Star" type="text">
+        </label>
+        <button type="submit", onclick="submitform()">Search</button>
     </div>
 </form>
 
 <div id="search_error_message"></div>
 
+
+<table id=movie_list_table2 class="table table-striped" >
+    <!-- Create a table header -->
+    <thead>
+    <tr>
+        <!-- Titles of each column-->
+        <th>Title</th>
+        <th>Year</th>
+        <th>Director</th>
+        <th>Genres</th>
+        <th>Stars</th>
+        <th>Rating</th>
+    </tr>
+    </thead>
+    <!-- Table body is left empty here, will be populated with the data retrieved with index.js -->
+    <!-- Again, id "star_table_body" is useful for jQuery to find this html element -->
+    <tbody id=movie_list_table_body2></tbody>
+</table>
+
 <button onclick="window.location.href='browsing.html'">Browsing</button>
+
 
 <!-- include jQuery-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <!-- include our own JS file -->
 <script src="./index.js"></script>
+
+
 
 </body>
 </html>
