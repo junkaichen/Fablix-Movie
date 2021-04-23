@@ -1,0 +1,104 @@
+<!-- This example is following frontend and backend separation.
+
+    This .html performs two steps:
+    1. Create a html template skeleton, with all the elements defined (some left empty) and named with ids.
+    2. Load index.js to populate the data into empty elements.
+    -->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <title>Browsing Alphabetically</title>
+  <style>
+    Body {
+      font-family: Calibri, Helvetica, sans-serif;
+      background-image: url("https://images.unsplash.com/photo-1542204165-65bf26472b9b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1267&q=80");
+      background-repeat: repeat;
+      background-size: cover;
+      height: auto;
+      background-color: #030101;
+    }
+    button {
+      background-color: #AEA5A5;
+      width: 100%;
+      color: black;
+      padding: 15px;
+      margin: 10px 0px;
+      border: none;
+      cursor: pointer;
+    }
+
+    input[type=text], input[type=password] {
+      width: 100%;
+      margin: 8px 0;
+      padding: 12px 20px;
+      display: inline-block;
+      border: 2px #030101;
+      box-sizing: border-box;
+    }
+    button:hover {
+      opacity: 0.7;
+    }
+
+    h2{text-align: center;}
+
+    ul{
+      column-count: 2;
+    }
+
+    div {
+      height: 200px;
+      width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    table{
+      size: auto;
+
+    }
+
+  </style>
+</head>
+<body>
+<h1 onclick="window.location.href='index.html'">Fabflix</h1>
+<h2>A-Z</h2>
+<ul>
+  <li onclick="window.location.href='movielist.html?starts_with=A'">A</li>
+  <li onclick="window.location.href='movielist.html?starts_with=B'">B</li>
+  <li onclick="window.location.href='movielist.html?starts_with=C'">C</li>
+  <li onclick="window.location.href='movielist.html?starts_with=D'">D</li>
+  <li onclick="window.location.href='movielist.html?starts_with=E'">E</li>
+  <li onclick="window.location.href='movielist.html?starts_with=F'">F</li>
+  <li onclick="window.location.href='movielist.html?starts_with=G'">G</li>
+  <li onclick="window.location.href='movielist.html?starts_with=H'">H</li>
+  <li onclick="window.location.href='movielist.html?starts_with=I'">I</li>
+  <li onclick="window.location.href='movielist.html?starts_with=J'">J</li>
+  <li onclick="window.location.href='movielist.html?starts_with=K'">K</li>
+  <li onclick="window.location.href='movielist.html?starts_with=L'">L</li>
+  <li onclick="window.location.href='movielist.html?starts_with=M'">M</li>
+  <li onclick="window.location.href='movielist.html?starts_with=N'">N</li>
+  <li onclick="window.location.href='movielist.html?starts_with=O'">O</li>
+  <li onclick="window.location.href='movielist.html?starts_with=P'">P</li>
+  <li onclick="window.location.href='movielist.html?starts_with=Q'">Q</li>
+  <li onclick="window.location.href='movielist.html?starts_with=R'">R</li>
+  <li onclick="window.location.href='movielist.html?starts_with=S'">S</li>
+  <li onclick="window.location.href='movielist.html?starts_with=T'">T</li>
+  <li onclick="window.location.href='movielist.html?starts_with=U'">U</li>
+  <li onclick="window.location.href='movielist.html?starts_with=V'">V</li>
+  <li onclick="window.location.href='movielist.html?starts_with=W'">W</li>
+  <li onclick="window.location.href='movielist.html?starts_with=X'">X</li>
+  <li onclick="window.location.href='movielist.html?starts_with=Y'">Y</li>
+  <li onclick="window.location.href='movielist.html?starts_with=Z'">Z</li>
+
+</ul>
+</body>
+</html>
