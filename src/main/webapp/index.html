@@ -84,6 +84,8 @@
 <!-- Set the method to POST to avoid showing the username/password in the URL
      The default action is disabled to allow your own implementation. -->
 <button onclick="myFunction()">Click Here to Search!</button>
+<button onclick="window.location.href='browsing.html'">Browsing</button>
+
 
 <form id="search_form" method="get" action="#">
     <div class="container">
@@ -124,6 +126,7 @@
         <th>Genres</th>
         <th>Stars</th>
         <th>Rating</th>
+        <td><Button data-id='4'>Reserve</Button></td>
     </tr>
     </thead>
     <!-- Table body is left empty here, will be populated with the data retrieved with index.js -->
@@ -131,7 +134,7 @@
     <tbody id=movie_list_table_body2></tbody>
 </table>
 
-<button onclick="window.location.href='browsing.html'">Browsing</button>
+
 
 
 <!-- include jQuery-->

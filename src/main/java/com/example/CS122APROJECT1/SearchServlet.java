@@ -114,6 +114,84 @@ public class SearchServlet extends HttpServlet {
     // Create a dataSource which registered in web.
     private DataSource dataSource;
 
+    public String genresfilter(String allgenres)
+    {
+        String outputGenres = "";
+        int currentposition;
+        while(allgenres.length() != 2)
+        {
+            String subString = "";
+            currentposition = allgenres.indexOf(","); //this finds the first occurrence of "."
+            if (currentposition != 0)
+            {
+                subString= allgenres.substring(0 , currentposition); //this will give abc
+                outputGenres += subString;// returns the movie Avatar 3
+                outputGenres += ", ";
+            }
+            if(currentposition+3 < allgenres.length())
+            {
+                int nextChar = allgenres.indexOf(";");
+                allgenres = allgenres.substring(currentposition + 3, allgenres.length());
+            }
+            else
+            {
+                break;
+            }
+
+        }
+        outputGenres = outputGenres.replace(";", "");
+        return outputGenres;
+    }
+
+    public void starfilter(String input, JsonArray staridArray, JsonArray starnameArray)
+    {
+        int counter = 0;
+        int currentposition;
+        while(counter < 3)
+        {
+            counter++;
+            String starname = null;
+            currentposition = input.indexOf(",");
+            if (currentposition != 0)
+            {
+                starname = input.substring(0 , currentposition);
+                starnameArray.add(starname);
+            }
+            if(currentposition+3 < input.length())
+            {
+                input = input.substring(currentposition + 1, input.length());
+            }
+
+            String starid = null;
+
+
+            currentposition = input.indexOf(";");
+
+            if(currentposition != -1)
+            {
+                if (currentposition != 0)
+                {
+                    starid= input.substring(0 , currentposition);
+                    staridArray.add(starid);
+                }
+                if(currentposition+3 < input.length())
+                {
+                    input = input.substring(currentposition + 1, input.length());
+                }
+                else
+                {
+                    break;
+                }
+            }
+            else
+            {
+                starid= input.substring(0 , input.length());
+                staridArray.add(starid);
+                break;
+            }
+
+        }
+    }
 
     public String handleQuery(ArrayList<String> user_inputs, ArrayList<String> user_inputsTypes)
     {
@@ -122,18 +200,162 @@ public class SearchServlet extends HttpServlet {
         {
             if (user_inputsTypes.get(0).equals("TITLE"))
             {
-                outputQuery = String.format("SELECT * from movies M, ratings R, genres_in_movies I, genres G, stars_in_movies S, " +
-                        "stars T WHERE M.id = R.movieId AND R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId " +
-                        "AND S.starId = T.id AND M.title like '%s'", user_inputs.get(0));
+                outputQuery = "SELECT S.movieId ,M.title, M.year, M.director, R.rating, " +
+                        "GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
+                        " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
+                        "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
+                        "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and M.title like "
+                        + "'%" + user_inputs.get(0) +"%'" + " GROUP BY S.movieId,R.rating ORDER BY rating DESC limit 20;";
             }
             else if (user_inputsTypes.get(0).equals("YEAR"))
             {
 
-                outputQuery = "SELECT * from movies M, ratings R, genres_in_movies I, genres G, stars_in_movies S, " +
-                        "stars T WHERE M.id = R.movieId AND R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId " +
-                        "AND S.starId = T.id AND M.year =" + "2003";
-//                outputQuery += "ORDER BY R.rating  DESC";
+                outputQuery = "SELECT S.movieId ,M.title, M.year, M.director, R.rating, " +
+                        "GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
+                        " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
+                        "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
+                        "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and M.year like "
+                        + user_inputs.get(0) +" GROUP BY S.movieId,R.rating ORDER BY rating DESC limit 20;";
+
             }
+            else if (user_inputsTypes.get(0).equals("DIRECTOR"))
+            {
+
+                outputQuery = "SELECT S.movieId ,M.title, M.year, M.director, R.rating, " +
+                        "GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
+                        " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
+                        "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
+                        "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and M.director like "
+                        + "'%" + user_inputs.get(0) +"%'" + " GROUP BY S.movieId,R.rating ORDER BY rating DESC limit 20;";
+
+            }
+            else if (user_inputsTypes.get(0).equals("STAR"))
+            {
+
+                outputQuery = "SELECT S.movieId ,M.title, M.year, M.director, R.rating, " +
+                        "GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
+                        " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
+                        "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
+                        "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and T.starname like "
+                        + "'%" + user_inputs.get(0) +"%'" + " GROUP BY S.movieId,R.rating ORDER BY rating DESC limit 20;";
+
+            }
+        }
+        else if (user_inputs.size() == 2)
+        {
+            if (user_inputsTypes.get(0).equals("TITLE") && user_inputsTypes.get(1).equals("YEAR"))
+            {
+                outputQuery = "SELECT S.movieId ,M.title, M.year, M.director, R.rating, " +
+                        "GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
+                        " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
+                        "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
+                        "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and M.title like "
+                        + "'%" + user_inputs.get(0) +"%'" + " AND " + "M.year = " + user_inputs.get(1) + " " +
+                        "GROUP BY S.movieId,R.rating ORDER BY rating DESC limit 20;";
+            }
+            else if (user_inputsTypes.get(0).equals("TITLE") && user_inputsTypes.get(1).equals("DIRECTOR"))
+            {
+                outputQuery = "SELECT S.movieId ,M.title, M.year, M.director, R.rating, " +
+                        "GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
+                        " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
+                        "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
+                        "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and M.title like "
+                        + "'%" + user_inputs.get(0) +"%'" + " AND " + "M.director like  " + "'%" + user_inputs.get(1) +"%'" + " " +
+                        "GROUP BY S.movieId,R.rating ORDER BY rating DESC limit 20;";
+            }
+            else if (user_inputsTypes.get(0).equals("TITLE") && user_inputsTypes.get(1).equals("STAR"))
+            {
+                outputQuery = "SELECT S.movieId ,M.title, M.year, M.director, R.rating, " +
+                        "GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
+                        " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
+                        "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
+                        "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and M.title like "
+                        + "'%" + user_inputs.get(0) +"%'" + " AND " + "T.starname like  " + "'%" + user_inputs.get(1) +"%'" + " " +
+                        "GROUP BY S.movieId,R.rating ORDER BY rating DESC limit 20;";
+            }
+            else if (user_inputsTypes.get(0).equals("YEAR") && user_inputsTypes.get(1).equals("DIRECTOR"))
+            {
+                outputQuery = "SELECT S.movieId ,M.title, M.year, M.director, R.rating, " +
+                        "GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
+                        " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
+                        "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
+                        "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and M.year = "
+                        +  user_inputs.get(0)  + " AND " + "M.director like  " + "'%" + user_inputs.get(1) +"%'" + " " +
+                        "GROUP BY S.movieId,R.rating ORDER BY rating DESC limit 20;";
+            }
+            else if (user_inputsTypes.get(0).equals("YEAR") && user_inputsTypes.get(1).equals("STAR"))
+            {
+                outputQuery = "SELECT S.movieId ,M.title, M.year, M.director, R.rating, " +
+                        "GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
+                        " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
+                        "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
+                        "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and M.year = "
+                        +  user_inputs.get(0)  + " AND " + "T.starname like  " + "'%" + user_inputs.get(1) +"%'" + " " +
+                        "GROUP BY S.movieId,R.rating ORDER BY rating DESC limit 20;";
+            }
+            else if (user_inputsTypes.get(0).equals("DIRECTOR") && user_inputsTypes.get(1).equals("STAR"))
+            {
+                outputQuery = "SELECT S.movieId ,M.title, M.year, M.director, R.rating, " +
+                        "GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
+                        " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
+                        "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
+                        "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and M.director like "
+                        +  "'%" + user_inputs.get(0) + "%'" + " AND " + "T.starname like  " + "'%" + user_inputs.get(1) +"%'" + " " +
+                        "GROUP BY S.movieId,R.rating ORDER BY rating DESC limit 20;";
+            }
+        }
+        else if (user_inputs.size() == 3)
+        {
+            if (user_inputsTypes.get(0).equals("TITLE") && user_inputsTypes.get(1).equals("YEAR") && user_inputsTypes.get(2).equals("DIRECTOR"))
+            {
+                outputQuery = "SELECT S.movieId ,M.title, M.year, M.director, R.rating, " +
+                        "GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
+                        " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
+                        "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
+                        "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and M.title like "
+                        +  "'%" + user_inputs.get(0)  + "%'" + " AND " + "M.year =  "  + user_inputs.get(1)  + " AND "
+                        + "M.director like  " + "'%" + user_inputs.get(2) +"%'" + "GROUP BY S.movieId,R.rating ORDER BY rating DESC limit 20;";
+            }
+            else if(user_inputsTypes.get(0).equals("TITLE") && user_inputsTypes.get(1).equals("YEAR") && user_inputsTypes.get(2).equals("STAR"))
+            {
+                outputQuery = "SELECT S.movieId ,M.title, M.year, M.director, R.rating, " +
+                        "GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
+                        " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
+                        "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
+                        "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and M.title like "
+                        +  "'%" + user_inputs.get(0)  + "%'" + " AND " + "M.year =  "  + user_inputs.get(1)  + " AND "
+                        + "T.starname like  " + "'%" + user_inputs.get(2) +"%'" + "GROUP BY S.movieId,R.rating ORDER BY rating DESC limit 20;";
+            }
+            else if (user_inputsTypes.get(0).equals("TITLE") && user_inputsTypes.get(1).equals("DIRECTOR") && user_inputsTypes.get(2).equals("STAR"))
+            {
+                outputQuery = "SELECT S.movieId ,M.title, M.year, M.director, R.rating, " +
+                        "GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
+                        " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
+                        "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
+                        "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and M.title like "
+                        +  "'%" + user_inputs.get(0)  + "%'" + " AND " + "M.director like  " + "'%" + user_inputs.get(1) + "%'"  + " AND "
+                        + "T.starname like  " + "'%" + user_inputs.get(2) +"%'" + "GROUP BY S.movieId,R.rating ORDER BY rating DESC limit 20;";
+            }
+            else if (user_inputsTypes.get(0).equals("YEAR") && user_inputsTypes.get(1).equals("DIRECTOR") && user_inputsTypes.get(2).equals("STAR"))
+            {
+                outputQuery = "SELECT S.movieId ,M.title, M.year, M.director, R.rating, " +
+                        "GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
+                        " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
+                        "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
+                        "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and M.year = "
+                        +  user_inputs.get(0)  + " AND " + "M.director like  " + "'%" + user_inputs.get(1) + "%'"  + " AND "
+                        + "T.starname like  " + "'%" + user_inputs.get(2) +"%'" + "GROUP BY S.movieId,R.rating ORDER BY rating DESC limit 20;";
+            }
+        }
+        else
+        {
+            outputQuery = "SELECT S.movieId ,M.title, M.year, M.director, R.rating, " +
+                    "GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
+                    " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
+                    "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
+                    "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and M.title like "
+                    +  "'%" + user_inputs.get(0)  + "%'" + " AND " + "M.year =  "  + user_inputs.get(1)  + " AND " + "M.director like  " + "'%" + user_inputs.get(2) + "%'"
+                    + " AND " + "T.starname like  " + "'%" + user_inputs.get(3) +"%'" + "GROUP BY S.movieId,R.rating ORDER BY rating DESC limit 20;";
         }
 
         return outputQuery;
@@ -162,6 +384,7 @@ public class SearchServlet extends HttpServlet {
 
             // Declare our statement
             Statement statement = dbcon.createStatement();
+            Statement statement2 = dbcon.createStatement();
             ArrayList <String> user_inputs = new ArrayList<String>();
             ArrayList <String> user_inputsTypes = new ArrayList<String>();
             String input_title = request.getParameter("title");
@@ -169,9 +392,8 @@ public class SearchServlet extends HttpServlet {
             String input_director= request.getParameter("director");
             String input_star = request.getParameter("star");
 
-            Integer querytype = -1;
-            if(input_title != ""){user_inputs.add(input_title); user_inputsTypes.add("TITLE"); querytype = 0;}
-            if(input_year != ""){user_inputs.add(input_year); user_inputsTypes.add("YEAR"); querytype = 1;}
+            if(input_title != ""){user_inputs.add(input_title); user_inputsTypes.add("TITLE");}
+            if(input_year != ""){user_inputs.add(input_year); user_inputsTypes.add("YEAR");}
             if(input_director != ""){user_inputs.add(input_director); user_inputsTypes.add("DIRECTOR");}
             if(input_star != ""){user_inputs.add(input_star); user_inputsTypes.add("STAR");}
 
@@ -180,142 +402,56 @@ public class SearchServlet extends HttpServlet {
 
             ResultSet rs = statement.executeQuery(query);
 
-            if(querytype == 0)
-            {
-                JsonObject jsonObject = new JsonObject();
                 JsonArray jsonArray = new JsonArray();
-                int countGenres = 0;
-                int countStars = 0;
-                // Perform the query
-                if(rs.next()) {
-                    String movie_title = rs.getString("title");
-                    String movie_id = rs.getString("id");
-                    String movie_year = rs.getString("year");
-                    String movie_director = rs.getString("director");
-                    String movie_rating = rs.getString("rating");
-                    String movie_nameOfGenres = rs.getString("name");
-                    String movie_star = rs.getString("starname");
-                    String movie_starid = rs.getString("starId");
+                while(rs.next())
+                {
                     JsonArray stars_array = new JsonArray();
                     JsonArray starsId_array = new JsonArray();
-                    stars_array.add(movie_star);
-                    starsId_array.add(movie_starid);
-                    jsonObject.addProperty("movie_title", movie_title);
-                    jsonObject.addProperty("movie_id", movie_id);
-                    jsonObject.addProperty("movie_director", movie_director);
-                    jsonObject.addProperty("movie_year", movie_year);
-                    jsonObject.addProperty("movie_rating", movie_rating);
-                    while(rs.next())
+                    JsonObject jsonObject = new JsonObject();
+                    String movie_id = rs.getString("movieId");
+                    String query2 = "SELECT T.starname, T.starId, starMovieCount FROM(SELECT m.starId, s.starname, " +
+                            "count(*) as starMovieCount FROM stars_in_movies m, stars s  WHERE  m.starId = s.id GROUP by s.id) " +
+                            "T,stars_in_movies X WHERE X.starId = T.starId AND X.movieId =  '" +   movie_id + "'" +
+                            " ORDER BY T.starMovieCount DESC LIMIT 3;";
+                    ResultSet rs2 = statement2.executeQuery(query2);
+                    int counter = 0;
+                    while(rs2.next())
                     {
-                        movie_star = rs.getString("starname");
-                        movie_starid = rs.getString("starId");
-                        String movie_nameOfGenres2 = rs.getString("name");
-                        if(countGenres < 2 && !movie_nameOfGenres.contains(movie_nameOfGenres2))
+                        String movie_star = rs2.getString("starname");
+                        stars_array.add(movie_star);
+                        String movie_starId = rs2.getString("starId");
+                        starsId_array.add(movie_starId);
+                        counter++;
+                        if(counter == 3)
                         {
-                            movie_nameOfGenres = movie_nameOfGenres + ", " + movie_nameOfGenres2;
-                            countGenres++;
-                        }
-                        if(countStars < 3)
-                        {
-                            stars_array.add(movie_star);
-                            starsId_array.add(movie_starid);
-                            countStars++;
+                            break;
                         }
                     }
+                    String movie_title = rs.getString("title");
+                    Integer movie_year = rs.getInt("year");
+                    String movie_director = rs.getString("director");
+                    Double movie_rating = rs.getDouble("rating");
+                    String movie_genres = genresfilter(rs.getString("allGenres"));
+//                    String movie_starInfo = rs.getString("starInfo");
+                    jsonObject.addProperty("movie_id", movie_id);
+                    jsonObject.addProperty("movie_title", movie_title);
+                    jsonObject.addProperty("movie_year", movie_year);
+                    jsonObject.addProperty("movie_director", movie_director);
+                    jsonObject.addProperty("movie_rating", movie_rating);
+                    jsonObject.addProperty("movie_genres", movie_genres);
+//                    starfilter(movie_starInfo, starsId_array, stars_array);
                     jsonObject.add("movie_starid", starsId_array);
-                    jsonObject.addProperty("searchType", "TITLE");
                     jsonObject.add("movie_star", stars_array);
-                    jsonObject.addProperty("movie_nameOfGenres", movie_nameOfGenres);
                     jsonArray.add(jsonObject);
                 }
                 // write JSON string to output
                 out.write(jsonArray.toString());
                 // set response status to 200 (OK)
                 response.setStatus(200);
-            }
-            else if(querytype == 1)
-            {
-
-                JsonArray jsonArray = new JsonArray();
-                int countGenres = 0;
-                int countStars = 0;
-                // Perform the query
-
-                JsonArray stars_array = new JsonArray();
-                JsonArray starsId_array = new JsonArray();
-                rs.next();
-                String movie_title = rs.getString("title");
-                String movie_id = rs.getString("id");
-                String movie_year = rs.getString("year");
-                String movie_director = rs.getString("director");
-                String movie_nameOfGenres = rs.getString("name");
-                String movie_star = rs.getString("starname");
-                String movie_rating = rs.getString("rating");
-                String movie_starid = rs.getString("starId");
-                stars_array.add(movie_star);
-                starsId_array.add(movie_starid);
-                rs.next();
-                do {
-                    String movie_title2 = rs.getString("title");
-                    String movie_id2 = rs.getString("id");
-                    String movie_year2 = rs.getString("year");
-                    String movie_director2 = rs.getString("director");
-                    String movie_nameOfGenres2 = rs.getString("name");
-                    String movie_star2 = rs.getString("starname");
-                    String movie_rating2 = rs.getString("rating");
-                    String movie_starid2 = rs.getString("starId");
-                    if(!movie_id.equals(movie_id2))
-                    {
-                        JsonObject jsonObject = new JsonObject();
-                        jsonObject.addProperty("searchType", "YEAR");
-                        jsonObject.addProperty("movie_title", movie_title);
-                        jsonObject.addProperty("movie_id", movie_id);
-                        jsonObject.addProperty("movie_director", movie_director);
-                        jsonObject.addProperty("movie_nameOfGenres", movie_nameOfGenres);
-                        jsonObject.addProperty("movie_year", movie_year);
-                        jsonObject.addProperty("movie_rating", movie_rating);
-                        jsonObject.add("movie_starid", starsId_array);
-                        jsonObject.add("movie_star", stars_array);
-                        jsonArray.add(jsonObject);
-                        movie_id = movie_id2;
-                        movie_title = movie_title2;
-                        movie_year = movie_year2;
-                        movie_director = movie_director2;
-                        movie_rating = movie_rating2;
-                        movie_nameOfGenres = movie_nameOfGenres2;
-                        stars_array = new JsonArray();
-                        starsId_array = new JsonArray();
-                        countStars = 0;
-                        countGenres = 0;
-                    }
-                    else {
-                        movie_id = movie_id2;
-                        movie_title = movie_title2;
-                        movie_year = movie_year2;
-                        movie_director = movie_director2;
-                        movie_rating = movie_rating2;
-
-
-                        if(countGenres < 3 && !movie_nameOfGenres.contains(movie_nameOfGenres2)){
-                            movie_nameOfGenres = movie_nameOfGenres + ", " + movie_nameOfGenres2;
-                            countGenres++;
-                        }
-                        if(countStars < 3)
-                        {
-                            stars_array.add(movie_star2);
-                            starsId_array.add(movie_starid2);
-                            countStars++;
-                        }
-                    }
-                } while(rs.next());
 
 
 
-                // write JSON string to output
-                out.write(jsonArray.toString());
-                // set response status to 200 (OK)
-                response.setStatus(200);
-            }
+
 
             rs.close();
             statement.close();
