@@ -34,12 +34,17 @@ public class ShopCartServlet extends HttpServlet {
         responseJsonObject.addProperty("lastAccessTime", new Date(lastAccessTime).toString());
 
         ArrayList<String> previousItems = (ArrayList<String>) session.getAttribute("previousItems");
+        ArrayList<Integer> numOfItems = (ArrayList<Integer>) session.getAttribute("numOfItems");
         if (previousItems == null) {
             previousItems = new ArrayList<>();
+            numOfItems = new ArrayList<>();
         }
         JsonArray previousItemsJsonArray = new JsonArray();
+        JsonArray numOfItemsJsonArray = new JsonArray();
         previousItems.forEach(previousItemsJsonArray::add);
+        numOfItems.forEach(numOfItemsJsonArray::add);
         responseJsonObject.add("previousItems", previousItemsJsonArray);
+        responseJsonObject.add("numOfItems", previousItemsJsonArray);
 
         // write all the data into the jsonObject
         response.getWriter().write(responseJsonObject.toString());
@@ -55,23 +60,40 @@ public class ShopCartServlet extends HttpServlet {
 
         // get the previous items in a ArrayList
         ArrayList<String> previousItems = (ArrayList<String>) session.getAttribute("previousItems");
+        ArrayList<Integer> numOfItems = (ArrayList<Integer>) session.getAttribute("numOfItems");
         if (previousItems == null) {
             previousItems = new ArrayList<>();
             previousItems.add(item);
+            numOfItems.add(1);
             session.setAttribute("previousItems", previousItems);
+            session.setAttribute("numOfItems", numOfItems);
         } else {
             // prevent corrupted states through sharing under multi-threads
             // will only be executed by one thread at a time
             synchronized (previousItems) {
-                previousItems.add(item);
+                if(previousItems.contains(item))
+                {
+                    int itemindex = previousItems.indexOf(item);
+                    int tempnumItem = numOfItems.get(itemindex) + 1;
+                    numOfItems.set(itemindex, tempnumItem);
+                }
+                else
+                {
+                    previousItems.add(item);
+                    numOfItems.add(1);
+                }
+
             }
         }
 
         JsonObject responseJsonObject = new JsonObject();
 
         JsonArray previousItemsJsonArray = new JsonArray();
+        JsonArray numOfItemsJsonArray = new JsonArray();
         previousItems.forEach(previousItemsJsonArray::add);
+        numOfItems.forEach( numOfItemsJsonArray::add);
         responseJsonObject.add("previousItems", previousItemsJsonArray);
+        responseJsonObject.add("numOfItems", numOfItemsJsonArray);
 
         response.getWriter().write(responseJsonObject.toString());
     }

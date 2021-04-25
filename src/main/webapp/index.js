@@ -34,8 +34,7 @@ function handleCartArray(resultArray) {
 
 
 
-function AddToCart(cartEvent)
-{
+function AddToCart(cartEvent) {
     console.log(cartEvent);
 
     $.ajax("api/shopcart", {
@@ -46,9 +45,12 @@ function AddToCart(cartEvent)
             handleCartArray(resultDataJson["previousItems"]);
         }
     });
-    // clear input form
+    alert("Added to Cart");
     cart[0].reset();
+
 }
+    // clear input form
+
 
 function myFunction() {
     let x = document.getElementById("search_form");
@@ -139,8 +141,10 @@ function submitGenre()
     // );
 }
 
-
-
+function ShoppingCart()
+{
+    window.location.replace("shopCart.html");
+}
 
 function handleSearchResult2(resultData)
 {
@@ -169,7 +173,7 @@ function handleSearchResult(resultData) {
     movieListTableElement2.html("");
     for (let i = 0; i < Math.min(20, resultData.length); i++) {
         let rowHTML = "";
-        let shpvalue = resultData[i]['movie_id'];
+        let shpvalue = resultData[i]["movie_title"];
         rowHTML += "<tr>";
         // Add a link to single-star.html with id passed with GET url parameter
         rowHTML +=
