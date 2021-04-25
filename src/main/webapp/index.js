@@ -141,6 +141,20 @@ function submitGenre()
     // );
 }
 
+function viewGenre(genre_id)
+{
+    console.log(genre_id);
+    console.log("attempting to view genre");
+    // jQuery.ajax(
+    //     {
+    //         dataType: "json",
+    //         method: "GET",
+    //         url: "api/browseGenre?genre=" + genre_id,
+    //         success: (resultData) => handleSearchResult(resultData)
+    //     }
+    // );
+}
+
 function ShoppingCart()
 {
     window.location.replace("shopCart.html");
@@ -173,7 +187,7 @@ function handleSearchResult(resultData) {
     movieListTableElement2.html("");
     for (let i = 0; i < Math.min(20, resultData.length); i++) {
         let rowHTML = "";
-        let shpvalue = resultData[i]["movie_title"];
+        let shpvalue = resultData[i]['movie_id'];
         rowHTML += "<tr>";
         // Add a link to single-star.html with id passed with GET url parameter
         rowHTML +=
@@ -183,8 +197,21 @@ function handleSearchResult(resultData) {
             '</a>' +
             "</td>";
         rowHTML += "<td>" + resultData[i]["movie_year"] + "</td>";
-        rowHTML += "<td>" + resultData[i]["movie_director"] + "</td>";
-        rowHTML += "<td>" + resultData[i]["movie_genres"] + "</td>";
+        rowHTML += "<td>" + resultData[i]["movie_director"] + "</td>"
+        rowHTML += "<td>";
+        for (let x = 0; x < Math.min(3, resultData[i]['genre_names'].length); x++) {
+            if (x + 1 == Math.min(3, resultData[i]['genre_names'].length)) {
+                rowHTML += '<a onclick="viewGenre( ' + resultData[i]['genre_ids'][x] + ')">'
+                    + resultData[i]['genre_names'][x] +
+                    '</a>';
+            } else {
+                rowHTML += '<a onclick="viewGenre( ' + resultData[i]['genre_ids'][x] + ')">'
+                    + resultData[i]['genre_names'][x] +
+                    '</a>' + ", ";
+            }
+        }
+
+        rowHTML += "</td>";
         // add Stars and hrefs
         rowHTML += "<td>";
         for (let x = 0; x < Math.min(3, resultData[i]['movie_star'].length); x++) {

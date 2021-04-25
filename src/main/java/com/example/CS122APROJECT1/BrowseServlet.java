@@ -29,26 +29,59 @@ public class BrowseServlet extends  HttpServlet {
     // Create a dataSource which registered in web.
     private DataSource dataSource;
 
-    public String genresfilter(String allgenres) {
-        String outputGenres = "";
-        int currentposition;
-        while (allgenres.length() != 2) {
-            String subString = "";
-            currentposition = allgenres.indexOf(","); //this finds the first occurrence of "."
-            if (currentposition != 0) {
-                subString = allgenres.substring(0, currentposition); //this will give abc
-                outputGenres += subString;// returns the movie Avatar 3
-                outputGenres += ", ";
+    public JsonArray genresfilterNames(String allgenres) {
+        JsonArray outputGenres = new JsonArray();
+        int total = 0;
+        if(allgenres.contains(";"))
+        {
+            String[] genres = allgenres.split(";");
+            if(genres.length == 2)
+            {
+                outputGenres.add(genres[0].split(",")[0]);
+                outputGenres.add(genres[1].split(",")[0]);
             }
-            if (currentposition + 3 < allgenres.length()) {
-                int nextChar = allgenres.indexOf(";");
-                allgenres = allgenres.substring(currentposition + 3, allgenres.length());
-            } else {
-                break;
+            else
+            {
+                while(total < 3 && total < genres.length)
+                {
+                    outputGenres.add(genres[total].split(",")[0]);
+                    total++;
+                }
             }
-
         }
-        outputGenres = outputGenres.replace(";", "");
+        else
+        {
+            String[] genres = allgenres.split(",");
+            outputGenres.add(genres[0]);
+        }
+        return outputGenres;
+    }
+
+    public JsonArray genresfilterIds(String allgenres) {
+        JsonArray outputGenres = new JsonArray();
+        int total = 0;
+        if(allgenres.contains(";"))
+        {
+            String[] genres = allgenres.split(";");
+            if(genres.length == 2)
+            {
+                outputGenres.add(genres[0].split(",")[1]);
+                outputGenres.add(genres[1].split(",")[1]);
+            }
+            else
+            {
+                while(total < 3 && total < genres.length)
+                {
+                    outputGenres.add(genres[total].split(",")[1]);
+                    total++;
+                }
+            }
+        }
+        else
+        {
+            String[] genres = allgenres.split(",");
+            outputGenres.add(genres[1]);
+        }
         return outputGenres;
     }
 
@@ -116,6 +149,10 @@ public class BrowseServlet extends  HttpServlet {
                 JsonArray stars_array = new JsonArray();
                 JsonArray starsId_array = new JsonArray();
                 JsonObject jsonObject = new JsonObject();
+                String movie_genres = rs.getString("allGenres");
+                JsonArray genre_names = genresfilterNames(movie_genres);
+                JsonArray genre_ids = genresfilterIds(movie_genres);
+
                 String movie_id = rs.getString("movieId");
                 String query2 = "SELECT T.starname, T.starId, starMovieCount FROM(SELECT m.starId, s.starname, " +
                         "count(*) as starMovieCount FROM stars_in_movies m, stars s  WHERE  m.starId = s.id GROUP by s.id) " +
@@ -139,15 +176,14 @@ public class BrowseServlet extends  HttpServlet {
                 Integer movie_year = rs.getInt("year");
                 String movie_director = rs.getString("director");
                 Double movie_rating = rs.getDouble("rating");
-                String movie_genres = genresfilter(rs.getString("allGenres"));
-
                 jsonObject.addProperty("movie_id", movie_id);
                 jsonObject.addProperty("movie_title", movie_title);
                 jsonObject.addProperty("movie_year", movie_year);
                 jsonObject.addProperty("movie_director", movie_director);
                 jsonObject.addProperty("movie_rating", movie_rating);
                 jsonObject.addProperty("movie_genres", movie_genres);
-
+                jsonObject.add("genre_names",genre_names);
+                jsonObject.add("genre_ids",genre_ids);
                 jsonObject.add("movie_starid", starsId_array);
                 jsonObject.add("movie_star", stars_array);
                 jsonArray.add(jsonObject);

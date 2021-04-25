@@ -115,32 +115,59 @@ public class SearchServlet extends HttpServlet {
     // Create a dataSource which registered in web.
     private DataSource dataSource;
 
-    public String genresfilter(String allgenres)
-    {
-        String outputGenres = "";
-        int currentposition;
-        while(allgenres.length() != 2)
+    public JsonArray genresfilterNames(String allgenres) {
+        JsonArray outputGenres = new JsonArray();
+        int total = 0;
+        if(allgenres.contains(";"))
         {
-            String subString = "";
-            currentposition = allgenres.indexOf(","); //this finds the first occurrence of "."
-            if (currentposition != 0)
+            String[] genres = allgenres.split(";");
+            if(genres.length == 2)
             {
-                subString= allgenres.substring(0 , currentposition); //this will give abc
-                outputGenres += subString;// returns the movie Avatar 3
-                outputGenres += ", ";
-            }
-            if(currentposition+3 < allgenres.length())
-            {
-                int nextChar = allgenres.indexOf(";");
-                allgenres = allgenres.substring(currentposition + 3, allgenres.length());
+                outputGenres.add(genres[0].split(",")[0]);
+                outputGenres.add(genres[1].split(",")[0]);
             }
             else
             {
-                break;
+                while(total < 3 && total < genres.length)
+                {
+                    outputGenres.add(genres[total].split(",")[0]);
+                    total++;
+                }
             }
-
         }
-        outputGenres = outputGenres.replace(";", "");
+        else
+        {
+            String[] genres = allgenres.split(",");
+            outputGenres.add(genres[0]);
+        }
+        return outputGenres;
+    }
+
+    public JsonArray genresfilterIds(String allgenres) {
+        JsonArray outputGenres = new JsonArray();
+        int total = 0;
+        if(allgenres.contains(";"))
+        {
+            String[] genres = allgenres.split(";");
+            if(genres.length == 2)
+            {
+                outputGenres.add(genres[0].split(",")[1]);
+                outputGenres.add(genres[1].split(",")[1]);
+            }
+            else
+            {
+                while(total < 3 && total < genres.length)
+                {
+                    outputGenres.add(genres[total].split(",")[1]);
+                    total++;
+                }
+            }
+        }
+        else
+        {
+            String[] genres = allgenres.split(",");
+            outputGenres.add(genres[1]);
+        }
         return outputGenres;
     }
 
@@ -403,52 +430,56 @@ public class SearchServlet extends HttpServlet {
 
             ResultSet rs = statement.executeQuery(query);
 
-                JsonArray jsonArray = new JsonArray();
-                while(rs.next())
+            JsonArray jsonArray = new JsonArray();
+            while(rs.next())
+            {
+                JsonArray stars_array = new JsonArray();
+                JsonArray starsId_array = new JsonArray();
+                JsonObject jsonObject = new JsonObject();
+                String movie_genres = rs.getString("allGenres");
+                JsonArray genre_names = genresfilterNames(movie_genres);
+                JsonArray genre_ids = genresfilterIds(movie_genres);
+                String movie_id = rs.getString("movieId");
+                String query2 = "SELECT T.starname, T.starId, starMovieCount FROM(SELECT m.starId, s.starname, " +
+                        "count(*) as starMovieCount FROM stars_in_movies m, stars s  WHERE  m.starId = s.id GROUP by s.id) " +
+                        "T,stars_in_movies X WHERE X.starId = T.starId AND X.movieId =  '" +   movie_id + "'" +
+                        " ORDER BY T.starMovieCount DESC LIMIT 3;";
+                ResultSet rs2 = statement2.executeQuery(query2);
+                int counter = 0;
+                while(rs2.next())
                 {
-                    JsonArray stars_array = new JsonArray();
-                    JsonArray starsId_array = new JsonArray();
-                    JsonObject jsonObject = new JsonObject();
-                    String movie_id = rs.getString("movieId");
-                    String query2 = "SELECT T.starname, T.starId, starMovieCount FROM(SELECT m.starId, s.starname, " +
-                            "count(*) as starMovieCount FROM stars_in_movies m, stars s  WHERE  m.starId = s.id GROUP by s.id) " +
-                            "T,stars_in_movies X WHERE X.starId = T.starId AND X.movieId =  '" +   movie_id + "'" +
-                            " ORDER BY T.starMovieCount DESC LIMIT 3;";
-                    ResultSet rs2 = statement2.executeQuery(query2);
-                    int counter = 0;
-                    while(rs2.next())
+                    String movie_star = rs2.getString("starname");
+                    stars_array.add(movie_star);
+                    String movie_starId = rs2.getString("starId");
+                    starsId_array.add(movie_starId);
+                    counter++;
+                    if(counter == 3)
                     {
-                        String movie_star = rs2.getString("starname");
-                        stars_array.add(movie_star);
-                        String movie_starId = rs2.getString("starId");
-                        starsId_array.add(movie_starId);
-                        counter++;
-                        if(counter == 3)
-                        {
-                            break;
-                        }
+                        break;
                     }
-                    String movie_title = rs.getString("title");
-                    Integer movie_year = rs.getInt("year");
-                    String movie_director = rs.getString("director");
-                    Double movie_rating = rs.getDouble("rating");
-                    String movie_genres = genresfilter(rs.getString("allGenres"));
-//                    String movie_starInfo = rs.getString("starInfo");
-                    jsonObject.addProperty("movie_id", movie_id);
-                    jsonObject.addProperty("movie_title", movie_title);
-                    jsonObject.addProperty("movie_year", movie_year);
-                    jsonObject.addProperty("movie_director", movie_director);
-                    jsonObject.addProperty("movie_rating", movie_rating);
-                    jsonObject.addProperty("movie_genres", movie_genres);
-//                    starfilter(movie_starInfo, starsId_array, stars_array);
-                    jsonObject.add("movie_starid", starsId_array);
-                    jsonObject.add("movie_star", stars_array);
-                    jsonArray.add(jsonObject);
                 }
-                // write JSON string to output
-                out.write(jsonArray.toString());
-                // set response status to 200 (OK)
-                response.setStatus(200);
+                String movie_title = rs.getString("title");
+                Integer movie_year = rs.getInt("year");
+                String movie_director = rs.getString("director");
+                Double movie_rating = rs.getDouble("rating");
+                jsonObject.add("genre_names",genre_names);
+                jsonObject.add("genre_ids",genre_ids);
+//                    String movie_starInfo = rs.getString("starInfo");
+                jsonObject.addProperty("movie_id", movie_id);
+                jsonObject.addProperty("movie_title", movie_title);
+                jsonObject.addProperty("movie_year", movie_year);
+                jsonObject.addProperty("movie_director", movie_director);
+                jsonObject.addProperty("movie_rating", movie_rating);
+                jsonObject.addProperty("movie_genres", movie_genres);
+//                    starfilter(movie_starInfo, starsId_array, stars_array);
+                jsonObject.add("movie_starid", starsId_array);
+                jsonObject.add("movie_star", stars_array);
+                jsonArray.add(jsonObject);
+            }
+            // write JSON string to output
+            out.write(jsonArray.toString());
+            // set response status to 200 (OK)
+            response.setStatus(200);
 
 
 
