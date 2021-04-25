@@ -46,14 +46,10 @@ function AddToCart(cartEvent)
     });
     // clear input form
     cart[0].reset();
-
-
-
-
 }
 
 function myFunction() {
-    var x = document.getElementById("search_form");
+    let x = document.getElementById("search_form");
     if(x.style.display == "block")
     {
         x.style.display = "none";
@@ -62,18 +58,62 @@ function myFunction() {
     x.style.display = "block";
 
 }
+
+function browse_alpha()
+{
+    let t = document.getElementById("alpha_list");
+    submitform();
+    jQuery.ajax(
+        {
+            dataType: "json",
+            method: "GET",
+            url: "api/browse?starts_with=" + t.value,
+            success: (resultData) => handleSearchResult(resultData)
+        }
+    );
+}
+
+function browse_numeric()
+{
+    let p = document.getElementById("numeric_list");
+    submitform();
+    jQuery.ajax(
+        {
+            dataType: "json",
+            method: "GET",
+            url: "api/browse?starts_with=" + p.value,
+            success: (resultData) => handleSearchResult(resultData)
+        }
+    );
+}
+
 function submitform() {
     var x = document.getElementById("movie_list_table2");
     x.style.display = "block";
+}
+
+function collapseResults()
+{
+    let x = document.getElementById("movie_list_table2");
+    if(x.style.display == "block")
+    {
+        x.style.display = "none";
+    }
+    else
+    {
+        x.style.display = "block";
+    }
 
 }
+
+
 
 function handleSearchResult(resultData) {
     console.log("handleSearchResult: populating MovieList table from resultData");
 
     // Populate the star table
     // Find the empty table body by id "star_table_body"
-    let movieListTableElement2 = $("#movie_list_table_body2");
+    let movieListTableElement2 = $("#movie_list_table_body2").empty();
 
     movieListTableElement2.html("");
     for (let i = 0; i < Math.min(20, resultData.length); i++) {
@@ -117,13 +157,7 @@ function handleSearchResult(resultData) {
 
 
     }
-    // let rowHTML ="";
-    // rowHTML += "</th>";
-    // rowHTML += "<th>" + "gi" + "</th>";
-    // rowHTML += "</tr>";
-    // movieListTableElement2.append(rowHTML);
-
-
+    console.log("Done populating table..")
 
 }
 

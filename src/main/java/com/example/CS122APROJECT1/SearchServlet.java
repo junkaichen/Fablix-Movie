@@ -104,6 +104,7 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 @WebServlet(name = "SearchServlet", urlPatterns = "/api/search")
