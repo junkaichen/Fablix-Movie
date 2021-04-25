@@ -76,11 +76,18 @@
 
         }
 
+        #item_list{
+
+            display:none;
+
+        }
+
     </style>
 </head>
 <body>
 
 <h2>Welcome to Fablix</h2>
+
 <!-- Set the method to POST to avoid showing the username/password in the URL
      The default action is disabled to allow your own implementation. -->
 <button onclick="myFunction()">Click Here to Search!</button>
@@ -115,6 +122,9 @@
 <div id="search_error_message"></div>
 
 
+<div id="item_list"></div>
+
+
 <table id=movie_list_table2 class="table table-striped" >
     <!-- Create a table header -->
     <thead>
@@ -126,7 +136,7 @@
         <th>Genres</th>
         <th>Stars</th>
         <th>Rating</th>
-        <td><Button data-id='4'>Reserve</Button></td>
+        <th><img src="https://cdn4.iconfinder.com/data/icons/simplicio/128x128/shoppingcart.png" width="35" height="35"></th>
     </tr>
     </thead>
     <!-- Table body is left empty here, will be populated with the data retrieved with index.js -->
