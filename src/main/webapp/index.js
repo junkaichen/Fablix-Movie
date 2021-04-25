@@ -1,5 +1,7 @@
 let search_form = $("#search_form");
 let cart = $("#cart");
+var Genre_activation = false;
+loadGenres();
 /**
  * Handle the data returned by SearchServlet
  * @param resultData jsonObject
@@ -63,6 +65,7 @@ function browse_alpha()
 {
     let t = document.getElementById("alpha_list");
     submitform();
+    console.log(document.location);
     jQuery.ajax(
         {
             dataType: "json",
@@ -88,7 +91,7 @@ function browse_numeric()
 }
 
 function submitform() {
-    var x = document.getElementById("movie_list_table2");
+    let x = document.getElementById("movie_list_table2");
     x.style.display = "block";
 }
 
@@ -106,6 +109,55 @@ function collapseResults()
 
 }
 
+function loadGenres()
+{
+    if(!Genre_activation)
+    {
+        Genre_activation = true;
+        jQuery.ajax(
+            {
+                dataType: "json",
+                method: "GET",
+                url: "api/browsingGenres",
+                success: (resultData) => handleSearchResult2(resultData)
+            }
+        );
+    }
+}
+
+function submitGenre()
+{
+    let p = document.getElementById("genre_list_table");
+    console.log(p.value);
+    // jQuery.ajax(
+    //     {
+    //         dataType: "json",
+    //         method: "GET",
+    //         url: "api/browseGenre?genre=" + p.value,
+    //         success: (resultData) => handleSearchResult(resultData)
+    //     }
+    // );
+}
+
+
+
+
+function handleSearchResult2(resultData)
+{
+    console.log("loading genre table");
+    let genreTableElement = $("#genre_list_table");
+    for (let i = 0; i < Math.min(25, resultData.length); i++) {
+        let rowHTML = "";
+        rowHTML +=
+            '<option value="'
+            + resultData[i]['id'] + '"' + '>'
+            + resultData[i]["name"] +
+            '</option>';
+        genreTableElement.append(rowHTML);
+    }
+    console.log("Done populating genre table..")
+
+}
 
 
 function handleSearchResult(resultData) {
@@ -114,7 +166,6 @@ function handleSearchResult(resultData) {
     // Populate the star table
     // Find the empty table body by id "star_table_body"
     let movieListTableElement2 = $("#movie_list_table_body2").empty();
-
     movieListTableElement2.html("");
     for (let i = 0; i < Math.min(20, resultData.length); i++) {
         let rowHTML = "";

@@ -5,6 +5,17 @@
     <meta charset="UTF-8">
     <title>Welcome to Fablix</title>
     <style>
+        option{
+            text-align: center;
+            position: center;
+
+        }
+        select {
+            position: center;
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+        }
         Body {
             font-family: Calibri, Helvetica, sans-serif;
             background-repeat: no-repeat;
@@ -87,13 +98,9 @@
 <body>
 
 <h2>Welcome to Fablix</h2>
-
 <!-- Set the method to POST to avoid showing the username/password in the URL
      The default action is disabled to allow your own implementation. -->
 <button onclick="myFunction()">Click Here to Search!</button>
-<button onclick="window.location.href='browsing.html'">Browsing</button>
-
-
 <form id="search_form" method="get" action="#">
     <div class="container">
         <label><b>Search by Title</b></label>
@@ -120,8 +127,6 @@
 </form>
 
 <div id="search_error_message"></div>
-
-
 <p style="text-align: center">Browse Alphabetically</p>
 <select id="alpha_list" size="1" style="position: center">
     <option value="*">*</option>
@@ -153,7 +158,7 @@
     <option value="Z">Z</option>
 </select>
 <button onclick="browse_alpha()" formmethod="get" formaction="?">Press to Browse Alphabetically</button>
-<br>
+<br/>
 <p style="text-align: center">Browse Numerically</p>
 <select id="numeric_list" size="1" style="position: center">
     <option value="0">0</option>
@@ -168,16 +173,13 @@
     <option value="9">9</option>
 </select>
 <button onclick="browse_numeric()" formmethod="get" formaction="?">Press to Browse Numerically</button>
+<br/>
 
-<button onclick="" formmethod="get" formaction="?">Show Genres</button>
-<!--<table id="genre_list_table" class="table table-striped">-->
-<!--    <thead style="text-align: center">-->
-<!--    <tr>-->
-<!--        <th>Genres</th>-->
-<!--    </tr>-->
-<!--    </thead>-->
-<!--    <tbody id="genre_list_table_body" style="text-align: center"></tbody>-->
-<!--</table>-->
+<select id="genre_list_table" style="position: center">
+</select>
+<br/>
+<button onclick="submitGenre()" formmethod="get" formaction="?">Submit Genre</button>
+<br/>
 <button onclick="collapseResults()">Open/Close Results</button>
 
 <div id="item_list"></div>
