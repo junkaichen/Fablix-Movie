@@ -51,11 +51,10 @@ public class BrowsingGenreServlet extends HttpServlet {
             Connection dbcon = dataSource.getConnection();
             // Declare our statement
             Statement statement = dbcon.createStatement();
-            String query = "SELECT * FROM genres limit 100";
+            String query = "SELECT * FROM genres ORDER BY name ASC";
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
             JsonArray jsonArray = new JsonArray();
-            rs.next();
             while (rs.next()) {
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("name", rs.getString("name"));

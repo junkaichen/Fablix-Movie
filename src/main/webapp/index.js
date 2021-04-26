@@ -129,15 +129,16 @@ function loadGenres()
 function submitGenre()
 {
     let p = document.getElementById("genre_list_table");
-    console.log(p.value);
-    // jQuery.ajax(
-    //     {
-    //         dataType: "json",
-    //         method: "GET",
-    //         url: "api/browseGenre?genre=" + p.value,
-    //         success: (resultData) => handleSearchResult(resultData)
-    //     }
-    // );
+    console.log("genre id is " + p.value);
+    submitform();
+    jQuery.ajax(
+        {
+            dataType: "json",
+            method: "GET",
+            url: "api/browseGenre?genre=" + p.value,
+            success: (resultData) => handleSearchResult(resultData)
+        }
+    );
 }
 
 function viewGenre(genre_id)
@@ -161,7 +162,7 @@ function ShoppingCart()
 
 function handleSearchResult2(resultData)
 {
-    console.log("loading genre table");
+    console.log("loading genre table for id");
     let genreTableElement = $("#genre_list_table");
     for (let i = 0; i < Math.min(25, resultData.length); i++) {
         let rowHTML = "";
@@ -200,11 +201,11 @@ function handleSearchResult(resultData) {
         rowHTML += "<td>";
         for (let x = 0; x < Math.min(3, resultData[i]['genre_names'].length); x++) {
             if (x + 1 == Math.min(3, resultData[i]['genre_names'].length)) {
-                rowHTML += '<a onclick="viewGenre( ' + resultData[i]['genre_ids'][x] + ')">'
+                rowHTML += '<a href="browsingGenre.html?genre=' + resultData[i]['genre_ids'][x] + '">'
                     + resultData[i]['genre_names'][x] +
                     '</a>';
             } else {
-                rowHTML += '<a onclick="viewGenre( ' + resultData[i]['genre_ids'][x] + ')">'
+                rowHTML += '<a href="browsingGenre.html?genre=' + resultData[i]['genre_ids'][x] + '">'
                     + resultData[i]['genre_names'][x] +
                     '</a>' + ", ";
             }

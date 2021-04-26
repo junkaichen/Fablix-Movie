@@ -157,7 +157,7 @@ public class BrowseServlet extends  HttpServlet {
                 String query2 = "SELECT T.starname, T.starId, starMovieCount FROM(SELECT m.starId, s.starname, " +
                         "count(*) as starMovieCount FROM stars_in_movies m, stars s  WHERE  m.starId = s.id GROUP by s.id) " +
                         "T,stars_in_movies X WHERE X.starId = T.starId AND X.movieId =  '" +   movie_id + "'" +
-                        " ORDER BY T.starMovieCount DESC LIMIT 3;";
+                        " ORDER BY T.starMovieCount DESC, T.starname ASC LIMIT 3;";
                 ResultSet rs2 = statement2.executeQuery(query2);
                 int counter = 0;
                 while(rs2.next())
@@ -181,7 +181,6 @@ public class BrowseServlet extends  HttpServlet {
                 jsonObject.addProperty("movie_year", movie_year);
                 jsonObject.addProperty("movie_director", movie_director);
                 jsonObject.addProperty("movie_rating", movie_rating);
-                jsonObject.addProperty("movie_genres", movie_genres);
                 jsonObject.add("genre_names",genre_names);
                 jsonObject.add("genre_ids",genre_ids);
                 jsonObject.add("movie_starid", starsId_array);

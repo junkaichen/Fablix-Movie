@@ -32,6 +32,62 @@ public class SingleMovieServlet extends HttpServlet{
         }
     }
 
+    public JsonArray genresfilterNames(String allgenres) {
+        JsonArray outputGenres = new JsonArray();
+        int total = 0;
+        if(allgenres.contains(";"))
+        {
+            String[] genres = allgenres.split(";");
+            if(genres.length == 2)
+            {
+                outputGenres.add(genres[0].split(",")[0]);
+                outputGenres.add(genres[1].split(",")[0]);
+            }
+            else
+            {
+                while(total < 3 && total < genres.length)
+                {
+                    outputGenres.add(genres[total].split(",")[0]);
+                    total++;
+                }
+            }
+        }
+        else
+        {
+            String[] genres = allgenres.split(",");
+            outputGenres.add(genres[0]);
+        }
+        return outputGenres;
+    }
+
+    public JsonArray genresfilterIds(String allgenres) {
+        JsonArray outputGenres = new JsonArray();
+        int total = 0;
+        if(allgenres.contains(";"))
+        {
+            String[] genres = allgenres.split(";");
+            if(genres.length == 2)
+            {
+                outputGenres.add(genres[0].split(",")[1]);
+                outputGenres.add(genres[1].split(",")[1]);
+            }
+            else
+            {
+                while(total < 3 && total < genres.length)
+                {
+                    outputGenres.add(genres[total].split(",")[1]);
+                    total++;
+                }
+            }
+        }
+        else
+        {
+            String[] genres = allgenres.split(",");
+            outputGenres.add(genres[1]);
+        }
+        return outputGenres;
+    }
+
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      *      response)
@@ -52,19 +108,21 @@ public class SingleMovieServlet extends HttpServlet{
             Connection dbcon = dataSource.getConnection();
 
             // Construct a query with parameter represented by "?"
-            String query = "SELECT  * " +
-                    "from movies M, genres_in_movies GM, genres G, stars_in_movies SM, stars S, ratings R " +
-                    "WHERE M.id = GM.movieId AND GM.genreId = G.id AND M.id = SM.movieId AND SM.starId = S.id AND " +
-                    "M.id = R.movieId AND M.id = ?";
+            String query = "SELECT S.movieId, M.title, M.year, M.director," +
+                    "     R.rating, " +
+                    "GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres" +
+                    " FROM " +
+                    "     stars T, movies M,  ratings R, " +
+                    "     genres_in_movies I, genres G, stars_in_movies S" +
+                    " WHERE M.id = R.movieId AND" +
+                    "     R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId" +
+                    "     AND S.starId = T.id and M.id = ?" +
+                    "     GROUP BY S.movieId,R.rating";
+
 
             // Declare our statement
             PreparedStatement statement = dbcon.prepareStatement(query);
-
-            // Set the parameter represented by "?" in the query to the id we get from url,
-            // num 1 indicates the first "?" in the query
             statement.setString(1, id);
-
-            // Perform the query
             ResultSet rs = statement.executeQuery();
 
             JsonArray jsonArray = new JsonArray();
@@ -76,64 +134,42 @@ public class SingleMovieServlet extends HttpServlet{
             Integer movie_year = rs.getInt("year");
             String movie_director = rs.getString("director");
             Double movie_rating = rs.getDouble("rating");
+
+            String movie_genres = rs.getString("allGenres");
+            JsonArray genre_names = genresfilterNames(movie_genres);
+            JsonArray genre_ids = genresfilterIds(movie_genres);
+            JsonArray stars_array = new JsonArray();
+            JsonArray starsId_array= new JsonArray();
+            String query2 = "SELECT T.starname, T.starId, starMovieCount FROM " +
+                    "    (SELECT m.starId, s.starname, count(*) as starMovieCount " +
+                    "     FROM stars_in_movies m, stars s  WHERE  m.starId = s.id GROUP by s.id) T,  " +
+                    "     stars_in_movies X" +
+                    "     WHERE X.starId = T.starId AND X.movieId = ?  " +
+                    "     ORDER BY T.starMovieCount DESC, T.starname ASC;";
+            PreparedStatement statement2 = dbcon.prepareStatement(query2);
+            statement2.setString(1, id);
+            ResultSet rs2 = statement2.executeQuery();
+            while(rs2.next())
+            {
+                stars_array.add(rs2.getString("starname"));
+                starsId_array.add(rs2.getString("starId"));
+            }
+
+            jsonObject.add("genre_names",genre_names);
+            jsonObject.add("genre_ids",genre_ids);
             jsonObject.addProperty("movie_title", movie_title);
             jsonObject.addProperty("movie_year", movie_year);
             jsonObject.addProperty("movie_director", movie_director);
             jsonObject.addProperty("movie_rating", movie_rating);
-            JsonArray genres_array = new JsonArray();
-            JsonArray stars_array = new JsonArray();
-            JsonArray star_ids = new JsonArray();
-            String movie_nameOfGenres = rs.getString("name");
-            String movie_nameOfStars = rs.getString("starname");
-            genres_array.add(movie_nameOfGenres);
-            stars_array.add(movie_nameOfStars);
-            star_ids.add(rs.getString("starId"));
-
-            while(rs.next())
-            {
-                movie_nameOfGenres = rs.getString("name");
-                movie_nameOfStars = rs.getString("starname");
-                boolean exists = false;
-                boolean exists2 = false;
-                for(int i = 0; i < genres_array.size(); i++)
-                {
-                    if(genres_array.toString().contains(movie_nameOfGenres))
-                    {
-                        exists = true;
-                        break;
-                    }
-                }
-                if(exists == false)
-                {
-                    genres_array.add(movie_nameOfGenres);
-                }
-                for(int i = 0; i < stars_array.size(); i++)
-                {
-                    if(stars_array.toString().contains(movie_nameOfStars))
-                    {
-                        exists2 = true;
-                        break;
-                    }
-                }
-                if(exists2 == false)
-                {
-                    stars_array.add(movie_nameOfStars);
-                    star_ids.add(rs.getString("starId"));
-                }
-
-            }
-            jsonObject.add("star_ids",star_ids);
-            jsonObject.add("movie_nameOfGenres", genres_array);
-            jsonObject.add("movie_nameOfStars", stars_array);
-
-
-
+            jsonObject.add("movie_starid", starsId_array);
+            jsonObject.add("movie_star", stars_array);
             jsonArray.add(jsonObject);
             // write JSON string to output
             out.write(jsonArray.toString());
             // set response status to 200 (OK)
             response.setStatus(200);
-
+            rs2.close();
+            statement2.close();
             rs.close();
             statement.close();
             dbcon.close();
