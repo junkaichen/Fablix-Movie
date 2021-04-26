@@ -13,13 +13,49 @@
         }
 
 
+
+        th {
+            height: 70px;
+        }
+        .table > tbody > tr > td {
+            vertical-align: middle;
+        }
+
+        .table {
+            font-size: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            position: center
+        }
+
+
     </style>
 </head>
 <body>
 <h2>Your Cart</h2>
 
-
 <button class="keepShopping" onclick=window.location.replace("index.html");>Continue Shopping</button>
+
+<table id=item_list_table class="table table-striped" >
+    <!-- Create a table header -->
+    <thead>
+    <tr>
+        <!-- Titles of each column-->
+        <th><img src="https://cdn4.iconfinder.com/data/icons/small-n-flat/24/movie-alt2-512.png" width="35" height="35"></th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Genres</th>
+        <th>delete</th>
+
+
+    </tr>
+    </thead>
+    <!-- Table body is left empty here, will be populated with the data retrieved with index.js -->
+    <!-- Again, id "star_table_body" is useful for jQuery to find this html element -->
+    <tbody id=item_list_table_body></tbody>
+</table>
+
 
 <div id="item_list"></div>
 

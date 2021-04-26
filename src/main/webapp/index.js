@@ -35,18 +35,17 @@ function handleCartArray(resultArray) {
 
 
 function AddToCart(cartEvent) {
-    console.log(cartEvent);
+    console.log("submit cart");
 
     $.ajax("api/shopcart", {
         method: "POST",
         data: {"itemInfo": cartEvent},
         success: resultDataString => {
             let resultDataJson = JSON.parse(resultDataString);
-            handleCartArray(resultDataJson["previousItems"]);
+            handleCartArray(resultDataJson);
         }
     });
     alert("Added to Cart");
-    cart[0].reset();
 
 }
     // clear input form
@@ -187,7 +186,7 @@ function handleSearchResult(resultData) {
     movieListTableElement2.html("");
     for (let i = 0; i < Math.min(20, resultData.length); i++) {
         let rowHTML = "";
-        let shpvalue = resultData[i]['movie_id'];
+        let shpvalue = resultData[i]["movie_id"];
         rowHTML += "<tr>";
         // Add a link to single-star.html with id passed with GET url parameter
         rowHTML +=
@@ -229,7 +228,7 @@ function handleSearchResult(resultData) {
         rowHTML += "</td>";
         rowHTML += "<td>" + resultData[i]["movie_rating"] + "</td>";
         rowHTML += "<td>";
-        rowHTML += "<button onclick=AddToCart('" + shpvalue + "')>ADD</button>";
+        rowHTML += "<button onclick=AddToCart('" + shpvalue + "')" + ">ADD</button>";
         rowHTML += "</td>";
         rowHTML += "</tr>";
         //
