@@ -63,14 +63,36 @@ Finally, type in the url http://3.129.149.109:8080/CS122APROJECT1-1.0-SNAPSHOT/
 
 to get to the landing page of the web application. The landing page will be the MovieList Page.
 
+Once on the landing page, there will be options to search and browse within the home page. 
+Most data will render on the main page with 
+the exception of browsingby a genre when clicking a hyperlink from movie list table results.
+
+The option to search is done with writing all 
+possible parameters out the user wants to check from i.e. title,year,director and/or actor.
+
+Substring matches designed use was %user_input% This subsstring match is used 
+for title, director and stars. Year must be an exact match. 
+
+
 Contributions
 
 SQL_Schema -- Jacob (Editted by: Alex)
+1 Row 1 Moive Result Search Query Jacob
+SQL query for Actors by Movies played in Jacob
+SearchServlet.java Alex (Editted by: Jacob)
+Browsing Servlets Jacob
+Browsing Gernre html/js Jacob
+Logging in functionality Alex
+Shopping Cart functionality Alex
+Jump functionality between pages Jacob
+User Servlet Alex
 SingleStarServlet.java Jacob (Editted by: Alex)
 MovieListServlet.java Alex (Editted by: Jacob)
 SingleMovie.java Alex (Editted by: Jacob) 
 single-movie.html Alex (Editted by: Jacob)
 single-movie.js Alex (Editted by: Jacob)
+UPDATED single-movie.hmtl/js Jacob (Editted by: Alex)
+UPDATED single-star.html/js Jacob (Editted by: Alex)
 single-star.html Jacob 
 index.js Alex (Editted by: Jacob)
 index.html Alex (Editted by: Jacob)

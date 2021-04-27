@@ -101,7 +101,7 @@ public class BrowseServlet extends  HttpServlet {
                     " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
                     "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
                     "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and M.title REGEXP "
-                    + "'^[^A-Za-z0-9]'" + " GROUP BY S.movieId,R.rating ORDER BY rating DESC limit 20;";
+                    + "'^[^A-Za-z0-9]'" + " GROUP BY S.movieId,R.rating ORDER BY rating DESC, M.title ASC limit 20;";
             return outputQuery;
 
         }
@@ -111,7 +111,7 @@ public class BrowseServlet extends  HttpServlet {
                     " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
                     "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
                     "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and M.title like "
-                    + "'" + starts_with +"%'" + " GROUP BY S.movieId,R.rating ORDER BY rating DESC limit 20;";
+                    + "'" + starts_with +"%'" + " GROUP BY S.movieId,R.rating ORDER BY rating DESC, M.title ASC limit 20;";
 
             return outputQuery;
         }

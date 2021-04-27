@@ -333,11 +333,10 @@ public class SearchServlet extends HttpServlet {
             String input_year = request.getParameter("year");
             String input_director= request.getParameter("director");
             String input_star = request.getParameter("star");
-
-            if(input_title != ""){user_inputs.add(input_title); user_inputsTypes.add("TITLE");}
-            if(input_year != ""){user_inputs.add(input_year); user_inputsTypes.add("YEAR");}
-            if(input_director != ""){user_inputs.add(input_director); user_inputsTypes.add("DIRECTOR");}
-            if(input_star != ""){user_inputs.add(input_star); user_inputsTypes.add("STAR");}
+            if(input_title != "" && input_title != null){user_inputs.add(input_title); user_inputsTypes.add("TITLE");}
+            if(input_year != "" && input_year != null){user_inputs.add(input_year); user_inputsTypes.add("YEAR");}
+            if(input_director != "" && input_director != null){user_inputs.add(input_director); user_inputsTypes.add("DIRECTOR");}
+            if(input_star != "" && input_star != null){user_inputs.add(input_star); user_inputsTypes.add("STAR");}
 
             String query = handleQuery(user_inputs, user_inputsTypes);
 
@@ -390,6 +389,8 @@ public class SearchServlet extends HttpServlet {
                 jsonObject.add("movie_star", stars_array);
                 jsonArray.add(jsonObject);
             }
+            System.out.println("Done");
+            System.out.println("Size = " + jsonArray.size());
             // write JSON string to output
             out.write(jsonArray.toString());
             // set response status to 200 (OK)

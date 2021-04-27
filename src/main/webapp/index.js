@@ -42,6 +42,16 @@ function myFunction() {
 
 function browse_alpha()
 {
+    // if(Search_view)
+    // {
+    //     page_num = 0;
+    //     Browse_view = true;
+    //     Search_view = false;
+    // }
+    // let sort_by_rating = document.getElementById("sort_by_rating");
+    // let sort_by_name = document.getElementById("sort_by_name");
+    // console.log("sort by rating : " + sort_by_rating.value);
+    // console.log("sort by name : " + sort_by_name.value);
     let t = document.getElementById("alpha_list");
     submitform();
     console.log(document.location);
@@ -53,10 +63,22 @@ function browse_alpha()
             success: (resultData) => handleSearchResult(resultData)
         }
     );
+    let browse_url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?starts_with=" + t.value;
+    window.history.pushState({path:browse_url},'',browse_url);
 }
 
 function browse_numeric()
 {
+    // if(Search_view)
+    // {
+    //     page_num = 0;
+    //     Browse_view = true;
+    //     Search_view = false;
+    // }
+    // let sort_by_rating = document.getElementById("sort_by_rating");
+    // let sort_by_name = document.getElementById("sort_by_name");
+    // console.log("sort by rating : " + sort_by_rating.value);
+    // console.log("sort by name : " + sort_by_name.value);
     let p = document.getElementById("numeric_list");
     submitform();
     jQuery.ajax(
@@ -67,6 +89,8 @@ function browse_numeric()
             success: (resultData) => handleSearchResult(resultData)
         }
     );
+    let browse_url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?starts_with=" + p.value;
+    window.history.pushState({path:browse_url},'',browse_url);
 }
 
 function submitform() {
@@ -106,6 +130,17 @@ function loadGenres()
 
 function submitGenre()
 {
+
+    // if(Search_view)
+    // {
+    //     page_num = 0;
+    //     Browse_view = true;
+    //     Search_view = false;
+    // }
+    // let sort_by_rating = document.getElementById("sort_by_rating");
+    // let sort_by_name = document.getElementById("sort_by_name");
+    // console.log("sort by rating : " + sort_by_rating.value);
+    // console.log("sort by name : " + sort_by_name.value);
     let p = document.getElementById("genre_list_table");
     console.log("genre id is " + p.value);
     submitform();
@@ -117,6 +152,8 @@ function submitGenre()
             success: (resultData) => handleSearchResult(resultData)
         }
     );
+    let browse_url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?genre=" + p.value;
+    window.history.pushState({path:browse_url},'',browse_url);
 }
 
 function viewGenre(genre_id)
@@ -234,16 +271,61 @@ function submitSearchForm(formSubmitEvent) {
      */
     formSubmitEvent.preventDefault();
 
+    // if(Browse_view)
+    // {
+    //     Search_view = true;
+    //     Browse_view = false;
+    //     page_num = 0;
+    // }
+    let first = false;
+    let title_info = {
+        "param_type":"title",
+        "value":document.getElementsByTagName("input")[0].value
+    };
+    let year_info = {
+        "param_type":"year",
+        "value":document.getElementsByTagName("input")[1].value
+    };
+    let director_info = {
+        "param_type":"director",
+        "value":document.getElementsByTagName("input")[2].value
+    };
+    let star_info = {
+        "param_type":"star",
+        "value":document.getElementsByTagName("input")[3].value
+    };
+    let params = [title_info,year_info,director_info,star_info];
+    let confirmedParams = "?";
+    for(i = 0; i < params.length; i++)
+    {
+        if(params[i].value != "")
+        {
+            if(!first)
+            {
+                first = true;
+                confirmedParams += params[i].param_type + "=" + params[i].value;
+            }
+            else
+            {
+                confirmedParams += "&" + params[i].param_type + "=" + params[i].value
+            }
+        }
+
+    }
+    console.log("confirmed parameters");
+    console.log(confirmedParams);
     jQuery.ajax(
-      {
-          dataType: "json",
-          method: "GET",
-          // Serialize the login form to the data sent by POST request
-          data: search_form.serialize(),
-          url: "api/search",
-          success: (resultData) => handleSearchResult(resultData)
+        {
+            dataType: "json",
+            method: "GET",
+            // Serialize the login form to the data sent by POST request
+            data: confirmedParams.substr(1),
+            url: "api/search",
+            success: (resultData) => handleSearchResult(resultData)
         }
     );
+    let browse_url = window.location.protocol + "//" + window.location.host + window.location.pathname + confirmedParams;
+    window.history.pushState({path:browse_url},'',browse_url);
 }
 
 $.ajax("api/shopcart", {
