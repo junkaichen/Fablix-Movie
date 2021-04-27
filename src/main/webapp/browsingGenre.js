@@ -14,6 +14,11 @@
  * @param resultData jsonObject
  */
 
+function ShoppingCart()
+{
+    window.location.replace("shopCart.html");
+}
+
 function getParameterByName(target) {
     // Get request URL
     let url = window.location.href;

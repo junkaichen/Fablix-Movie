@@ -15,6 +15,8 @@
  * @param target String
  * @returns {*}
  */
+
+
 function getParameterByName(target) {
     // Get request URL
     let url = window.location.href;
@@ -35,6 +37,12 @@ function getParameterByName(target) {
  * Handles the data returned by the API, read the jsonObject and populate data into html elements
  * @param resultData jsonObject
  */
+
+function ShoppingCart()
+{
+    window.location.replace("shopCart.html");
+}
+
 
 function handleResult(resultData) {
 
