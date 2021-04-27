@@ -104,7 +104,10 @@ public class ShopCartServlet extends HttpServlet {
      * handles POST requests to add and show the item list information
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("application/json"); // Response mime type
+        PrintWriter out = response.getWriter();
         String item = request.getParameter("itemInfo");
+        String option = request.getParameter("option");
         System.out.println(item);
         HttpSession session = request.getSession();
 
@@ -121,31 +124,66 @@ public class ShopCartServlet extends HttpServlet {
         } else {
             // prevent corrupted states through sharing under multi-threads
             // will only be executed by one thread at a time
-            synchronized (previousItems) {
-                if(previousItems.contains(item))
-                {
-                    int repeatIndex = previousItems.indexOf(item);
-                    NumOfItems.set(repeatIndex, NumOfItems.get(repeatIndex) + 1);
+            JsonArray moviesTitleJsonArray = new JsonArray();
+            try {
+                Connection dbcon = dataSource.getConnection();
+                Statement statement = dbcon.createStatement();
+                synchronized (previousItems) {
 
+                    if (previousItems.contains(item)) {
+                        int repeatIndex = previousItems.indexOf(item);
+                        NumOfItems.set(repeatIndex, NumOfItems.get(repeatIndex) + 1);
+
+                    } else {
+                        NumOfItems.add(1);
+                        previousItems.add(item);
+                    }
+                    if(option.equals("REMOVE"))
+                    {
+                        int repeatIndex = previousItems.indexOf(item);
+                        NumOfItems.set(repeatIndex, NumOfItems.get(repeatIndex) - 2);
+                    }
+                    if (option.equals("DELETE"))
+                    {
+                        int repeatIndex = previousItems.indexOf(item);
+                        previousItems.remove(item);
+                        NumOfItems.remove(repeatIndex);
+                    }
                 }
-                else
-                {
-                    NumOfItems.add(1);
-                    previousItems.add(item);
+                if (!option.equals("NONE")){
+                for (int i = 0; i < previousItems.size(); i++) {
+                    String movieID = previousItems.get(i);
+                    String query = "SELECT M.title FROM movies M WHERE M.id = '" + movieID + "'";
+                    ResultSet rs = statement.executeQuery(query);
+                    rs.next();
+                    String movie_title = rs.getString("title");
+                    rs.close();
+                    moviesTitleJsonArray.add(movie_title);
                 }
+                    response.setStatus(200);
+                    statement.close();
+                    dbcon.close();
+                }
+            } catch (SQLException e) {
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("errorMessage", e.getMessage());
+                out.write(jsonObject.toString());
+
+                // set reponse status to 500 (Internal Server Error)
+                response.setStatus(500);
             }
+
+            JsonObject responseJsonObject = new JsonObject();
+
+            JsonArray previousItemsJsonArray = new JsonArray();
+            JsonArray NumOfItemsJsonArray = new JsonArray();
+            previousItems.forEach(previousItemsJsonArray::add);
+            NumOfItems.forEach(NumOfItemsJsonArray::add);
+            responseJsonObject.add("moviesTitle", moviesTitleJsonArray);
+            responseJsonObject.add("numItems", NumOfItemsJsonArray);
+            responseJsonObject.add("previousItems", previousItemsJsonArray);
+
+            out.write(responseJsonObject.toString());
         }
-
-        JsonObject responseJsonObject = new JsonObject();
-
-        JsonArray previousItemsJsonArray = new JsonArray();
-        JsonArray NumOfItemsJsonArray = new JsonArray();
-        previousItems.forEach(previousItemsJsonArray::add);
-        NumOfItems.forEach(NumOfItemsJsonArray::add);
-        responseJsonObject.add("numItems", NumOfItemsJsonArray);
-        responseJsonObject.add("previousItems", previousItemsJsonArray);
-
-        response.getWriter().write(responseJsonObject.toString());
     }
-
 }

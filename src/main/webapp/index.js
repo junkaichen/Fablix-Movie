@@ -1,5 +1,4 @@
 let search_form = $("#search_form");
-let cart = $("#cart");
 var Genre_activation = false;
 loadGenres();
 /**
@@ -8,29 +7,11 @@ loadGenres();
  */
 
 function handleSessionData(resultDataString) {
-    let resultDataJson = JSON.parse(resultDataString);
     console.log("handle session response");
-    console.log(resultDataJson);
-    console.log(resultDataJson["sessionID"]);
-    handleCartArray(resultDataJson["previousItems"]);
+    console.log(resultDataString);
 
 }
 
-function handleCartArray(resultArray) {
-    console.log(resultArray);
-    let item_list = $("#item_list");
-    // change it to html list
-    let res = "<ul>";
-    for (let i = 0; i < resultArray.length; i++) {
-        // each item will be in a bullet point
-        res += "<li>" + resultArray[i] + "</li>";
-    }
-    res += "</ul>";
-
-    // clear the old array and show the new array in the frontend
-    item_list.html("");
-    item_list.append(res);
-}
 
 
 
@@ -39,11 +20,8 @@ function AddToCart(cartEvent) {
 
     $.ajax("api/shopcart", {
         method: "POST",
-        data: {"itemInfo": cartEvent},
-        success: resultDataString => {
-            let resultDataJson = JSON.parse(resultDataString);
-            handleCartArray(resultDataJson);
-        }
+        data: {"itemInfo": cartEvent, "option": "NONE"},
+        success: (resultData) => handleSessionData(resultData)
     });
     alert("Added to Cart");
 

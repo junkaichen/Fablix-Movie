@@ -1,0 +1,109 @@
+<!-- This page will be redirected from any url if you are not logged in -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment</title>
+    <style>
+        Body {
+            font-family: Calibri, Helvetica, sans-serif;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 500px;
+            background-color: beige;
+        }
+        button {
+            background-color: #AEA5A5;
+            width: 100%;
+            color: black;
+            padding: 15px;
+            margin: 10px 0px;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type=text], input[type=password] {
+            width: 100%;
+            margin: 8px 0;
+            padding: 12px 20px;
+            display: inline-block;
+            border: 2px #030101;
+            box-sizing: border-box;
+        }
+        button:hover {
+            opacity: 0.7;
+        }
+
+        .container {
+            padding: 300px;
+            background-color: #D7DBDD ;
+        }
+
+        h2{text-align: center;}
+
+        div {
+            height: 200px;
+            width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .mytotalprice {
+
+            font-size: 180%;
+            height: 200px;
+            width: 50%;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<h1>Total Price is:</h1>
+<div class= "mytotalprice" id="totalprice"></div>
+
+
+
+<h2>Enter Your Payment Details</h2>
+<!-- Set the method to POST to avoid showing the username/password in the URL
+     The default action is disabled to allow your own implementation. -->
+<form id="payment_form" method="post" action="#">
+    <div class="container">
+        <label><b>FIRST NAME</b></label>
+        <label>
+            <input name="firstname"  type="text">
+        </label>
+        <br>
+        <label><b>LAST NAME</b></label>
+        <label>
+            <input name="lastname"  type="text">
+        </label>
+        <br>
+        <br>
+        <label><b>CREDIT CARD NUMBER</b></label>
+        <label>
+            <input name="creditcard"  type="text">
+        </label>
+        <br>
+        <br>
+        <label><b>EXPIRATION DATE</b></label>
+        <label>
+            <input name="expirationdate"  type="text">
+        </label>
+        <br>
+        <button type="submit">Place Order</button>
+    </div>
+</form>
+
+<div id="payment_error_message"></div>
+
+<!-- include jQuery-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src='https://code.jquery.com/jquery-3.1.0.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<!-- include our own JS file -->
+<script src="./payment.js"></script>
+
+</body>
+</html>

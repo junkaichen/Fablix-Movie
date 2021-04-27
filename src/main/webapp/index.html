@@ -10,6 +10,18 @@
             position: center;
 
         }
+        button {
+            background-color: grey; /* Green */
+            border: none;
+            color: white;
+            padding: 10px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
         select {
             position: center;
             width: 100%;
@@ -23,7 +35,7 @@
 
             background-color: #C9B7B7 ;
         }
-        button {
+        .search {
             background-color: #aea5a5;
             width: 100%;
             color: black;
@@ -84,15 +96,30 @@
         #movie_list_table2 {
 
             display:none;
-
         }
 
-        #item_list{
 
-            display:none;
-
+        .Checkout {
+            background-color: white;
+            color: black;
+            border: 2px solid #008CBA;
+            padding: 12px 28px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
         }
+    #alpha_list{
+        width: 5%
+    }
 
+    #numeric_list{
+        width: 5%
+    }
+
+    #genre_list_table{
+        width: 5%;
+    }
 
 
     </style>
@@ -102,7 +129,7 @@
 <h2>Welcome to Fablix</h2>
 <!-- Set the method to POST to avoid showing the username/password in the URL
      The default action is disabled to allow your own implementation. -->
-<button onclick="myFunction()">Click Here to Search!</button>
+<button class=search onclick="myFunction()">Click Here to Search!</button>
 <form id="search_form" method="get" action="#">
     <div class="container">
         <label><b>Search by Title</b></label>
@@ -128,11 +155,11 @@
     </div>
 </form>
 
-<button onclick="ShoppingCart()">Cart</button>
-<div id="Add_To_Cart_message"></div>
+<button class=Checkout onclick="ShoppingCart()">Checkout</button>
+
 
 <div id="search_error_message"></div>
-<p style="text-align: center">Browse Alphabetically</p>
+<p style="text-align: left">Browse Alphabetically</p>
 <select id="alpha_list" size="1" style="position: center">
     <option value="*">*</option>
     <option value="A">A</option>
@@ -162,9 +189,9 @@
     <option value="Y">Y</option>
     <option value="Z">Z</option>
 </select>
-<button onclick="browse_alpha()" formmethod="get" formaction="?">Press to Browse Alphabetically</button>
+<button onclick="browse_alpha()" formmethod="get" formaction="?">Browse</button>
 <br/>
-<p style="text-align: center">Browse Numerically</p>
+<p style="text-align: left">Browse Numerically</p>
 <select id="numeric_list" size="1" style="position: center">
     <option value="0">0</option>
     <option value="1">1</option>
@@ -177,17 +204,16 @@
     <option value="8">8</option>
     <option value="9">9</option>
 </select>
-<button onclick="browse_numeric()" formmethod="get" formaction="?">Press to Browse Numerically</button>
+<button onclick="browse_numeric()" formmethod="get" formaction="?">Browse</button>
 <br/>
 
+<p style="text-align: left">Browse Genre</p>
 <select id="genre_list_table" style="position: center">
 </select>
-<br/>
-<button onclick="submitGenre()" formmethod="get" formaction="?">Submit Genre</button>
+<button onclick="submitGenre()" formmethod="get" formaction="?">Browse</button>
 <br/>
 <button onclick="collapseResults()">Open/Close Results</button>
 
-<div id="item_list"></div>
 
 
 <table id=movie_list_table2 class="table table-striped" >
