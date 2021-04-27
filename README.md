@@ -4,7 +4,7 @@ ALL CODE THAT WAS NOT PROVIDED BY Professor Chen Li WAS CREATED BY TEAM 54.
 
 LATEST UPDATE OF README: SATURDAY APRIL 10, 2021
 
-LINK FOR VIDEO = https://drive.google.com/file/d/1me4rMcDOXmS8_YY7YRj39A-yiUCrfckq/view?usp=sharing
+LINK FOR VIDEO =  https://drive.google.com/file/d/1T7uWEFlbPSZWWri8C84ojd-vF4ptQ_20/view?usp=sharing
 
 REQUIREMENTS:
 Java 11
@@ -59,7 +59,7 @@ ls -lah /var/lib/tomcat9/webapps/
 
 The war file will appear 
 
-Finally, type in the url http://3.129.149.109:8080/CS122APROJECT1-1.0-SNAPSHOT/
+Finally, type in the url http://18.217.56.83:8080/CS122APROJECT1-1.0-SNAPSHOT/
 
 to get to the landing page of the web application. The landing page will be the MovieList Page.
 
