@@ -74,6 +74,7 @@ Substring matches designed use was %user_input% This subsstring match is used
 for title, director and stars. Year must be an exact match. 
 
 
+
 Contributions
 
 SQL_Schema -- Jacob (Editted by: Alex)
@@ -99,5 +100,7 @@ index.html Alex (Editted by: Jacob)
 jumping between single movies and movielist by movie title Alex 
 Jumping between single star and movielist by movie star Jacob
 Going back to the home page from Single movie page and Single Star page Jacob
+Payment pages Alex
+Confirmation pages Alex
 git repo organization Jacob
 README Jacob (Editted by: Alex)
