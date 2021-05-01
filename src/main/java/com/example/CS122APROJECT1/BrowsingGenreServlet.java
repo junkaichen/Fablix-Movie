@@ -19,6 +19,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 
 @WebServlet(name = "BrowsingGenreServlet", urlPatterns = "/api/browsingGenres")
 public class BrowsingGenreServlet extends HttpServlet {
@@ -50,6 +51,7 @@ public class BrowsingGenreServlet extends HttpServlet {
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
             // Declare our statement
+            System.out.println(Collections.list(request.getParameterNames()));
             Statement statement = dbcon.createStatement();
             String query = "SELECT * FROM genres ORDER BY name ASC";
             // Perform the query

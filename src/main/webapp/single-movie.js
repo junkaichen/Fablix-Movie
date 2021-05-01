@@ -65,28 +65,28 @@ function handleResult(resultData) {
     rowHTML += "<tr>";
     rowHTML += "<td>";
 
-    for (let x = 0; x < resultData[0]['genre_names'].length; x++) {
-        if (x + 1 == resultData[0]['genre_names'].length) {
-            rowHTML += '<a href="browsingGenre.html?genre=' + resultData[0]['genre_ids'][x] + '">'
-                + resultData[0]['genre_names'][x] +
+    for (let x = 0; x < resultData[0]['genres'].length; x++) {
+        if (x + 1 == resultData[0]['genres'].length) {
+            rowHTML += '<a href="browsingGenre.html?genre=' + resultData[0]['genres'][x].split(",")[1] + '">'
+                + resultData[0]['genres'][x].split(",")[0] +
                 '</a>';
         } else {
-            rowHTML += '<a href="browsingGenre.html?genre=' + resultData[0]['genre_ids'][x] + '">'
-                + resultData[0]['genre_names'][x] +
+            rowHTML += '<a href="browsingGenre.html?genre=' + resultData[0]['genres'][x].split(",")[1] + '">'
+                + resultData[0]['genres'][x].split(",")[0] +
                 '</a>' + ", ";
         }
     }
 
     rowHTML += "</td>";
     rowHTML += "<td>";
-    for (let x = 0; x < resultData[0]['movie_star'].length; x++) {
-        if (x + 1 == resultData[0]['movie_star'].length) {
-            rowHTML += '<a href="single-star.html?id=' + resultData[0]['movie_starid'][x] + '">'
-                + resultData[0]['movie_star'][x] +
+    for (let x = 0; x < resultData[0]['movie_stars'].length; x++) {
+        if (x + 1 == resultData[0]['movie_stars'].length) {
+            rowHTML += '<a href="single-star.html?id=' + resultData[0]['movie_stars'][x].split(",")[1] + '">'
+                + resultData[0]['movie_stars'][x].split(",")[0] +
                 '</a>';
         } else {
-            rowHTML += '<a href="single-star.html?id=' + resultData[0]['movie_starid'][x] + '">'
-                + resultData[0]['movie_star'][x] +
+            rowHTML += '<a href="single-star.html?id=' + resultData[0]['movie_stars'][x].split(",")[1] + '">'
+                + resultData[0]['movie_stars'][x].split(",")[0] +
                 '</a>' + ", ";
         }
     }

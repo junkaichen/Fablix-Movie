@@ -16,6 +16,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -29,60 +30,22 @@ public class BrowseServlet extends  HttpServlet {
     // Create a dataSource which registered in web.
     private DataSource dataSource;
 
-    public JsonArray genresfilterNames(String allgenres) {
+    public JsonArray genresfilter(String[] allgenres) {
         JsonArray outputGenres = new JsonArray();
-        int total = 0;
-        if(allgenres.contains(";"))
+        for(int i = 0; i < allgenres.length; i++)
         {
-            String[] genres = allgenres.split(";");
-            if(genres.length == 2)
-            {
-                outputGenres.add(genres[0].split(",")[0]);
-                outputGenres.add(genres[1].split(",")[0]);
-            }
-            else
-            {
-                while(total < 3 && total < genres.length)
-                {
-                    outputGenres.add(genres[total].split(",")[0]);
-                    total++;
-                }
-            }
-        }
-        else
-        {
-            String[] genres = allgenres.split(",");
-            outputGenres.add(genres[0]);
+            outputGenres.add(allgenres[i]);
         }
         return outputGenres;
     }
 
-    public JsonArray genresfilterIds(String allgenres) {
-        JsonArray outputGenres = new JsonArray();
-        int total = 0;
-        if(allgenres.contains(";"))
+    public JsonArray starsfilter(String[] allstars) {
+        JsonArray outputStars = new JsonArray();
+        for(int i = 0; i < allstars.length; i++)
         {
-            String[] genres = allgenres.split(";");
-            if(genres.length == 2)
-            {
-                outputGenres.add(genres[0].split(",")[1]);
-                outputGenres.add(genres[1].split(",")[1]);
-            }
-            else
-            {
-                while(total < 3 && total < genres.length)
-                {
-                    outputGenres.add(genres[total].split(",")[1]);
-                    total++;
-                }
-            }
+            outputStars.add(allstars[i]);
         }
-        else
-        {
-            String[] genres = allgenres.split(",");
-            outputGenres.add(genres[1]);
-        }
-        return outputGenres;
+        return outputStars;
     }
 
     public void init(ServletConfig config) {
@@ -94,24 +57,41 @@ public class BrowseServlet extends  HttpServlet {
     }
 
     public String handleQuery(String starts_with) {
+
+
         if(starts_with.equals("*"))
         {
-            String outputQuery = "SELECT S.movieId ,M.title, M.year, M.director, R.rating, " +
-                    "GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
-                    " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
-                    "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
-                    "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and M.title REGEXP "
-                    + "'^[^A-Za-z0-9]'" + " GROUP BY S.movieId,R.rating ORDER BY rating DESC, M.title ASC limit 20;";
+            String outputQuery = "SELECT S.movieId ,M.title, M.year, M.director," +
+                    " R.rating, GROUP_CONCAT(" +
+                    "DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
+                    " GROUP_CONCAT(" +
+                    "DISTINCT CONCAT(" +
+                    "T.starname,',',T.starId) ORDER BY T.starMovieCount DESC, T.starname ASC SEPARATOR ';') as starInfo " +
+                    "FROM " +
+                    " (SELECT m.starId, s.starname, count(*) as starMovieCount " +
+                    " FROM stars_in_movies m, stars s  WHERE  m.starId = s.id GROUP by s.id) T, movies M,  ratings R," +
+                    " genres_in_movies I, genres G, stars_in_movies S" +
+                    " WHERE M.id = R.movieId AND" +
+                    " R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId" +
+                    " AND S.starId = T.starId AND M.title REGEXP "
+                    + "'^[^A-Za-z0-9]'" + " GROUP BY S.movieId,R.rating ORDER BY rating DESC limit ?,?;";
             return outputQuery;
 
         }
         else{
-            String outputQuery = "SELECT S.movieId ,M.title, M.year, M.director, R.rating, " +
-                    "GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
-                    " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',S.starId) SEPARATOR ';') as starInfo FROM movies M," +
-                    "  ratings R, genres_in_movies I, genres G, stars_in_movies S, stars T WHERE M.id = R.movieId AND " +
-                    "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId AND S.starId = T.id and M.title like "
-                    + "'" + starts_with +"%'" + " GROUP BY S.movieId,R.rating ORDER BY rating DESC, M.title ASC limit 20;";
+            String outputQuery = "SELECT S.movieId ,M.title, M.year, M.director," +
+                    " R.rating, GROUP_CONCAT(" +
+                    "DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
+                    " GROUP_CONCAT(" +
+                    "DISTINCT CONCAT(" +
+                    "T.starname,',',T.starId) ORDER BY T.starMovieCount DESC, T.starname ASC SEPARATOR ';') as starInfo " +
+                    "FROM " +
+                    " (SELECT m.starId, s.starname, count(*) as starMovieCount " +
+                    " FROM stars_in_movies m, stars s  WHERE  m.starId = s.id GROUP by s.id) T, movies M,  ratings R," +
+                    " genres_in_movies I, genres G, stars_in_movies S" +
+                    " WHERE M.id = R.movieId AND" +
+                    " R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId" +
+                    " AND S.starId = T.starId AND M.title LIKE ? GROUP BY S.movieId,R.rating ORDER BY rating DESC limit ?,?;";
 
             return outputQuery;
         }
@@ -131,47 +111,31 @@ public class BrowseServlet extends  HttpServlet {
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
 
-            // Declare our statement
-            Statement statement = dbcon.createStatement();
-            Statement statement2 = dbcon.createStatement();
             String input_starts_with = request.getParameter("starts_with");
             System.out.println(Collections.list(request.getParameterNames()));
-            System.out.println(input_starts_with);
 
             String query = handleQuery(input_starts_with);
-
-
-            ResultSet rs = statement.executeQuery(query);
+            PreparedStatement preparedStatement = dbcon.prepareStatement(query);
+            if(input_starts_with.equals("*"))
+            {
+                preparedStatement.setInt(1,0);
+                preparedStatement.setInt(2,20);
+            }
+            else
+            {
+                preparedStatement.setString(1,input_starts_with+"%");
+                preparedStatement.setInt(2,0);
+                preparedStatement.setInt(3,20);
+            }
+            ResultSet rs = preparedStatement.executeQuery();
 
             JsonArray jsonArray = new JsonArray();
             while(rs.next())
             {
-                JsonArray stars_array = new JsonArray();
-                JsonArray starsId_array = new JsonArray();
                 JsonObject jsonObject = new JsonObject();
-                String movie_genres = rs.getString("allGenres");
-                JsonArray genre_names = genresfilterNames(movie_genres);
-                JsonArray genre_ids = genresfilterIds(movie_genres);
-
+                JsonArray movie_genres = genresfilter(rs.getString("allGenres").split(";"));
+                JsonArray movie_stars  = starsfilter(rs.getString("starInfo").split(";"));
                 String movie_id = rs.getString("movieId");
-                String query2 = "SELECT T.starname, T.starId, starMovieCount FROM(SELECT m.starId, s.starname, " +
-                        "count(*) as starMovieCount FROM stars_in_movies m, stars s  WHERE  m.starId = s.id GROUP by s.id) " +
-                        "T,stars_in_movies X WHERE X.starId = T.starId AND X.movieId =  '" +   movie_id + "'" +
-                        " ORDER BY T.starMovieCount DESC, T.starname ASC LIMIT 3;";
-                ResultSet rs2 = statement2.executeQuery(query2);
-                int counter = 0;
-                while(rs2.next())
-                {
-                    String movie_star = rs2.getString("starname");
-                    stars_array.add(movie_star);
-                    String movie_starId = rs2.getString("starId");
-                    starsId_array.add(movie_starId);
-                    counter++;
-                    if(counter == 3)
-                    {
-                        break;
-                    }
-                }
                 String movie_title = rs.getString("title");
                 Integer movie_year = rs.getInt("year");
                 String movie_director = rs.getString("director");
@@ -181,10 +145,8 @@ public class BrowseServlet extends  HttpServlet {
                 jsonObject.addProperty("movie_year", movie_year);
                 jsonObject.addProperty("movie_director", movie_director);
                 jsonObject.addProperty("movie_rating", movie_rating);
-                jsonObject.add("genre_names",genre_names);
-                jsonObject.add("genre_ids",genre_ids);
-                jsonObject.add("movie_starid", starsId_array);
-                jsonObject.add("movie_star", stars_array);
+                jsonObject.add("genres",movie_genres);
+                jsonObject.add("movie_stars", movie_stars);
                 jsonArray.add(jsonObject);
             }
             // write JSON string to output
@@ -192,9 +154,8 @@ public class BrowseServlet extends  HttpServlet {
             // set response status to 200 (OK)
             response.setStatus(200);
             rs.close();
-            statement.close();
+            preparedStatement.close();
             dbcon.close();
-            System.out.println("Results are done");
 
         } catch (Exception e) {
 

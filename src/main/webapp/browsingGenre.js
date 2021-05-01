@@ -55,14 +55,14 @@ function handleMovieListResult(resultData) {
         rowHTML += "<td>" + resultData[i]["movie_year"] + "</td>";
         rowHTML += "<td>" + resultData[i]["movie_director"] + "</td>"
         rowHTML += "<td>";
-        for (let x = 0; x < Math.min(3, resultData[i]['genre_names'].length); x++) {
-            if (x + 1 == Math.min(3, resultData[i]['genre_names'].length)) {
-                rowHTML += '<a href="browsingGenre.html?genre=' + resultData[i]['genre_ids'][x] + '">'
-                    + resultData[i]['genre_names'][x] +
+        for (let x = 0; x < Math.min(3, resultData[i]['genres'].length); x++) {
+            if (x + 1 == Math.min(3, resultData[i]['genres'].length)) {
+                rowHTML += '<a href="browsingGenre.html?genre=' + resultData[i]['genres'][x].split(",")[1] + '">'
+                    + resultData[i]['genres'][x].split(",")[0] +
                     '</a>';
             } else {
-                rowHTML += '<a href="browsingGenre.html?genre=' + resultData[i]['genre_ids'][x] + '">'
-                    + resultData[i]['genre_names'][x] +
+                rowHTML += '<a href="browsingGenre.html?genre=' + resultData[i]['genres'][x].split(",")[1] + '">'
+                    + resultData[i]['genres'][x].split(",")[0] +
                     '</a>' + ", ";
             }
         }
@@ -70,14 +70,14 @@ function handleMovieListResult(resultData) {
         rowHTML += "</td>";
         // add Stars and hrefs
         rowHTML += "<td>";
-        for (let x = 0; x < Math.min(3, resultData[i]['movie_star'].length); x++) {
-            if (x + 1 == Math.min(3, resultData[i]['movie_star'].length)) {
-                rowHTML += '<a href="single-star.html?id=' + resultData[i]['movie_starid'][x] + '">'
-                    + resultData[i]['movie_star'][x] +
+        for (let x = 0; x < Math.min(3, resultData[i]['movie_stars'].length); x++) {
+            if (x + 1 == Math.min(3, resultData[i]['movie_stars'].length)) {
+                rowHTML += '<a href="single-star.html?id=' + resultData[i]['movie_stars'][x].split(",")[1] + '">'
+                    + resultData[i]['movie_stars'][x].split(",")[0] +
                     '</a>';
             } else {
-                rowHTML += '<a href="single-star.html?id=' + resultData[i]['movie_starid'][x] + '">'
-                    + resultData[i]['movie_star'][x] +
+                rowHTML += '<a href="single-star.html?id=' + resultData[i]['movie_stars'][x].split(",")[1] + '">'
+                    + resultData[i]['movie_stars'][x].split(",")[0] +
                     '</a>' + ", ";
             }
         }
