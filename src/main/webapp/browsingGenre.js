@@ -19,6 +19,19 @@ function ShoppingCart()
     window.location.replace("shopCart.html");
 }
 
+var webVariables = {
+    "searchView" : false,
+    "browseView" : false,
+    "pageNumber" : 1,
+    "sortingRatingFirst" : true,
+    "sortingTitleFirst" : false,
+    "sortingRatingBy" : "DESC",
+    "sortingTitleBy" : "ASC",
+    "pageSize" : 20
+};
+
+
+
 function getParameterByName(target) {
     // Get request URL
     let url = window.location.href;

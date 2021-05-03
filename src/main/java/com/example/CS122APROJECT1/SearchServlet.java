@@ -48,7 +48,13 @@ public class SearchServlet extends HttpServlet {
         return outputStars;
     }
 
-    // The order is title, year, director, star
+    /*
+        The function handleQuery() builds the query info together based on what the user inputs
+        for searching parameters. The info is organized in one format as :
+        Title, Year, Director, Star
+        The purpose for this is the organization of the SQL Query is when searching for a movie star, with the given,
+        group concatenation starInfo.
+     */
     public String handleQuery(String[] searchInfo) {
         String query = "SELECT S.movieId ,M.title, M.year, M.director," +
                 " R.rating, GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +

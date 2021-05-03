@@ -14,6 +14,7 @@
             background-color: grey; /* Green */
             border: none;
             color: white;
+            position: center;
             padding: 10px 10px;
             text-align: center;
             text-decoration: none;
@@ -25,6 +26,7 @@
         select {
             position: center;
             width: 100%;
+            text-decoration: none;
             padding: 10px;
             text-align: center;
         }
@@ -65,8 +67,8 @@
         h2{text-align: center;}
 
         div {
-            height: 320px;
-            width: 500px;
+            height: auto;
+            width: auto;
             padding: 20px;
             margin-left: auto;
             margin-right: auto;
@@ -77,8 +79,9 @@
             text-align: center;
         }
         #search_form {
-
+            width: 50%;
             display:none;
+            position: center;
 
         }
         .table {
@@ -109,18 +112,55 @@
             top: 10px;
             right: 10px;
         }
-    #alpha_list{
-        width: 5%
-    }
+    /*#alpha_list{*/
+    /*    width: 5%*/
+    /*}*/
 
-    #numeric_list{
-        width: 5%
-    }
+    /*#numeric_list{*/
+    /*    width: 5%*/
+    /*}*/
 
-    #genre_list_table{
-        width: 5%;
-    }
+    /*#genre_list_table{*/
+    /*    width: 5%;*/
+    /*}*/
 
+        #sorting_information{
+            display: none;
+        }
+        #buttonSortBy{
+
+            position: center;
+
+        }
+        #buttonTitle{
+
+            position: center;
+
+        }
+        #buttonRating{
+
+            position: center;
+        }
+        #buttonItems{
+
+            position: center;
+        }
+        #sort_by_first{
+
+            position: center;
+        }
+        #sort_by_title{
+
+            position: center;
+        }
+        #sort_by_rating{
+
+            position: center;
+        }
+        #sort_by_numbers{
+
+            position: center;
+        }
 
     </style>
 </head>
@@ -130,30 +170,28 @@
 <!-- Set the method to POST to avoid showing the username/password in the URL
      The default action is disabled to allow your own implementation. -->
 <button class=search onclick="myFunction()">Click Here to Search!</button>
-<form id="search_form" method="get" action="#">
-    <div class="container">
-        <label><b>Search by Title</b></label>
-        <label>
-            <input name="title" placeholder="Enter movietitle" type="text">
-        </label>
+<div id="search_form" class="container">
+    <label><b>Search by Title</b></label>
+    <label>
+        <input id="input_title" name="title" placeholder="Enter movietitle" type="text">
+    </label>
 
-        <label><b>Search by Year</b></label>
-        <label>
-            <input name="year" placeholder="Enter Year" type="text">
-        </label>
+    <label><b>Search by Year</b></label>
+    <label>
+        <input id="input_year" name="year" placeholder="Enter Year" type="text">
+    </label>
 
-        <label><b>Search by Director</b></label>
-        <label>
-            <input name="director" placeholder="Enter Director" type="text">
-        </label>
+    <label><b>Search by Director</b></label>
+    <label>
+        <input id="input_director" name="director" placeholder="Enter Director" type="text">
+    </label>
 
-        <label><b>Search by Star</b></label>
-        <label>
-            <input name="star" placeholder="Enter Star" type="text">
-        </label>
-        <button type="submit", onclick="submitform()">Search</button>
-    </div>
-</form>
+    <label><b>Search by Star</b></label>
+    <label>
+        <input id="input_star" name="star" placeholder="Enter Star" type="text">
+    </label>
+    <button onclick="search()">Search</button>
+</div>
 
 <button class=Checkout onclick="ShoppingCart()">Checkout</button>
 
@@ -214,8 +252,32 @@
 <br/>
 <button onclick="collapseResults()">Open/Close Results</button>
 
+<div id="sorting_information">
+<select id="sort_by_rating" size="1" style="position: center">
+    <option  value = "DESC" selected>DESCENDING</option>
+    <option  value = "ASC">ASCENDING</option>
+</select>
+<button id="buttonRating" onclick="submitRating()" formmethod="get" formaction="?">Sort By Rating</button>
 
+<select id="sort_by_title" size="1" style="position: center">
+    <option  value ="ASC"selected>ASCENDING</option>
+    <option  value ="DESC">DESCENDING</option>
+</select>
+<button id="buttonTitle"onclick="submitTitle()" formmethod="get" formaction="?">Sort By Title</button>
+<select id="sort_by_numbers" size="1" style="position: center">
+    <option value=10>10</option>
+    <option value=25 selected>25</option>
+    <option value=50>50</option>
+    <option value=100>100</option>
+</select>
+<button id="buttonItems" onclick="submitNumberOfItems()" formmethod="get" formaction="?">Items Per Page</button>
 
+<select id="sort_by_first" size="1" style="position: center">
+    <option  value ="Rating"selected>Rating</option>
+    <option  value ="Title">Title</option>
+</select>
+<button id="buttonSortBy"onclick="submitSort()" formmethod="get" formaction="?">Sort First By</button>
+</div>
 <table id=movie_list_table2 class="table table-striped" >
     <!-- Create a table header -->
     <thead>
@@ -234,7 +296,6 @@
     <!-- Again, id "star_table_body" is useful for jQuery to find this html element -->
     <tbody id=movie_list_table_body2></tbody>
 </table>
-
 
 
 

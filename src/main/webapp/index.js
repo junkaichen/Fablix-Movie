@@ -1,18 +1,13 @@
-let search_form = $("#search_form");
-var Genre_activation = false;
-loadGenres();
+
+
 /**
  * Handle the data returned by SearchServlet
  * @param resultData jsonObject
  */
-
 function handleSessionData(resultDataString) {
     console.log("handle session response");
     console.log(resultDataString);
-
 }
-
-
 
 
 function AddToCart(cartEvent) {
@@ -26,7 +21,6 @@ function AddToCart(cartEvent) {
     alert("Added to Cart");
 
 }
-    // clear input form
 
 
 function myFunction() {
@@ -34,80 +28,123 @@ function myFunction() {
     if(x.style.display == "block")
     {
         x.style.display = "none";
-        exit;
     }
-    x.style.display = "block";
+    else
+    {
+        x.style.display = "block";
+    }
+
 
 }
 
 function browse_alpha()
 {
-    // if(Search_view)
-    // {
-    //     page_num = 0;
-    //     Browse_view = true;
-    //     Search_view = false;
-    // }
-    // let sort_by_rating = document.getElementById("sort_by_rating");
-    // let sort_by_name = document.getElementById("sort_by_name");
-    // console.log("sort by rating : " + sort_by_rating.value);
-    // console.log("sort by name : " + sort_by_name.value);
-    let t = document.getElementById("alpha_list");
+    webVariables.pageNumber = 1;
+    webVariables.browseNumericView = false;
+    webVariables.browseGenreView = false;
+    webVariables.browseAlphaView = true;
+    webVariables.searchView = false;
+    let p = document.getElementById("alpha_list");
     submitform();
+    let param = "pageSize=" + webVariables.pageSize.toString() + "&";
+    param += "pageNumber=" + webVariables.pageNumber.toString() + "&";
+    param += "RatingFirst=" + webVariables.sortingRatingFirst.toString() + "&";
+    param += "sortRating=" + webVariables.sortingRatingBy + "&";
+    param += "sortTitle=" + webVariables.sortingTitleBy;
+    param += "&starts_with=" + p.value;
     console.log(document.location);
     jQuery.ajax(
         {
             dataType: "json",
             method: "GET",
-            url: "api/browse?starts_with=" + t.value,
+            url: "api/browse?" + param,
             success: (resultData) => handleSearchResult(resultData)
         }
     );
-    let browse_url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?starts_with=" + t.value;
+    let browse_url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + param;
     window.history.pushState({path:browse_url},'',browse_url);
 }
 
 function browse_numeric()
 {
-    // if(Search_view)
-    // {
-    //     page_num = 0;
-    //     Browse_view = true;
-    //     Search_view = false;
-    // }
-    // let sort_by_rating = document.getElementById("sort_by_rating");
-    // let sort_by_name = document.getElementById("sort_by_name");
-    // console.log("sort by rating : " + sort_by_rating.value);
-    // console.log("sort by name : " + sort_by_name.value);
+    webVariables.pageNumber = 1;
+    webVariables.browseNumericView = true;
+    webVariables.browseGenreView = false;
+    webVariables.browseAlphaView = false;
+    webVariables.searchView = false;
     let p = document.getElementById("numeric_list");
+    let param = "pageSize=" + webVariables.pageSize.toString() + "&";
+    param += "pageNumber=" + webVariables.pageNumber.toString() + "&";
+    param += "RatingFirst=" + webVariables.sortingRatingFirst.toString() + "&";
+    param += "sortRating=" + webVariables.sortingRatingBy + "&";
+    param += "sortTitle=" + webVariables.sortingTitleBy;
+    param += "&starts_with=" + p.value;
     submitform();
     jQuery.ajax(
         {
             dataType: "json",
             method: "GET",
-            url: "api/browse?starts_with=" + p.value,
+            url: "api/browse?" + param,
             success: (resultData) => handleSearchResult(resultData)
         }
     );
-    let browse_url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?starts_with=" + p.value;
+    let browse_url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + param;
     window.history.pushState({path:browse_url},'',browse_url);
 }
 
+function submitGenre()
+{
+
+    let p = document.getElementById("genre_list_table");
+    webVariables.pageNumber = 1;
+    webVariables.browseNumericView = false;
+    webVariables.browseGenreView = true;
+    webVariables.browseAlphaView = false;
+    webVariables.searchView = false;
+    let param = "pageSize=" + webVariables.pageSize.toString() + "&";
+    param += "pageNumber=" + webVariables.pageNumber.toString() + "&";
+    param += "RatingFirst=" + webVariables.sortingRatingFirst.toString() + "&";
+    param += "sortRating=" + webVariables.sortingRatingBy + "&";
+    param += "sortTitle=" + webVariables.sortingTitleBy;
+    param += "&genre=" + p.value;
+    console.log("genre id is " + p.value);
+    submitform();
+    jQuery.ajax(
+        {
+            dataType: "json",
+            method: "GET",
+            url: "api/browseGenre?" + param,
+            success: (resultData) => handleSearchResult(resultData)
+        }
+    );
+    let browse_url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + param;
+    window.history.pushState({path:browse_url},'',browse_url);
+}
+
+
 function submitform() {
     let x = document.getElementById("movie_list_table2");
+    let y = document.getElementById("sorting_information");
+    y.style.display = "block";
     x.style.display = "block";
+
 }
 
 function collapseResults()
 {
     let x = document.getElementById("movie_list_table2");
+    let y = document.getElementById("sorting_information");
+
+
     if(x.style.display == "block")
     {
         x.style.display = "none";
+        y.style.display = "none";
     }
     else
     {
         x.style.display = "block";
+        y.style.display = "block";
     }
 
 }
@@ -128,47 +165,6 @@ function loadGenres()
     }
 }
 
-function submitGenre()
-{
-
-    // if(Search_view)
-    // {
-    //     page_num = 0;
-    //     Browse_view = true;
-    //     Search_view = false;
-    // }
-    // let sort_by_rating = document.getElementById("sort_by_rating");
-    // let sort_by_name = document.getElementById("sort_by_name");
-    // console.log("sort by rating : " + sort_by_rating.value);
-    // console.log("sort by name : " + sort_by_name.value);
-    let p = document.getElementById("genre_list_table");
-    console.log("genre id is " + p.value);
-    submitform();
-    jQuery.ajax(
-        {
-            dataType: "json",
-            method: "GET",
-            url: "api/browseGenre?genre=" + p.value,
-            success: (resultData) => handleSearchResult(resultData)
-        }
-    );
-    let browse_url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?genre=" + p.value;
-    window.history.pushState({path:browse_url},'',browse_url);
-}
-
-function viewGenre(genre_id)
-{
-    console.log(genre_id);
-    console.log("attempting to view genre");
-    // jQuery.ajax(
-    //     {
-    //         dataType: "json",
-    //         method: "GET",
-    //         url: "api/browseGenre?genre=" + genre_id,
-    //         success: (resultData) => handleSearchResult(resultData)
-    //     }
-    // );
-}
 
 function ShoppingCart()
 {
@@ -191,6 +187,143 @@ function handleSearchResult2(resultData)
     console.log("Done populating genre table..")
 
 }
+
+function submitTitle()
+{
+    let titleElement = $("#sort_by_title");
+    if(titleElement.value != webVariables.sortingTitleBy)
+    {
+        webVariables.sortingTitleBy = titleElement.value;
+        webVariables.pageNumber = 1;
+        if(webVariables.browseAlphaView)
+        {
+            browse_alpha();
+        }
+        else if(webVariables.browseGenreView)
+        {
+            submitGenre();
+        }
+        else if(webVariables.browseNumericView)
+        {
+            browse_numeric();
+        }
+        else
+        {
+            search();
+        }
+
+    }
+}
+
+function submitRating()
+{
+    let ratingElement = $("#sort_by_rating");
+    if(ratingElement.value != webVariables.sortingRatingBy)
+    {
+        webVariables.sortingRatingBy = ratingElement.value;
+        webVariables.pageNumber = 1;
+        if(webVariables.browseAlphaView)
+        {
+            browse_alpha();
+        }
+        else if(webVariables.browseGenreView)
+        {
+            submitGenre();
+        }
+        else if(webVariables.browseNumericView)
+        {
+            browse_numeric();
+        }
+        else
+        {
+            search();
+        }
+    }
+
+}
+
+function submitSort()
+{
+    let sortingElement = $("#sort_by_first");
+    if(sortingElement.value == "Rating")
+    {
+        if(!webVariables.sortingRatingFirst) {
+            webVariables.sortingRatingFirst = true;
+            webVariables.pageNumber = 1;
+            if(webVariables.browseAlphaView)
+            {
+                browse_alpha();
+            }
+            else if(webVariables.browseGenreView)
+            {
+                submitGenre();
+            }
+            else if(webVariables.browseNumericView)
+            {
+                browse_numeric();
+            }
+            else
+            {
+                search();
+            }
+        }
+    }
+    else
+    {
+        if(webVariables.sortingRatingFirst)
+        {
+            webVariables.sortingRatingFirst = false;
+            webVariables.pageNumber = 1;
+            if(webVariables.browseAlphaView)
+            {
+                browse_alpha();
+            }
+            else if(webVariables.browseGenreView)
+            {
+                submitGenre();
+            }
+            else if(webVariables.browseNumericView)
+            {
+                browse_numeric();
+            }
+            else
+            {
+                search();
+            }
+        }
+
+    }
+
+}
+
+function submitNumberOfItems()
+{
+    let numberOfItems = $("#sort_by_numbers");
+    if(webVariables.pageSize != numberOfItems)
+    {
+        webVariables.pageSize = numberOfItems;
+        webVariables.pageNumber = 1;
+        if(webVariables.browseAlphaView)
+        {
+            browse_alpha();
+        }
+        else if(webVariables.browseGenreView)
+        {
+            submitGenre();
+        }
+        else if(webVariables.browseNumericView)
+        {
+            browse_numeric();
+        }
+        else
+        {
+            search();
+        }
+    }
+
+
+}
+
 
 
 function handleSearchResult(resultData) {
@@ -225,7 +358,6 @@ function handleSearchResult(resultData) {
                     '</a>' + ", ";
             }
         }
-
         rowHTML += "</td>";
         // add Stars and hrefs
         rowHTML += "<td>";
@@ -240,91 +372,74 @@ function handleSearchResult(resultData) {
                     '</a>' + ", ";
             }
         }
-
         rowHTML += "</td>";
         rowHTML += "<td>" + resultData[i]["movie_rating"] + "</td>";
         rowHTML += "<td>";
         rowHTML += "<button onclick=AddToCart('" + shpvalue + "')" + ">ADD</button>";
         rowHTML += "</td>";
         rowHTML += "</tr>";
-        //
-        //     // Append the row created to the table body, which will refresh the page
-
         movieListTableElement2.append(rowHTML);
-
-
     }
     console.log("Done populating table..")
 
 }
 
-/**
- * Submit the form content with POST method
- * @param formSubmitEvent
- */
-function submitSearchForm(formSubmitEvent) {
+function search()
+{
+    submitSearchForm();
+}
+
+function submitSearchForm() {
     console.log("submit search form");
-    /**
-     * When users click the submit button, the browser will not direct
-     * users to the url defined in HTML form. Instead, it will call this
-     * event handler when the event is triggered.
-     */
-    formSubmitEvent.preventDefault();
-
-    // if(Browse_view)
-    // {
-    //     Search_view = true;
-    //     Browse_view = false;
-    //     page_num = 0;
-    // }
-    let first = false;
-    let title_info = {
-        "param_type":"title",
-        "value":document.getElementsByTagName("input")[0].value
-    };
-    let year_info = {
-        "param_type":"year",
-        "value":document.getElementsByTagName("input")[1].value
-    };
-    let director_info = {
-        "param_type":"director",
-        "value":document.getElementsByTagName("input")[2].value
-    };
-    let star_info = {
-        "param_type":"star",
-        "value":document.getElementsByTagName("input")[3].value
-    };
-    let params = [title_info,year_info,director_info,star_info];
-    let confirmedParams = "?";
-    for(i = 0; i < params.length; i++)
+    console.log(document.getElementsByTagName("input")[0].value);
+    console.log(document.getElementsByTagName("input")[1].value);
+    console.log(document.getElementsByTagName("input")[2].value);
+    console.log(document.getElementsByTagName("input")[3].value);
+    submitform();
+    webVariables.pageNumber = 1;
+    webVariables.browseNumericView = false;
+    webVariables.browseGenreView = false;
+    webVariables.browseAlphaView = false;
+    webVariables.searchView = true;
+    
+    let param = "pageSize=" + webVariables.pageSize.toString() + "&";
+    param += "pageNumber=" + webVariables.pageNumber.toString() + "&";
+    param += "RatingFirst=" + webVariables.sortingRatingFirst.toString() + "&";
+    param += "sortRating=" + webVariables.sortingRatingBy + "&";
+    param += "sortTitle=" + webVariables.sortingTitleBy;
+    let addParams;
+    if(document.getElementsByTagName("input")[0].value != "")
     {
-        if(params[i].value != "")
-        {
-            if(!first)
-            {
-                first = true;
-                confirmedParams += params[i].param_type + "=" + params[i].value;
-            }
-            else
-            {
-                confirmedParams += "&" + params[i].param_type + "=" + params[i].value
-            }
-        }
-
+        param += "&title=" + document.getElementsByTagName("input")[0].value;
+        addParams += "&title=" + document.getElementsByTagName("input")[0].value;
     }
+    if(document.getElementsByTagName("input")[1].value)
+    {
+        param += "&year=" + document.getElementsByTagName("input")[1].value;
+        addParams += "&year=" + document.getElementsByTagName("input")[1].value;
+    }
+    if(document.getElementsByTagName("input")[2].value)
+    {
+        param += "&director=" + document.getElementsByTagName("input")[2].value;
+        addParams += "&director=" + document.getElementsByTagName("input")[2].value;
+    }
+    if(document.getElementsByTagName("input")[3].value)
+    {
+        param += "&star=" + document.getElementsByTagName("input")[3].value;
+    }
+
     console.log("confirmed parameters");
-    console.log(confirmedParams);
+    console.log(param);
     jQuery.ajax(
         {
             dataType: "json",
             method: "GET",
-            // Serialize the login form to the data sent by POST request
-            data: confirmedParams.substr(1),
+            data : param,
             url: "api/search",
             success: (resultData) => handleSearchResult(resultData)
         }
     );
-    let browse_url = window.location.protocol + "//" + window.location.host + window.location.pathname + confirmedParams;
+    let browse_url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + param;
     window.history.pushState({path:browse_url},'',browse_url);
 }
 
@@ -333,5 +448,19 @@ $.ajax("api/shopcart", {
     success: handleSessionData
 });
 
-// Bind the submit action of the form to a handler function
-search_form.submit(submitSearchForm);
+var Genre_activation = false;
+
+
+// All the variables needed for the Main page
+var webVariables = {
+    "searchView" : false,
+    "browseGenreView" : false,
+    "browseAlphaView" : false,
+    "browseNumericView" : false,
+    "pageNumber" : 1,
+    "sortingRatingFirst" : true,
+    "sortingRatingBy" : "DESC",
+    "sortingTitleBy" : "ASC",
+    "pageSize" : 25
+};
+loadGenres();
