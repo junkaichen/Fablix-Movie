@@ -20,16 +20,13 @@ function ShoppingCart()
 }
 
 var webVariables = {
-    "searchView" : false,
-    "browseView" : false,
+    "browseGenreView" : false,
     "pageNumber" : 1,
     "sortingRatingFirst" : true,
-    "sortingTitleFirst" : false,
     "sortingRatingBy" : "DESC",
     "sortingTitleBy" : "ASC",
-    "pageSize" : 20
+    "pageSize" : 25
 };
-
 
 
 function getParameterByName(target) {

@@ -56,7 +56,7 @@ public class BrowseServlet extends  HttpServlet {
         }
     }
 
-    public String handleQuery(String starts_with) {
+    public String handleQuery(String starts_with, String sortFirstBy,String sortRating, String sortTitle) {
 
 
         if(starts_with.equals("*"))
@@ -74,7 +74,17 @@ public class BrowseServlet extends  HttpServlet {
                     " WHERE M.id = R.movieId AND" +
                     " R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId" +
                     " AND S.starId = T.starId AND M.title REGEXP "
-                    + "'^[^A-Za-z0-9]'" + " GROUP BY S.movieId,R.rating ORDER BY rating DESC limit ?,?;";
+                    + "'^[^A-Za-z0-9]'" + " GROUP BY S.movieId,R.rating";
+            if(sortFirstBy.equals("true"))
+            {
+                outputQuery += " ORDER BY R.rating " + sortRating + "  , M.title " + sortTitle;
+            }
+            else
+            {
+                outputQuery += " ORDER BY M.title " + sortTitle + " , R.rating " + sortRating;
+            }
+
+            outputQuery += " limit ? , ?;";
             return outputQuery;
 
         }
@@ -91,7 +101,16 @@ public class BrowseServlet extends  HttpServlet {
                     " genres_in_movies I, genres G, stars_in_movies S" +
                     " WHERE M.id = R.movieId AND" +
                     " R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId" +
-                    " AND S.starId = T.starId AND M.title LIKE ? GROUP BY S.movieId,R.rating ORDER BY rating DESC limit ?,?;";
+                    " AND S.starId = T.starId AND M.title LIKE ? GROUP BY S.movieId,R.rating";
+            if(sortFirstBy.equals("true"))
+            {
+                outputQuery += " ORDER BY R.rating " + sortRating + "  , M.title " + sortTitle;
+            }
+            else
+            {
+                outputQuery += " ORDER BY M.title " + sortTitle + " , R.rating " + sortRating;
+            }
+            outputQuery += " limit ? , ?;";
 
             return outputQuery;
         }
@@ -113,20 +132,28 @@ public class BrowseServlet extends  HttpServlet {
 
             String input_starts_with = request.getParameter("starts_with");
             System.out.println(Collections.list(request.getParameterNames()));
-
-            String query = handleQuery(input_starts_with);
+            String sortFirstBy = request.getParameter("RatingFirst");
+            String sortTitle = request.getParameter("sortTitle");
+            String sortRating = request.getParameter("sortRating");
+            int pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
+            int pageSize = Integer.parseInt(request.getParameter("pageSize"));
+            String query = handleQuery(input_starts_with,sortFirstBy,sortRating,sortTitle);
             PreparedStatement preparedStatement = dbcon.prepareStatement(query);
             if(input_starts_with.equals("*"))
             {
-                preparedStatement.setInt(1,0);
-                preparedStatement.setInt(2,20);
+
+                preparedStatement.setInt(1,(pageNumber-1)*pageSize);
+                preparedStatement.setInt(2,pageSize);
+                //change this
             }
             else
             {
                 preparedStatement.setString(1,input_starts_with+"%");
-                preparedStatement.setInt(2,0);
-                preparedStatement.setInt(3,20);
+                preparedStatement.setInt(2,(pageNumber-1)*pageSize);
+                preparedStatement.setInt(3,pageSize);
+                //change this
             }
+            System.out.println(preparedStatement.toString());
             ResultSet rs = preparedStatement.executeQuery();
 
             JsonArray jsonArray = new JsonArray();

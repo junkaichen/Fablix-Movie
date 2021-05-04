@@ -58,18 +58,28 @@ public class BrowseGenreServlet extends HttpServlet {
         }
     }
 
-    public String handleQuery() {
-        String outputQuery = "SELECT S.movieId FROM movies M, " +
+    public String handleQuery(String sortFirstBy,String sortRating, String sortTitle) {
+        String outputQuery = "SELECT S.movieId, M.title FROM movies M, " +
                 "ratings R, genres_in_movies I, genres G, stars_in_movies S, " +
                 "stars T WHERE M.id = R.movieId AND " +
                 "R.movieId = I.movieId AND I.genreId = G.id AND R.movieId = S.movieId " +
                 "AND S.starId = T.id " +
                 "AND G.id = ?"  +
-                " GROUP BY S.movieId,R.rating ORDER BY rating DESC limit ?,?;";
-            return outputQuery;
+                " GROUP BY S.movieId,R.rating ";
+        if(sortFirstBy.equals("true"))
+        {
+            outputQuery += " ORDER BY R.rating " + sortRating + "  , M.title " + sortTitle;
+        }
+        else
+        {
+            outputQuery += " ORDER BY M.title " + sortTitle + " , R.rating " + sortRating;
+        }
+        outputQuery += " limit ? , ?;";
+
+        return outputQuery;
     }
 
-    public String handleMovie(int numOfMovies)
+    public String handleMovie(int numOfMovies, String sortFirstBy,String sortRating, String sortTitle)
     {
         String outputQuery = "SELECT S.movieId ,M.title, M.year, M.director," +
                 " R.rating, GROUP_CONCAT(" +
@@ -95,9 +105,19 @@ public class BrowseGenreServlet extends HttpServlet {
                 outputQuery += "?,";
             }
         }
-        outputQuery += ")  GROUP BY S.movieId,R.rating ORDER BY rating DESC limit ?,?;";
+        outputQuery += ")  GROUP BY S.movieId,R.rating ";
+        if(sortFirstBy.equals("true"))
+        {
+            outputQuery += " ORDER BY R.rating " + sortRating + "  , M.title " + sortTitle;
+        }
+        else
+        {
+            outputQuery += " ORDER BY M.title " + sortTitle + " , R.rating " + sortRating;
+        }
+        outputQuery += " limit ? , ?;";
 
         return outputQuery;
+
     }
 
 
@@ -119,11 +139,16 @@ public class BrowseGenreServlet extends HttpServlet {
             Statement statement = dbcon.createStatement();
             System.out.println(Collections.list(request.getParameterNames()));
             String genre = request.getParameter("genre");
+            String sortFirstBy = request.getParameter("RatingFirst");
+            String sortTitle = request.getParameter("sortTitle");
+            String sortRating = request.getParameter("sortRating");
+            int pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
+            int pageSize = Integer.parseInt(request.getParameter("pageSize"));
             JsonArray jsonArray = new JsonArray();
-            PreparedStatement preparedStatement = dbcon.prepareStatement(handleQuery());
+            PreparedStatement preparedStatement = dbcon.prepareStatement(handleQuery(sortFirstBy,sortRating,sortTitle));
             preparedStatement.setString(1,genre);
-            preparedStatement.setInt(2,0);
-            preparedStatement.setInt(3,20);
+            preparedStatement.setInt(2,(pageSize*(pageNumber-1)));
+            preparedStatement.setInt(3,pageSize);
             ResultSet rs = preparedStatement.executeQuery();
             ArrayList<String> movies_in_genre = new ArrayList<String>();
             while(rs.next())
@@ -133,14 +158,14 @@ public class BrowseGenreServlet extends HttpServlet {
 
             String[] movies = movies_in_genre.toArray(new String[movies_in_genre.size()]);
 
-            PreparedStatement preparedStatement2 = dbcon.prepareStatement(handleMovie(movies.length));
+            PreparedStatement preparedStatement2 = dbcon.prepareStatement(handleMovie(movies.length,sortFirstBy,sortRating,sortTitle));
             for(int i = 0; i < movies.length; i++)
             {
                 preparedStatement2.setString(i+1,movies[i]);
             }
 
-            preparedStatement2.setInt(movies.length+1,0);
-            preparedStatement2.setInt(movies.length+2,20);
+            preparedStatement2.setInt(movies.length+1,(pageSize*(pageNumber-1)));
+            preparedStatement2.setInt(movies.length+2,pageSize);
             ResultSet rs2 = preparedStatement2.executeQuery();
             while(rs2.next()) {
                 JsonObject jsonObject = new JsonObject();

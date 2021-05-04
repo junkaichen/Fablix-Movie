@@ -48,7 +48,7 @@ function browse_alpha()
     submitform();
     let param = "pageSize=" + webVariables.pageSize.toString() + "&";
     param += "pageNumber=" + webVariables.pageNumber.toString() + "&";
-    param += "RatingFirst=" + webVariables.sortingRatingFirst.toString() + "&";
+    param += "RatingFirst=" + webVariables.sortingRatingFirst + "&";
     param += "sortRating=" + webVariables.sortingRatingBy + "&";
     param += "sortTitle=" + webVariables.sortingTitleBy;
     param += "&starts_with=" + p.value;
@@ -75,7 +75,7 @@ function browse_numeric()
     let p = document.getElementById("numeric_list");
     let param = "pageSize=" + webVariables.pageSize.toString() + "&";
     param += "pageNumber=" + webVariables.pageNumber.toString() + "&";
-    param += "RatingFirst=" + webVariables.sortingRatingFirst.toString() + "&";
+    param += "RatingFirst=" + webVariables.sortingRatingFirst + "&";
     param += "sortRating=" + webVariables.sortingRatingBy + "&";
     param += "sortTitle=" + webVariables.sortingTitleBy;
     param += "&starts_with=" + p.value;
@@ -103,7 +103,7 @@ function submitGenre()
     webVariables.searchView = false;
     let param = "pageSize=" + webVariables.pageSize.toString() + "&";
     param += "pageNumber=" + webVariables.pageNumber.toString() + "&";
-    param += "RatingFirst=" + webVariables.sortingRatingFirst.toString() + "&";
+    param += "RatingFirst=" + webVariables.sortingRatingFirst + "&";
     param += "sortRating=" + webVariables.sortingRatingBy + "&";
     param += "sortTitle=" + webVariables.sortingTitleBy;
     param += "&genre=" + p.value;
@@ -190,106 +190,101 @@ function handleSearchResult2(resultData)
 
 function submitTitle()
 {
-    let titleElement = $("#sort_by_title");
-    if(titleElement.value != webVariables.sortingTitleBy)
-    {
-        webVariables.sortingTitleBy = titleElement.value;
-        webVariables.pageNumber = 1;
-        if(webVariables.browseAlphaView)
-        {
-            browse_alpha();
-        }
-        else if(webVariables.browseGenreView)
-        {
-            submitGenre();
-        }
-        else if(webVariables.browseNumericView)
-        {
-            browse_numeric();
-        }
-        else
-        {
-            search();
-        }
+    let titleElement = document.getElementById("sort_by_title");
 
+    webVariables.sortingTitleBy = titleElement.value;
+    webVariables.pageNumber = 1;
+    if(webVariables.browseAlphaView)
+    {
+        browse_alpha();
     }
+    else if(webVariables.browseGenreView)
+    {
+        submitGenre();
+    }
+    else if(webVariables.browseNumericView)
+    {
+        browse_numeric();
+    }
+    else
+    {
+        search();
+    }
+
 }
 
 function submitRating()
 {
-    let ratingElement = $("#sort_by_rating");
-    if(ratingElement.value != webVariables.sortingRatingBy)
+    let ratingElement = document.getElementById("sort_by_rating");
+
+    webVariables.sortingRatingBy = ratingElement.value;
+    console.log(webVariables.sortingRatingBy);
+    console.log(ratingElement.value);
+    webVariables.pageNumber = 1;
+    if(webVariables.browseAlphaView)
     {
-        webVariables.sortingRatingBy = ratingElement.value;
-        webVariables.pageNumber = 1;
-        if(webVariables.browseAlphaView)
-        {
-            browse_alpha();
-        }
-        else if(webVariables.browseGenreView)
-        {
-            submitGenre();
-        }
-        else if(webVariables.browseNumericView)
-        {
-            browse_numeric();
-        }
-        else
-        {
-            search();
-        }
+        browse_alpha();
+    }
+    else if(webVariables.browseGenreView)
+    {
+        submitGenre();
+    }
+    else if(webVariables.browseNumericView)
+    {
+        browse_numeric();
+    }
+    else
+    {
+        search();
     }
 
 }
 
 function submitSort()
 {
-    let sortingElement = $("#sort_by_first");
+    let sortingElement = document.getElementById("sort_by_first");
     if(sortingElement.value == "Rating")
     {
-        if(!webVariables.sortingRatingFirst) {
-            webVariables.sortingRatingFirst = true;
-            webVariables.pageNumber = 1;
-            if(webVariables.browseAlphaView)
-            {
-                browse_alpha();
-            }
-            else if(webVariables.browseGenreView)
-            {
-                submitGenre();
-            }
-            else if(webVariables.browseNumericView)
-            {
-                browse_numeric();
-            }
-            else
-            {
-                search();
-            }
+        webVariables.sortingRatingFirst = "true";
+        webVariables.pageNumber = 1;
+        if(webVariables.browseAlphaView)
+        {
+            browse_alpha();
         }
+        else if(webVariables.browseGenreView)
+        {
+            submitGenre();
+        }
+        else if(webVariables.browseNumericView)
+        {
+            browse_numeric();
+        }
+        else
+        {
+            search();
+        }
+
     }
     else
     {
-        if(webVariables.sortingRatingFirst)
+
+        webVariables.sortingRatingFirst = "false";
+        webVariables.pageNumber = 1;
+        if(webVariables.browseAlphaView)
         {
-            webVariables.sortingRatingFirst = false;
-            webVariables.pageNumber = 1;
-            if(webVariables.browseAlphaView)
-            {
-                browse_alpha();
-            }
-            else if(webVariables.browseGenreView)
-            {
-                submitGenre();
-            }
-            else if(webVariables.browseNumericView)
-            {
-                browse_numeric();
-            }
-            else
-            {
-                search();
-            }
+            browse_alpha();
+        }
+        else if(webVariables.browseGenreView)
+        {
+            submitGenre();
+        }
+        else if(webVariables.browseNumericView)
+        {
+            browse_numeric();
+        }
+        else
+        {
+            search();
         }
 
     }
@@ -298,27 +293,24 @@ function submitSort()
 
 function submitNumberOfItems()
 {
-    let numberOfItems = $("#sort_by_numbers");
-    if(webVariables.pageSize != numberOfItems)
+    let numberOfItems = document.getElementById("sort_by_numbers");
+    webVariables.pageSize = numberOfItems.value;
+    webVariables.pageNumber = 1;
+    if(webVariables.browseAlphaView)
     {
-        webVariables.pageSize = numberOfItems;
-        webVariables.pageNumber = 1;
-        if(webVariables.browseAlphaView)
-        {
-            browse_alpha();
-        }
-        else if(webVariables.browseGenreView)
-        {
-            submitGenre();
-        }
-        else if(webVariables.browseNumericView)
-        {
-            browse_numeric();
-        }
-        else
-        {
-            search();
-        }
+        browse_alpha();
+    }
+    else if(webVariables.browseGenreView)
+    {
+        submitGenre();
+    }
+    else if(webVariables.browseNumericView)
+    {
+        browse_numeric();
+    }
+    else
+    {
+        search();
     }
 
 
@@ -333,7 +325,7 @@ function handleSearchResult(resultData) {
     // Find the empty table body by id "star_table_body"
     let movieListTableElement2 = $("#movie_list_table_body2").empty();
     movieListTableElement2.html("");
-    for (let i = 0; i < Math.min(20, resultData.length); i++) {
+    for (let i = 0; i < Math.min(webVariables.pageSize, resultData.length); i++) {
         let rowHTML = "";
         let shpvalue = resultData[i]["movie_id"];
         rowHTML += "<tr>";
@@ -401,10 +393,10 @@ function submitSearchForm() {
     webVariables.browseGenreView = false;
     webVariables.browseAlphaView = false;
     webVariables.searchView = true;
-    
+
     let param = "pageSize=" + webVariables.pageSize.toString() + "&";
     param += "pageNumber=" + webVariables.pageNumber.toString() + "&";
-    param += "RatingFirst=" + webVariables.sortingRatingFirst.toString() + "&";
+    param += "RatingFirst=" + webVariables.sortingRatingFirst + "&";
     param += "sortRating=" + webVariables.sortingRatingBy + "&";
     param += "sortTitle=" + webVariables.sortingTitleBy;
     let addParams;
@@ -458,7 +450,7 @@ var webVariables = {
     "browseAlphaView" : false,
     "browseNumericView" : false,
     "pageNumber" : 1,
-    "sortingRatingFirst" : true,
+    "sortingRatingFirst" : "true",
     "sortingRatingBy" : "DESC",
     "sortingTitleBy" : "ASC",
     "pageSize" : 25

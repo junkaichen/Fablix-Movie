@@ -55,7 +55,7 @@ public class SearchServlet extends HttpServlet {
         The purpose for this is the organization of the SQL Query is when searching for a movie star, with the given,
         group concatenation starInfo.
      */
-    public String handleQuery(String[] searchInfo) {
+    public String handleQuery(String[] searchInfo, String sortFirstBy,String sortRating, String sortTitle) {
         String query = "SELECT S.movieId ,M.title, M.year, M.director," +
                 " R.rating, GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
                 " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',T.starId) ORDER BY T.starMovieCount DESC," +
@@ -83,7 +83,16 @@ public class SearchServlet extends HttpServlet {
         {
             query += " HAVING starInfo LIKE ? ";
         }
-        query +=" ORDER BY rating DESC limit ?,? ;";
+        if(sortFirstBy.equals("true"))
+        {
+            query += " ORDER BY R.rating " + sortRating + "  , M.title " + sortTitle;
+        }
+        else
+        {
+            query += " ORDER BY M.title " + sortTitle + " , R.rating " + sortRating;
+        }
+
+        query += " limit ? , ?;";
 
         return query;
     }
@@ -117,6 +126,11 @@ public class SearchServlet extends HttpServlet {
             String input_year = request.getParameter("year");
             String input_director= request.getParameter("director");
             String input_star = request.getParameter("star");
+            String sortFirstBy = request.getParameter("RatingFirst");
+            String sortTitle = request.getParameter("sortTitle");
+            String sortRating = request.getParameter("sortRating");
+            int pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
+            int pageSize = Integer.parseInt(request.getParameter("pageSize"));
             if(input_title != "" && input_title != null && !input_title.contains("%"))
             {
                 user_inputs[0] = input_title;
@@ -138,7 +152,7 @@ public class SearchServlet extends HttpServlet {
                 input_count++;
             }
 
-            PreparedStatement preparedStatement = dbcon.prepareStatement(handleQuery(user_inputs));
+            PreparedStatement preparedStatement = dbcon.prepareStatement(handleQuery(user_inputs,sortFirstBy,sortRating,sortTitle));
             int prepPosition = 1;
             // The order is title, year, director, star
             if(!user_inputs[0].equals(""))
@@ -161,10 +175,10 @@ public class SearchServlet extends HttpServlet {
                 preparedStatement.setString(prepPosition,"%" + user_inputs[3] + "%");
                 prepPosition++;
             }
-            preparedStatement.setInt(prepPosition,0);
-            preparedStatement.setInt(prepPosition+1,20);
+            preparedStatement.setInt(prepPosition,(pageNumber-1)*pageSize);
+            preparedStatement.setInt(prepPosition+1,pageSize);
             ResultSet rs = preparedStatement.executeQuery();
-
+            System.out.println(preparedStatement.toString());
             JsonArray jsonArray = new JsonArray();
             while(rs.next())
             {
