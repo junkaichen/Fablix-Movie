@@ -59,6 +59,9 @@ function submitTitle()
     let titleElement = document.getElementById("sort_by_title");
     webVariables.sortingTitleBy = titleElement.value;
     webVariables.pageNumber = 1;
+    webVariables.stopNextPage = false;
+    let y = document.getElementById("nextTablePage");
+    y.style.display = "block";
     submitGenre();
 }
 
@@ -69,6 +72,9 @@ function submitRating()
     console.log(webVariables.sortingRatingBy);
     console.log(ratingElement.value);
     webVariables.pageNumber = 1;
+    webVariables.stopNextPage = false;
+    let y = document.getElementById("nextTablePage");
+    y.style.display = "block";
     submitGenre();
 }
 
@@ -79,11 +85,17 @@ function submitSort()
     {
         webVariables.sortingRatingFirst = "true";
         webVariables.pageNumber = 1;
+        webVariables.stopNextPage = false;
+        let y = document.getElementById("nextTablePage");
+        y.style.display = "block";
         submitGenre();
     }
     else {
         webVariables.sortingRatingFirst = "false";
         webVariables.pageNumber = 1;
+        webVariables.stopNextPage = false;
+        let y = document.getElementById("nextTablePage");
+        y.style.display = "block";
         submitGenre();
     }
 }
@@ -93,6 +105,9 @@ function submitNumberOfItems()
     let numberOfItems = document.getElementById("sort_by_numbers");
     webVariables.pageSize = numberOfItems.value;
     webVariables.pageNumber = 1;
+    webVariables.stopNextPage = false;
+    let y = document.getElementById("nextTablePage");
+    y.style.display = "block";
     submitGenre();
 }
 
@@ -100,44 +115,16 @@ function nextTPage()
 {
     webVariables.pageNumber += 1;
     webVariables.stopNextPage = false;
-    if(webVariables.browseAlphaView)
-    {
-        browse_alpha();
-    }
-    else if(webVariables.browseGenreView)
-    {
-        submitGenre();
-    }
-    else if(webVariables.browseNumericView)
-    {
-        browse_numeric();
-    }
-    else
-    {
-        search();
-    }
+    submitGenre();
+
 }
 
 function prevTPage()
 {
     webVariables.pageNumber -= 1;
     webVariables.stopNextPage = false;
-    if(webVariables.browseAlphaView)
-    {
-        browse_alpha();
-    }
-    else if(webVariables.browseGenreView)
-    {
-        submitGenre();
-    }
-    else if(webVariables.browseNumericView)
-    {
-        browse_numeric();
-    }
-    else
-    {
-        search();
-    }
+    submitGenre();
+
 }
 
 
@@ -156,7 +143,7 @@ function submitGenre()
             dataType: "json",
             method: "GET",
             url: "api/browseGenre?" + params,
-            success: (resultData) => handleSearchResult(resultData)
+            success: (resultData) => handleMovieListResult(resultData)
         }
     );
     let browse_url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + param;
@@ -166,6 +153,14 @@ function submitGenre()
 
 function handleMovieListResult(resultData) {
     console.log("handleSearchResult: populating MovieList table from resultData");
+    let size = resultData.length;
+    console.log("length of result data is " + size);
+    if(size == webVariables.pageSize && !webVariables.stopNextPage)
+    {
+        let y = document.getElementById("nextTablePage");
+        y.style.display = "block";
+
+    }
     if(webVariables.pageNumber == 1)
     {
         let x = document.getElementById("prevTablePage");
@@ -176,24 +171,19 @@ function handleMovieListResult(resultData) {
         let x = document.getElementById("prevTablePage");
         x.style.display = "block";
     }
-    if(resultData.length != webVariables.pageSize)
+    if(size < webVariables.pageSize)
     {
         let y = document.getElementById("nextTablePage");
         y.style.display = "none";
         webVariables.stopNextPage = true;
     }
-    else if(resultData.length == webVariables.pageSize && !webVariables.stopNextPage)
-    {
-        let y = document.getElementById("nextTablePage");
-        y.style.display = "block";
-    }
 
-    if(resultData.length != 0)
+    if(resultData.length >= 1)
     {
         let movieListTableElement2 = $("#genre_movie_list_table_body");
         movieListTableElement2.html("");
         console.log(resultData[0]);
-        for (let i = 0; i < Math.min(20, resultData.length); i++) {
+        for (let i = 0; i < Math.min(webVariables.pageSize, resultData.length); i++) {
             let rowHTML = "";
             let shpvalue = resultData[i]['movie_id'];
             rowHTML += "<tr>";
@@ -249,7 +239,7 @@ function handleMovieListResult(resultData) {
         }
         console.log("Done populating table..");
     }
-    else
+    if(size === 0)
     {
         revertToPreviousPage();
         alert("Next page was not available for this search...\nReverting to previous page");

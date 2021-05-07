@@ -121,8 +121,6 @@ public class BrowseGenreServlet extends HttpServlet {
     }
 
 
-
-
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
@@ -187,9 +185,6 @@ public class BrowseGenreServlet extends HttpServlet {
             }
             rs2.close();
             preparedStatement2.close();
-
-
-
 
             // write JSON string to output
             out.write(jsonArray.toString());
