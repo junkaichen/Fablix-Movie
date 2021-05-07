@@ -41,6 +41,7 @@ function browse_alpha()
     if(!webVariables.browseAlphaView)
     {
         webVariables.pageNumber = 1;
+        webVariables.stopNextPage = false;
         webVariables.browseNumericView = false;
         webVariables.browseGenreView = false;
         webVariables.browseAlphaView = true;
@@ -73,6 +74,7 @@ function browse_numeric()
     if(!webVariables.browseNumericView)
     {
         webVariables.pageNumber = 1;
+        webVariables.stopNextPage = false;
         webVariables.browseNumericView = true;
         webVariables.browseGenreView = false;
         webVariables.browseAlphaView = false;
@@ -106,6 +108,7 @@ function submitGenre()
     if(!webVariables.browseGenreView)
     {
         webVariables.pageNumber = 1;
+        webVariables.stopNextPage = false;
         webVariables.browseNumericView = false;
         webVariables.browseGenreView = true;
         webVariables.browseAlphaView = false;
@@ -145,17 +148,29 @@ function collapseResults()
 {
     let x = document.getElementById("movie_list_table2");
     let y = document.getElementById("sorting_information");
+    let w = document.getElementById("nextTablePage");
+    let z = document.getElementById("prevTablePage");
 
-
-    if(x.style.display == "block")
+    if(x.style.display === "block")
     {
         x.style.display = "none";
         y.style.display = "none";
+        w.style.display = "none";
+        z.style.display = "none";
     }
     else
     {
         x.style.display = "block";
         y.style.display = "block";
+        if(!webVariables.stopNextPage)
+        {
+            w.style.display = "block";
+        }
+        if(webVariables.pageNumber !== 1)
+        {
+            z.style.display = "block";
+        }
+
     }
 
 }
@@ -205,6 +220,9 @@ function submitTitle()
 
     webVariables.sortingTitleBy = titleElement.value;
     webVariables.pageNumber = 1;
+    let y = document.getElementById("nextTablePage");
+    y.style.display = "block";
+    webVariables.stopNextPage = false;
     if(webVariables.browseAlphaView)
     {
         browse_alpha();
@@ -227,9 +245,11 @@ function submitTitle()
 function submitRating()
 {
     let ratingElement = document.getElementById("sort_by_rating");
-
+    let y = document.getElementById("nextTablePage");
+    y.style.display = "block";
     webVariables.sortingRatingBy = ratingElement.value;
     webVariables.pageNumber = 1;
+    webVariables.stopNextPage = false;
     if(webVariables.browseAlphaView)
     {
         browse_alpha();
@@ -252,8 +272,11 @@ function submitRating()
 function submitSort()
 {
     let sortingElement = document.getElementById("sort_by_first");
-    if(sortingElement.value == "Rating")
+    let y = document.getElementById("nextTablePage");
+    y.style.display = "block";
+    if(sortingElement.value === "Rating")
     {
+        webVariables.stopNextPage = false;
         webVariables.sortingRatingFirst = "true";
         webVariables.pageNumber = 1;
         if(webVariables.browseAlphaView)
@@ -276,7 +299,7 @@ function submitSort()
     }
     else
     {
-
+        webVariables.stopNextPage = false;
         webVariables.sortingRatingFirst = "false";
         webVariables.pageNumber = 1;
         if(webVariables.browseAlphaView)
@@ -305,6 +328,9 @@ function submitNumberOfItems()
     let numberOfItems = document.getElementById("sort_by_numbers");
     webVariables.pageSize = numberOfItems.value;
     webVariables.pageNumber = 1;
+    webVariables.stopNextPage = false;
+    let y = document.getElementById("nextTablePage");
+    y.style.display = "block";
     if(webVariables.browseAlphaView)
     {
         browse_alpha();
@@ -392,6 +418,15 @@ function revertToPreviousPage()
 
 function handleSearchResult(resultData) {
     console.log("handleSearchResult: populating MovieList table from resultData");
+
+    let size = resultData.length;
+    console.log("length of result data is " + size);
+    if(size == webVariables.pageSize && !webVariables.stopNextPage)
+    {
+        let y = document.getElementById("nextTablePage");
+        y.style.display = "block";
+
+    }
     if(webVariables.pageNumber == 1)
     {
         let x = document.getElementById("prevTablePage");
@@ -402,19 +437,14 @@ function handleSearchResult(resultData) {
         let x = document.getElementById("prevTablePage");
         x.style.display = "block";
     }
-    if(resultData.length != webVariables.pageSize)
+    if(size < webVariables.pageSize)
     {
         let y = document.getElementById("nextTablePage");
         y.style.display = "none";
         webVariables.stopNextPage = true;
     }
-    else if(resultData.length == webVariables.pageSize && !webVariables.stopNextPage)
-    {
-        let y = document.getElementById("nextTablePage");
-        y.style.display = "block";
 
-    }
-    if(resultData.length != 0)
+    if(resultData.length >= 1)
     {
         // Populate the star table
         // Find the empty table body by id "star_table_body"
@@ -435,7 +465,7 @@ function handleSearchResult(resultData) {
             rowHTML += "<td>" + resultData[i]["movie_director"] + "</td>"
             rowHTML += "<td>";
             for (let x = 0; x < Math.min(3, resultData[i]['genres'].length); x++) {
-                if (x + 1 == Math.min(3, resultData[i]['genres'].length)) {
+                if (x + 1 === Math.min(3, resultData[i]['genres'].length)) {
                     rowHTML += '<a href="browsingGenre.html?genre=' + resultData[i]['genres'][x].split(",")[1] + '">'
                         + resultData[i]['genres'][x].split(",")[0] +
                         '</a>';
@@ -449,7 +479,7 @@ function handleSearchResult(resultData) {
             // add Stars and hrefs
             rowHTML += "<td>";
             for (let x = 0; x < Math.min(3, resultData[i]['movie_stars'].length); x++) {
-                if (x + 1 == Math.min(3, resultData[i]['movie_stars'].length)) {
+                if (x + 1 === Math.min(3, resultData[i]['movie_stars'].length)) {
                     rowHTML += '<a href="single-star.html?id=' + resultData[i]['movie_stars'][x].split(",")[1] + '">'
                         + resultData[i]['movie_stars'][x].split(",")[0] +
                         '</a>';
@@ -469,7 +499,7 @@ function handleSearchResult(resultData) {
         }
         console.log("Done populating table..")
     }
-    else
+    if(size === 0)
     {
         revertToPreviousPage();
         alert("Next page was not available for this search...\nReverting to previous page");
@@ -488,6 +518,7 @@ function submitSearchForm() {
     if(!webVariables.searchView)
     {
         webVariables.pageNumber = 1;
+        webVariables.stopNextPage = false;
         webVariables.browseNumericView = false;
         webVariables.browseGenreView = false;
         webVariables.browseAlphaView = false;
@@ -499,7 +530,7 @@ function submitSearchForm() {
     param += "sortRating=" + webVariables.sortingRatingBy + "&";
     param += "sortTitle=" + webVariables.sortingTitleBy;
 
-    if(document.getElementsByTagName("input")[0].value != "")
+    if(document.getElementsByTagName("input")[0].value)
     {
         param += "&title=" + document.getElementsByTagName("input")[0].value;
     }

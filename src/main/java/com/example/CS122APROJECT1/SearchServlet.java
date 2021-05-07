@@ -1,5 +1,4 @@
 package com.example.CS122APROJECT1;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import javax.naming.InitialContext;
@@ -15,9 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.Statement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.Collections;
 
 
@@ -130,22 +127,22 @@ public class SearchServlet extends HttpServlet {
             String sortRating = request.getParameter("sortRating");
             int pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
             int pageSize = Integer.parseInt(request.getParameter("pageSize"));
-            if(input_title != "" && input_title != null && !input_title.contains("%"))
+            if(input_title != null && !input_title.contains("%"))
             {
                 user_inputs[0] = input_title;
                 input_count++;
             }
-            if(input_year != "" && input_year != null && !input_year.contains("%"))
+            if(input_year != null && !input_year.contains("%"))
             {
                 user_inputs[1] = input_year;
                 input_count++;
             }
-            if(input_director != "" && input_director != null && !input_director.contains("%"))
+            if(input_director != null && !input_director.contains("%"))
             {
                 user_inputs[2] = input_director;
                 input_count++;
             }
-            if(input_star != "" && input_star != null && !input_star.contains("%"))
+            if(input_star != null && !input_star.contains("%"))
             {
                 user_inputs[3] = input_star;
                 input_count++;

@@ -114,7 +114,7 @@ public class BrowseGenreServlet extends HttpServlet {
         {
             outputQuery += " ORDER BY M.title " + sortTitle + " , R.rating " + sortRating;
         }
-        outputQuery += " limit ? , ?;";
+        outputQuery += " limit ?;";
 
         return outputQuery;
 
@@ -164,8 +164,8 @@ public class BrowseGenreServlet extends HttpServlet {
                 preparedStatement2.setString(i+1,movies[i]);
             }
 
-            preparedStatement2.setInt(movies.length+1,(pageSize*(pageNumber-1)));
-            preparedStatement2.setInt(movies.length+2,pageSize);
+            preparedStatement2.setInt(movies.length+1,pageSize);
+            System.out.println(preparedStatement2.toString());
             ResultSet rs2 = preparedStatement2.executeQuery();
             while(rs2.next()) {
                 JsonObject jsonObject = new JsonObject();
