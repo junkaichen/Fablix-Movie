@@ -112,17 +112,7 @@
             top: 10px;
             right: 10px;
         }
-    /*#alpha_list{*/
-    /*    width: 5%*/
-    /*}*/
 
-    /*#numeric_list{*/
-    /*    width: 5%*/
-    /*}*/
-
-    /*#genre_list_table{*/
-    /*    width: 5%;*/
-    /*}*/
 
         #sorting_information{
             display: none;
@@ -161,6 +151,15 @@
 
             position: center;
         }
+        #nextTablePage
+        {
+            display: none;
+        }
+        #prevTablePage
+        {
+            display: none;
+        }
+
 
     </style>
 </head>
@@ -277,6 +276,12 @@
     <option  value ="Title">Title</option>
 </select>
 <button id="buttonSortBy"onclick="submitSort()" formmethod="get" formaction="?">Sort First By</button>
+</div>
+<div id="prevTablePage">
+    <button onclick="prevTPage()">Prev</button>
+</div>
+<div id="nextTablePage">
+    <button onclick="nextTPage()">Next</button>
 </div>
 <table id=movie_list_table2 class="table table-striped" >
     <!-- Create a table header -->

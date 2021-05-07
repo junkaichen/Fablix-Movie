@@ -121,6 +121,38 @@
 
 <h1 onclick="window.location.href='index.html'">Fablix</h1>
 <h2>Genre Movie List</h2>
+<div id="sorting_information">
+  <select id="sort_by_rating" size="1" style="position: center">
+    <option  value = "DESC" selected>DESCENDING</option>
+    <option  value = "ASC">ASCENDING</option>
+  </select>
+  <button id="buttonRating" onclick="submitRating()" formmethod="get" formaction="?">Sort By Rating</button>
+
+  <select id="sort_by_title" size="1" style="position: center">
+    <option  value ="ASC"selected>ASCENDING</option>
+    <option  value ="DESC">DESCENDING</option>
+  </select>
+  <button id="buttonTitle"onclick="submitTitle()" formmethod="get" formaction="?">Sort By Title</button>
+  <select id="sort_by_numbers" size="1" style="position: center">
+    <option value=10>10</option>
+    <option value=25 selected>25</option>
+    <option value=50>50</option>
+    <option value=100>100</option>
+  </select>
+  <button id="buttonItems" onclick="submitNumberOfItems()" formmethod="get" formaction="?">Items Per Page</button>
+
+  <select id="sort_by_first" size="1" style="position: center">
+    <option  value ="Rating"selected>Rating</option>
+    <option  value ="Title">Title</option>
+  </select>
+  <button id="buttonSortBy"onclick="submitSort()" formmethod="get" formaction="?">Sort First By</button>
+</div>
+<div id="prevTablePage">
+  <button onclick="prevTPage()">Prev</button>
+</div>
+<div id="nextTablePage">
+  <button onclick="nextTPage()">Next</button>
+</div>
 
 <!-- Id "star_table" is useful for jQuery to find the html element with id, class here is mapping to Bootstrap defined class CSS -->
 <table id=genre_movie_list_table class="table table-striped">

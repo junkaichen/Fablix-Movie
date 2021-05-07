@@ -22,7 +22,6 @@ function AddToCart(cartEvent) {
 
 }
 
-
 function myFunction() {
     let x = document.getElementById("search_form");
     if(x.style.display == "block")
@@ -39,11 +38,15 @@ function myFunction() {
 
 function browse_alpha()
 {
-    webVariables.pageNumber = 1;
-    webVariables.browseNumericView = false;
-    webVariables.browseGenreView = false;
-    webVariables.browseAlphaView = true;
-    webVariables.searchView = false;
+    if(!webVariables.browseAlphaView)
+    {
+        webVariables.pageNumber = 1;
+        webVariables.browseNumericView = false;
+        webVariables.browseGenreView = false;
+        webVariables.browseAlphaView = true;
+        webVariables.searchView = false;
+    }
+
     let p = document.getElementById("alpha_list");
     submitform();
     let param = "pageSize=" + webVariables.pageSize.toString() + "&";
@@ -67,11 +70,15 @@ function browse_alpha()
 
 function browse_numeric()
 {
-    webVariables.pageNumber = 1;
-    webVariables.browseNumericView = true;
-    webVariables.browseGenreView = false;
-    webVariables.browseAlphaView = false;
-    webVariables.searchView = false;
+    if(!webVariables.browseNumericView)
+    {
+        webVariables.pageNumber = 1;
+        webVariables.browseNumericView = true;
+        webVariables.browseGenreView = false;
+        webVariables.browseAlphaView = false;
+        webVariables.searchView = false;
+    }
+
     let p = document.getElementById("numeric_list");
     let param = "pageSize=" + webVariables.pageSize.toString() + "&";
     param += "pageNumber=" + webVariables.pageNumber.toString() + "&";
@@ -96,11 +103,15 @@ function submitGenre()
 {
 
     let p = document.getElementById("genre_list_table");
-    webVariables.pageNumber = 1;
-    webVariables.browseNumericView = false;
-    webVariables.browseGenreView = true;
-    webVariables.browseAlphaView = false;
-    webVariables.searchView = false;
+    if(!webVariables.browseGenreView)
+    {
+        webVariables.pageNumber = 1;
+        webVariables.browseNumericView = false;
+        webVariables.browseGenreView = true;
+        webVariables.browseAlphaView = false;
+        webVariables.searchView = false;
+    }
+
     let param = "pageSize=" + webVariables.pageSize.toString() + "&";
     param += "pageNumber=" + webVariables.pageNumber.toString() + "&";
     param += "RatingFirst=" + webVariables.sortingRatingFirst + "&";
@@ -218,8 +229,6 @@ function submitRating()
     let ratingElement = document.getElementById("sort_by_rating");
 
     webVariables.sortingRatingBy = ratingElement.value;
-    console.log(webVariables.sortingRatingBy);
-    console.log(ratingElement.value);
     webVariables.pageNumber = 1;
     if(webVariables.browseAlphaView)
     {
@@ -312,67 +321,159 @@ function submitNumberOfItems()
     {
         search();
     }
-
-
 }
 
+function nextTPage()
+{
+    webVariables.pageNumber += 1;
+    webVariables.stopNextPage = false;
+    if(webVariables.browseAlphaView)
+    {
+        browse_alpha();
+    }
+    else if(webVariables.browseGenreView)
+    {
+        submitGenre();
+    }
+    else if(webVariables.browseNumericView)
+    {
+        browse_numeric();
+    }
+    else
+    {
+        search();
+    }
+}
+
+function prevTPage()
+{
+    webVariables.pageNumber -= 1;
+    webVariables.stopNextPage = false;
+    if(webVariables.browseAlphaView)
+    {
+        browse_alpha();
+    }
+    else if(webVariables.browseGenreView)
+    {
+        submitGenre();
+    }
+    else if(webVariables.browseNumericView)
+    {
+        browse_numeric();
+    }
+    else
+    {
+        search();
+    }
+}
+
+function revertToPreviousPage()
+{
+    webVariables.pageNumber -= 1;
+    webVariables.stopNextPage = true;
+    if(webVariables.browseAlphaView)
+    {
+        browse_alpha();
+    }
+    else if(webVariables.browseGenreView)
+    {
+        submitGenre();
+    }
+    else if(webVariables.browseNumericView)
+    {
+        browse_numeric();
+    }
+    else
+    {
+        search();
+    }
+}
 
 
 function handleSearchResult(resultData) {
     console.log("handleSearchResult: populating MovieList table from resultData");
-
-    // Populate the star table
-    // Find the empty table body by id "star_table_body"
-    let movieListTableElement2 = $("#movie_list_table_body2").empty();
-    movieListTableElement2.html("");
-    for (let i = 0; i < Math.min(webVariables.pageSize, resultData.length); i++) {
-        let rowHTML = "";
-        let shpvalue = resultData[i]["movie_id"];
-        rowHTML += "<tr>";
-        // Add a link to single-star.html with id passed with GET url parameter
-        rowHTML +=
-            "<td>" +
-            '<a href="single-movie.html?id=' + resultData[i]['movie_id'] + '">'
-            + resultData[i]["movie_title"] +
-            '</a>' +
-            "</td>";
-        rowHTML += "<td>" + resultData[i]["movie_year"] + "</td>";
-        rowHTML += "<td>" + resultData[i]["movie_director"] + "</td>"
-        rowHTML += "<td>";
-        for (let x = 0; x < Math.min(3, resultData[i]['genres'].length); x++) {
-            if (x + 1 == Math.min(3, resultData[i]['genres'].length)) {
-                rowHTML += '<a href="browsingGenre.html?genre=' + resultData[i]['genres'][x].split(",")[1] + '">'
-                    + resultData[i]['genres'][x].split(",")[0] +
-                    '</a>';
-            } else {
-                rowHTML += '<a href="browsingGenre.html?genre=' + resultData[i]['genres'][x].split(",")[1] + '">'
-                    + resultData[i]['genres'][x].split(",")[0] +
-                    '</a>' + ", ";
-            }
-        }
-        rowHTML += "</td>";
-        // add Stars and hrefs
-        rowHTML += "<td>";
-        for (let x = 0; x < Math.min(3, resultData[i]['movie_stars'].length); x++) {
-            if (x + 1 == Math.min(3, resultData[i]['movie_stars'].length)) {
-                rowHTML += '<a href="single-star.html?id=' + resultData[i]['movie_stars'][x].split(",")[1] + '">'
-                    + resultData[i]['movie_stars'][x].split(",")[0] +
-                    '</a>';
-            } else {
-                rowHTML += '<a href="single-star.html?id=' + resultData[i]['movie_stars'][x].split(",")[1] + '">'
-                    + resultData[i]['movie_stars'][x].split(",")[0] +
-                    '</a>' + ", ";
-            }
-        }
-        rowHTML += "</td>";
-        rowHTML += "<td>" + resultData[i]["movie_rating"] + "</td>";
-        rowHTML += "<td>";
-        rowHTML += "<button onclick=AddToCart('" + shpvalue + "')" + ">ADD</button>";
-        rowHTML += "</td>";
-        rowHTML += "</tr>";
-        movieListTableElement2.append(rowHTML);
+    if(webVariables.pageNumber == 1)
+    {
+        let x = document.getElementById("prevTablePage");
+        x.style.display = "none";
     }
-    console.log("Done populating table..")
+    else
+    {
+        let x = document.getElementById("prevTablePage");
+        x.style.display = "block";
+    }
+    if(resultData.length != webVariables.pageSize)
+    {
+        let y = document.getElementById("nextTablePage");
+        y.style.display = "none";
+        webVariables.stopNextPage = true;
+    }
+    else if(resultData.length == webVariables.pageSize && !webVariables.stopNextPage)
+    {
+        let y = document.getElementById("nextTablePage");
+        y.style.display = "block";
+
+    }
+    if(resultData.length != 0)
+    {
+        // Populate the star table
+        // Find the empty table body by id "star_table_body"
+        let movieListTableElement2 = $("#movie_list_table_body2").empty();
+        movieListTableElement2.html("");
+        for (let i = 0; i < Math.min(webVariables.pageSize, resultData.length); i++) {
+            let rowHTML = "";
+            let shpvalue = resultData[i]["movie_id"];
+            rowHTML += "<tr>";
+            // Add a link to single-star.html with id passed with GET url parameter
+            rowHTML +=
+                "<td>" +
+                '<a href="single-movie.html?id=' + resultData[i]['movie_id'] + '">'
+                + resultData[i]["movie_title"] +
+                '</a>' +
+                "</td>";
+            rowHTML += "<td>" + resultData[i]["movie_year"] + "</td>";
+            rowHTML += "<td>" + resultData[i]["movie_director"] + "</td>"
+            rowHTML += "<td>";
+            for (let x = 0; x < Math.min(3, resultData[i]['genres'].length); x++) {
+                if (x + 1 == Math.min(3, resultData[i]['genres'].length)) {
+                    rowHTML += '<a href="browsingGenre.html?genre=' + resultData[i]['genres'][x].split(",")[1] + '">'
+                        + resultData[i]['genres'][x].split(",")[0] +
+                        '</a>';
+                } else {
+                    rowHTML += '<a href="browsingGenre.html?genre=' + resultData[i]['genres'][x].split(",")[1] + '">'
+                        + resultData[i]['genres'][x].split(",")[0] +
+                        '</a>' + ", ";
+                }
+            }
+            rowHTML += "</td>";
+            // add Stars and hrefs
+            rowHTML += "<td>";
+            for (let x = 0; x < Math.min(3, resultData[i]['movie_stars'].length); x++) {
+                if (x + 1 == Math.min(3, resultData[i]['movie_stars'].length)) {
+                    rowHTML += '<a href="single-star.html?id=' + resultData[i]['movie_stars'][x].split(",")[1] + '">'
+                        + resultData[i]['movie_stars'][x].split(",")[0] +
+                        '</a>';
+                } else {
+                    rowHTML += '<a href="single-star.html?id=' + resultData[i]['movie_stars'][x].split(",")[1] + '">'
+                        + resultData[i]['movie_stars'][x].split(",")[0] +
+                        '</a>' + ", ";
+                }
+            }
+            rowHTML += "</td>";
+            rowHTML += "<td>" + resultData[i]["movie_rating"] + "</td>";
+            rowHTML += "<td>";
+            rowHTML += "<button onclick=AddToCart('" + shpvalue + "')" + ">ADD</button>";
+            rowHTML += "</td>";
+            rowHTML += "</tr>";
+            movieListTableElement2.append(rowHTML);
+        }
+        console.log("Done populating table..")
+    }
+    else
+    {
+        revertToPreviousPage();
+        alert("Next page was not available for this search...\nReverting to previous page");
+    }
 
 }
 
@@ -383,37 +484,33 @@ function search()
 
 function submitSearchForm() {
     console.log("submit search form");
-    console.log(document.getElementsByTagName("input")[0].value);
-    console.log(document.getElementsByTagName("input")[1].value);
-    console.log(document.getElementsByTagName("input")[2].value);
-    console.log(document.getElementsByTagName("input")[3].value);
     submitform();
-    webVariables.pageNumber = 1;
-    webVariables.browseNumericView = false;
-    webVariables.browseGenreView = false;
-    webVariables.browseAlphaView = false;
-    webVariables.searchView = true;
-
+    if(!webVariables.searchView)
+    {
+        webVariables.pageNumber = 1;
+        webVariables.browseNumericView = false;
+        webVariables.browseGenreView = false;
+        webVariables.browseAlphaView = false;
+        webVariables.searchView = true;
+    }
     let param = "pageSize=" + webVariables.pageSize.toString() + "&";
     param += "pageNumber=" + webVariables.pageNumber.toString() + "&";
     param += "RatingFirst=" + webVariables.sortingRatingFirst + "&";
     param += "sortRating=" + webVariables.sortingRatingBy + "&";
     param += "sortTitle=" + webVariables.sortingTitleBy;
-    let addParams;
+
     if(document.getElementsByTagName("input")[0].value != "")
     {
         param += "&title=" + document.getElementsByTagName("input")[0].value;
-        addParams += "&title=" + document.getElementsByTagName("input")[0].value;
     }
     if(document.getElementsByTagName("input")[1].value)
     {
         param += "&year=" + document.getElementsByTagName("input")[1].value;
-        addParams += "&year=" + document.getElementsByTagName("input")[1].value;
+
     }
     if(document.getElementsByTagName("input")[2].value)
     {
         param += "&director=" + document.getElementsByTagName("input")[2].value;
-        addParams += "&director=" + document.getElementsByTagName("input")[2].value;
     }
     if(document.getElementsByTagName("input")[3].value)
     {
@@ -453,6 +550,7 @@ var webVariables = {
     "sortingRatingFirst" : "true",
     "sortingRatingBy" : "DESC",
     "sortingTitleBy" : "ASC",
-    "pageSize" : 25
+    "pageSize" : 25,
+    "stopNextPage" : false
 };
 loadGenres();
