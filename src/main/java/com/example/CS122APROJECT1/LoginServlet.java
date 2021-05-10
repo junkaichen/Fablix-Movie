@@ -91,8 +91,7 @@ public class LoginServlet extends HttpServlet {
 
                 // Check the password correct or not
                 String encryptedPassword = rs.getString("password");
-//                success = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
-                success = true;
+                success = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
                 //if the password is not correct
                 if(!success)
                 {
