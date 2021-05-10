@@ -1,6 +1,7 @@
 package com.example.CS122APROJECT1;
 
 import com.google.gson.JsonObject;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -75,6 +76,8 @@ public class LoginServlet extends HttpServlet {
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
 
+            boolean success = false;
+
             // Check the Username exists in database or not
             if(rs.next() == false)
             {
@@ -85,11 +88,12 @@ public class LoginServlet extends HttpServlet {
             // the Username exists in database
             else
             {
-                // Check the password correct or not
-                String correctPassword = rs.getString("password");
 
+                // Check the password correct or not
+                String encryptedPassword = rs.getString("password");
+                success = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
                 //if the password is not correct
-                if(!correctPassword.equals( password))
+                if(!success)
                 {
                     responseJsonObject.addProperty("status", "fail");
                     responseJsonObject.addProperty("message", "incorrect password");
