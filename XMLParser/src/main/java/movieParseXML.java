@@ -72,6 +72,7 @@ public class movieParseXML extends DefaultHandler {
         tempVal = "";
         if(qName.equalsIgnoreCase("film"))
         {
+
             tempMov = new Movie();
         }
     }
@@ -84,11 +85,30 @@ public class movieParseXML extends DefaultHandler {
     public void endElement(String uri, String localName, String qName) throws SAXException{
         if(qName.equalsIgnoreCase("film"))
         {
+
             if(tempMov.getGenres().isEmpty())
             {
                 tempMov.addGenre("unknown");
             }
+            Iterator<Movie> it = movies.iterator();
+            boolean found = false;
+            while(it.hasNext() && !found)
+            {
+                Movie temper = it.next();
+                if(temper.getTitle().equalsIgnoreCase(tempMov.getTitle()))
+                {
+                    found = true;
+                }
+                if(temper.getId().equalsIgnoreCase(tempMov.getId()))
+                {
+                    found = true;
+                }
+            }
+            if(!found)
+            {
                 movies.add(tempMov);
+            }
+
         }
         else if(qName.equalsIgnoreCase("fid"))
         {

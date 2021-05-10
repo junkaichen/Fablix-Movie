@@ -27,7 +27,7 @@ public class actorParseXML extends DefaultHandler {
     public void run()
     {
         parseDocument();
-        printData();
+        //printData();
     }
 
     private void parseDocument()
