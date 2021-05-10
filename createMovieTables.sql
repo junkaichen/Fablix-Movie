@@ -83,3 +83,16 @@ CREATE TABLE employee (
     fullname VARCHAR(100),
     PRIMARY KEY (email)
 );
+
+CREATE TABLE customers_backup (
+    id			INTEGER NOT NULL AUTO_INCREMENT,
+    firstName	VARCHAR(50) NOT NULL,
+    lastName	VARCHAR(50) NOT NULL,
+    ccId		VARCHAR(20),
+    address		VARCHAR(200) NOT NULL,
+    email		VARCHAR(50) NOT NULL,
+    password	VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (ccId) REFERENCES creditcards(id) ON UPDATE CASCADE
+);
+
