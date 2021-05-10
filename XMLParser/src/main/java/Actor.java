@@ -60,6 +60,26 @@ public class Actor {
         }
     }
 
+    public void removeMovieID(String id)
+    {
+        if(movies_played_in.contains(id))
+        {
+            movies_played_in.remove(movies_played_in.indexOf(id));
+        }
+    }
+
+    public boolean playedInMovie(String id)
+    {
+        if(movies_played_in.contains(id))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 
     public String toString()
     {

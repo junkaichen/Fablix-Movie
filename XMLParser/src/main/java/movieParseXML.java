@@ -26,7 +26,7 @@ public class movieParseXML extends DefaultHandler {
     public void run()
     {
         parseDocument();
-        printData();
+        //printData();
     }
 
     private void parseDocument()
@@ -134,6 +134,10 @@ public class movieParseXML extends DefaultHandler {
             tempMov.setDirector(tempVal);
         }
 
+    }
+
+    public List<Movie> getMovies() {
+        return movies;
     }
 
     public static void main(String[] args)

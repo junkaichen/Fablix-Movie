@@ -28,7 +28,7 @@ public class actorParseDOBXML extends DefaultHandler {
     public void run()
     {
         parseDocument();
-        printData();
+        //printData();
     }
 
     private void parseDocument()
@@ -115,6 +115,11 @@ public class actorParseDOBXML extends DefaultHandler {
         }
 
     }
+
+    public List<Actor> getActors() {
+        return actors;
+    }
+
 
     public static void main(String[] args)
     {
