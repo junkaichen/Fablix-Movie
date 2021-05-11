@@ -54,7 +54,7 @@ public class InsertStars {
                 psInsertRecord.setString(2,a.getName());
                 if(a.getDob() == 0)
                 {
-                    psInsertRecord.setInt(3,a.getDob());
+                    psInsertRecord.setInt(3,java.sql.Types.INTEGER);
                 }
                 else
                 {

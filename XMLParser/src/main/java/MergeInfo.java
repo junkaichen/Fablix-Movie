@@ -135,8 +135,8 @@ public class MergeInfo{
     }
 
     public void run(){
-        System.out.println("Movies size is :" + movies.size());
-        System.out.println("Actors size is : " + actors.size());
+        System.out.println("The size of Parse XML Movies size is :" + movies.size());
+        System.out.println("The size of Parse XML Actors size is : " + actors.size());
         generateMovieIDs();
         compareMovieIDAgainstActors();
         findMoviesWithNoActors();
@@ -159,7 +159,6 @@ public class MergeInfo{
                 Actor act = a.next();
                 if(act.getMovies().contains(mov.getId()))
                 {
-                    System.out.println("adding");
                     starsInMovie.put(act.getId(),mov.getId());
                 }
             }
@@ -168,7 +167,6 @@ public class MergeInfo{
 
     public List<String> getAllGenres()
     {
-        System.out.println(allGenres);
         return allGenres;
     }
 
@@ -179,7 +177,6 @@ public class MergeInfo{
 
     public HashMap<String,String> getStarsInMovie()
     {
-        System.out.println(starsInMovie.size());
         return starsInMovie;
     }
 
