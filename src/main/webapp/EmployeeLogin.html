@@ -1,9 +1,104 @@
+<!--&lt;!&ndash; This page will be redirected from any url if you are not logged in &ndash;&gt;-->
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Employee Entry</title>-->
+<!--    <style>-->
+<!--        Body {-->
+<!--            font-family: Calibri, Helvetica, sans-serif;-->
+<!--            background-image: url("https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");-->
+<!--            background-repeat: no-repeat;-->
+<!--            background-size: cover;-->
+<!--            height: 500px;-->
+<!--            background-color: #030101;-->
+<!--        }-->
+<!--        button {-->
+<!--            background-color: #AEA5A5;-->
+<!--            width: 100%;-->
+<!--            color: black;-->
+<!--            padding: 15px;-->
+<!--            margin: 10px 0px;-->
+<!--            border: none;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+
+<!--        input[type=text], input[type=password] {-->
+<!--            width: 100%;-->
+<!--            margin: 8px 0;-->
+<!--            padding: 12px 20px;-->
+<!--            display: inline-block;-->
+<!--            border: 2px #030101;-->
+<!--            box-sizing: border-box;-->
+<!--        }-->
+<!--        button:hover {-->
+<!--            opacity: 0.7;-->
+<!--        }-->
+
+<!--        .container {-->
+<!--            padding: 25px;-->
+<!--            background-color: #D7DBDD ;-->
+<!--        }-->
+
+<!--        h2{text-align: center;}-->
+
+<!--        div {-->
+<!--            height: 200px;-->
+<!--            width: 500px;-->
+<!--            margin-left: auto;-->
+<!--            margin-right: auto;-->
+<!--        }-->
+
+
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<h2>Employee Entry</h2>-->
+<!--&lt;!&ndash; Set the method to POST to avoid showing the username/password in the URL-->
+<!--     The default action is disabled to allow your own implementation. &ndash;&gt;-->
+<!--<form id="login_form2" method="post" action="#">-->
+<!--    <div class="container">-->
+<!--        <label><b>Email</b></label>-->
+<!--        <label>-->
+<!--            <input name="email" placeholder="Enter Email" type="text">-->
+<!--        </label>-->
+<!--        <br>-->
+<!--        <label><b>Password</b></label>-->
+<!--        <label>-->
+<!--            <input name="password" placeholder="Enter Password" type="password">-->
+<!--        </label>-->
+<!--        <br>-->
+<!--        <button type="submit">Login</button>-->
+<!--        <div class="g-recaptcha" data-sitekey="6LeHpckaAAAAAFnW-BI1hFcG0bBj_G05-OgenylF"></div>-->
+<!--    </div>-->
+<!--</form>-->
+
+<!--<script src='https://www.google.com/recaptcha/api.js'></script>-->
+<!--&lt;!&ndash;<FORM ACTION="form-recaptcha">&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;    </FORM>&ndash;&gt;-->
+<!--&lt;!&ndash;    <div class="g-recaptcha" data-sitekey="6LeHpckaAAAAAFnW-BI1hFcG0bBj_G05-OgenylF"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;</FORM>&ndash;&gt;-->
+
+<!--<div id="login_error_message"></div>-->
+
+<!--&lt;!&ndash; include jQuery&ndash;&gt;-->
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
+<!--&lt;!&ndash; include our own JS file &ndash;&gt;-->
+<!--<script src="./EmployeeLogin.js"></script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
 <!-- This page will be redirected from any url if you are not logged in -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Employee Entry</title>
+    <title>Login to Fablix</title>
     <style>
         Body {
             font-family: Calibri, Helvetica, sans-serif;
@@ -48,7 +143,19 @@
             margin-left: auto;
             margin-right: auto;
         }
-
+        .Users {
+            background-color: white;
+            color: black;
+            border: 2px solid #008CBA;
+            padding: 15px 15px;
+            cursor: pointer;
+            top: 10px;
+            right: 10px;
+            width: 200px;
+            margin:0 auto;
+            margin-top: 90px;
+            display:block;
+        }
 
     </style>
 </head>
@@ -61,7 +168,7 @@
     <div class="container">
         <label><b>Email</b></label>
         <label>
-            <input name="email" placeholder="Enter Email" type="text">
+            <input name="email" placeholder="Enter Username" type="text">
         </label>
         <br>
         <label><b>Password</b></label>
@@ -75,15 +182,12 @@
 </form>
 
 <script src='https://www.google.com/recaptcha/api.js'></script>
-<!--<FORM ACTION="form-recaptcha">-->
 
-<!--        <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>-->
-<!--    </FORM>-->
-<!--    <div class="g-recaptcha" data-sitekey="6LeHpckaAAAAAFnW-BI1hFcG0bBj_G05-OgenylF"></div>-->
-<!--</FORM>-->
 
 <div id="login_error_message"></div>
 
+
+<button class="Users" onclick="UsersEntry()">UserEntry</button>
 <!-- include jQuery-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!-- include our own JS file -->

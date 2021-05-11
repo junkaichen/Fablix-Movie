@@ -19,7 +19,9 @@ function handleLoginResult(resultDataString) {
         // error messages on <div> with id "login_error_message"
         console.log("show error message");
         console.log(resultDataJson["message"]);
+        alert(resultDataJson["message"]);
         $("#login_error_message").text(resultDataJson["message"]);
+        window.location.replace("login.html");
     }
 }
 
@@ -42,7 +44,7 @@ function submitLoginForm(formSubmitEvent) {
             method: "POST",
             // Serialize the login form to the data sent by POST request
             data: login_form.serialize(),
-            success: handleLoginResult
+            success: handleLoginResult,
         }
     );
 }

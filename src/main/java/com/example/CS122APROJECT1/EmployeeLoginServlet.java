@@ -19,7 +19,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 
-@WebServlet(name = "LoginServlet", urlPatterns = "/api/employeelogin")
+@WebServlet(name = "EmployeeLoginServlet", urlPatterns = "/api/employeelogin")
 public class EmployeeLoginServlet extends HttpServlet {
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -63,26 +63,25 @@ public class EmployeeLoginServlet extends HttpServlet {
 
             /* get the content in the login box from the http request(user's typed in username and the password)
                 which refers to the value of <input name="name"> in index.html*/
-            String username = request.getParameter("username");
+            String email = request.getParameter("email");
             String password = request.getParameter("password");
-
             JsonObject responseJsonObject = new JsonObject();
 
             // Generate a SQL query
             String query = "SELECT * from employees where email like ?";
             PreparedStatement statement = dbCon.prepareStatement(query);
-            statement.setString(1, username);
+            statement.setString(1, email);
             // Perform the query
             ResultSet rs = statement.executeQuery();
 
-            boolean success;
+            boolean success = false;
 
             // Check the Username exists in database or not
             if(rs.next() == false)
             {
                 // the Username doesn't exists in database
                 responseJsonObject.addProperty("status", "fail");
-                responseJsonObject.addProperty("message", "user " + username + " doesn't exist");
+                responseJsonObject.addProperty("message", "user " + email + " doesn't exist");
             }
             // the Username exists in database
             else
@@ -102,7 +101,7 @@ public class EmployeeLoginServlet extends HttpServlet {
                 else
                 {
                     // set this user into the session
-                    request.getSession().setAttribute("user", new User(username));
+                    request.getSession().setAttribute("user", new User(email));
                     responseJsonObject.addProperty("status", "success");
                     responseJsonObject.addProperty("message", "success");
                 }
