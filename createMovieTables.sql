@@ -4,7 +4,7 @@ USE moviedb;
 
 CREATE TABLE movies (
 	id			VARCHAR(10) NOT NULL,
-	title		VARCHAR(100) UNIQUE NOT NULL,
+	title		VARCHAR(100) NOT NULL,
     year		INTEGER NOT NULL,
     director	VARCHAR(100) NOT NULL,
     PRIMARY KEY (id) 

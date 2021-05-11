@@ -72,7 +72,7 @@ public class MergeInfo{
             }
             i++;
         }
-        System.out.println("total removed ids from actors for movies that dont exist is :" + Integer.toString(countRemoved));
+        System.out.println("total removed ids from actors for movies that dont exist is :" + countRemoved);
 
     }
 
@@ -111,7 +111,7 @@ public class MergeInfo{
 
             }
         }
-        System.out.println("Movies removed:" + Integer.toString(countRemovedMovies));
+        System.out.println("Movies removed:" + countRemovedMovies);
     }
 
     public void allGenresFromMovies()
@@ -143,6 +143,11 @@ public class MergeInfo{
 
     }
 
+    public List<String> getAllGenres()
+    {
+        return allGenres;
+    }
+
 
 
 
@@ -154,6 +159,16 @@ public class MergeInfo{
     {
         MergeInfo info = new MergeInfo();
         info.run();
+        InsertGenres ig = new InsertGenres(info.getAllGenres());
+        try {
+            ig.run();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 
