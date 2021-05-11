@@ -4,7 +4,7 @@ USE moviedb;
 
 CREATE TABLE movies (
 	id			VARCHAR(10) NOT NULL,
-	title		VARCHAR(100) NOT NULL,
+	title		VARCHAR(100) UNIQUE NOT NULL,
     year		INTEGER NOT NULL,
     director	VARCHAR(100) NOT NULL,
     PRIMARY KEY (id) 
@@ -26,7 +26,7 @@ CREATE TABLE stars_in_movies (
 
 CREATE TABLE genres (
 	id			INTEGER AUTO_INCREMENT,
-    name		VARCHAR(32),
+    name		VARCHAR(32) UNIQUE ,
     PRIMARY KEY (id)
 );
 

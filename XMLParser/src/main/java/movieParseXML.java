@@ -72,7 +72,6 @@ public class movieParseXML extends DefaultHandler {
         tempVal = "";
         if(qName.equalsIgnoreCase("film"))
         {
-
             tempMov = new Movie();
         }
     }
@@ -106,7 +105,11 @@ public class movieParseXML extends DefaultHandler {
             }
             if(!found)
             {
-                movies.add(tempMov);
+                if(tempMov.validMovie())
+                {
+                    movies.add(tempMov);
+                }
+
             }
 
         }

@@ -24,6 +24,7 @@ public class MergeInfo{
         movies = m.getMovies();
         actors = a.getActors();
         movieIds = new ArrayList<String>();
+        allGenres = new ArrayList<String>();
     }
 
 
@@ -32,7 +33,15 @@ public class MergeInfo{
         while(it.hasNext())
         {
             Movie id = it.next();
-            movieIds.add(id.getId());
+            if(!movieIds.contains(id.getId()))
+            {
+                movieIds.add(id.getId());
+            }
+
+        }
+        if(movieIds.size() == movies.size())
+        {
+            System.out.println("all unique movie ids");
         }
     }
 
@@ -66,6 +75,7 @@ public class MergeInfo{
         System.out.println("total removed ids from actors for movies that dont exist is :" + Integer.toString(countRemoved));
 
     }
+
 
     private void findMoviesWithNoActors()
     {
@@ -104,11 +114,33 @@ public class MergeInfo{
         System.out.println("Movies removed:" + Integer.toString(countRemovedMovies));
     }
 
+    public void allGenresFromMovies()
+    {
+        Iterator<Movie> it = movies.iterator();
+        while(it.hasNext())
+        {
+            ArrayList<String> g = it.next().getGenres();
+            for(String gen : g)
+            {
+                if(!allGenres.contains(gen))
+                {
+                    allGenres.add(gen);
+                }
+            }
+        }
+    }
+
     public void run(){
+        System.out.println("Movies size is :" + movies.size());
+        System.out.println("Actors size is : " + actors.size());
         generateMovieIDs();
         compareMovieIDAgainstActors();
         findMoviesWithNoActors();
-        System.out.println("This is working");
+        System.out.println("Total number of movies remaining is: " + movies.size());
+        allGenresFromMovies();
+        System.out.println("Total number of found Genres: " + allGenres.size());
+        System.out.println(allGenres.toString());
+
     }
 
 

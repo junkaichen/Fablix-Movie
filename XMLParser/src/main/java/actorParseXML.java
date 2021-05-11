@@ -100,7 +100,10 @@ public class actorParseXML extends DefaultHandler {
             }
             else
             {
-                actors.add(tempAct);
+                if(!tempAct.getName().equals(""))
+                {
+                    actors.add(tempAct);
+                }
             }
 
         }

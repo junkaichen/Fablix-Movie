@@ -96,75 +96,115 @@ public class Movie {
 
     private String translateGenre(String genre)
     {
-        if(genre.equals("Susp"))
+        if(genre.equalsIgnoreCase("Susp"))
         {
             return "Thriller";
         }
-        if(genre.equals("CnR"))
+        if(genre.equalsIgnoreCase("CnR"))
         {
             return "Cops and Robbers";
         }
-        if(genre.equals("Dram"))
+        if(genre.equalsIgnoreCase("Fant"))
+        {
+            return "Fantasy";
+        }
+        if(genre.equalsIgnoreCase("Epic"))
+        {
+            return "Epic";
+        }
+        if(genre.equalsIgnoreCase("Crim"))
+        {
+            return "Crime";
+        }
+        if(genre.equalsIgnoreCase("Dram"))
         {
             return "Drama";
         }
-        if(genre.equals("West"))
+        if(genre.equalsIgnoreCase("West"))
         {
             return "Western";
         }
-        if(genre.equals("Myst"))
+        if(genre.equalsIgnoreCase("Myst"))
         {
             return "Mystery";
         }
-        if(genre.equals("S.F."))
+        if(genre.equalsIgnoreCase("S.F."))
         {
             return "Science Fiction";
         }
-        if(genre.equals("Advt"))
+        if(genre.equalsIgnoreCase("ScFi"))
+        {
+            return "Science Fiction";
+        }
+        if(genre.equalsIgnoreCase("Advt"))
         {
             return "Adventure";
         }
-        if(genre.equals("Horr"))
+        if(genre.equalsIgnoreCase("Horr"))
         {
             return "Horror";
         }
-        if(genre.equals("Romt"))
+        if(genre.equalsIgnoreCase("Romt"))
         {
             return "Romantic";
         }
-        if(genre.equals("Comd"))
+        if(genre.equalsIgnoreCase("Comd"))
         {
             return "Comedy";
         }
-        if(genre.equals("Musc"))
+        if(genre.equalsIgnoreCase("Musc"))
         {
             return "Musical";
         }
-        if(genre.equals("Docu"))
+        if(genre.equalsIgnoreCase("Docu"))
         {
             return "Documentary";
         }
-        if(genre.equals("Porn"))
+        if(genre.equalsIgnoreCase("Porn"))
         {
             return "Porn";
         }
-        if(genre.equals("Noir"))
+        if(genre.equalsIgnoreCase("Noir"))
         {
             return "Noir";
         }
-        if(genre.equals("BioP"))
+        if(genre.equalsIgnoreCase("BioP"))
         {
             return "Biographical Picture";
         }
-        if(genre.equals("TV"))
+        if(genre.equalsIgnoreCase("Actn"))
+        {
+            return "Action";
+        }
+        if(genre.equalsIgnoreCase("TV"))
         {
             return "TV Show";
         }
-        if(genre.equals("TVs"))
+        if(genre.equalsIgnoreCase("Hist"))
+        {
+            return "History";
+        }
+        if(genre.equalsIgnoreCase("Disa"))
+        {
+            return "Disaster";
+        }
+        if(genre.equalsIgnoreCase("Cart"))
+        {
+            return "Cartoon";
+        }
+        if(genre.equalsIgnoreCase("Faml"))
+        {
+            return "Family";
+        }
+        if(genre.equalsIgnoreCase("Surl"))
+        {
+            return "Surreal";
+        }
+        if(genre.equalsIgnoreCase("TVs"))
         {
             return "TV Series";
         }
-        if(genre.equals("TVm"))
+        if(genre.equalsIgnoreCase("TVm"))
         {
             return "TV Miniseries";
         }
