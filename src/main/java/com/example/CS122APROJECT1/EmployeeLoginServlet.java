@@ -19,8 +19,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 
-@WebServlet(name = "LoginServlet", urlPatterns = "/api/login")
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "LoginServlet", urlPatterns = "/api/employeelogin")
+public class EmployeeLoginServlet extends HttpServlet {
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
@@ -69,7 +69,7 @@ public class LoginServlet extends HttpServlet {
             JsonObject responseJsonObject = new JsonObject();
 
             // Generate a SQL query
-            String query = "SELECT * from customers where email like ?";
+            String query = "SELECT * from employees where email like ?";
             PreparedStatement statement = dbCon.prepareStatement(query);
             statement.setString(1, username);
             // Perform the query
@@ -123,4 +123,5 @@ public class LoginServlet extends HttpServlet {
         }
     }
 }
+
 

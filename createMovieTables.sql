@@ -77,7 +77,7 @@ CREATE TABLE ratings (
     FOREIGN KEY (movieId) REFERENCES movies (id) ON DELETE CASCADE
 );
 
-CREATE TABLE employee (
+CREATE TABLE employees (
     email VARCHAR(50),
     password VARCHAR(20) not null,
     fullname VARCHAR(100),

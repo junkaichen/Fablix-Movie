@@ -38,19 +38,13 @@ function submitLoginForm(formSubmitEvent) {
 
     $.ajax(
         /* this will lead us to LoginServlet */
-        "api/login", {
+        "api/employeelogin", {
             method: "POST",
             // Serialize the login form to the data sent by POST request
             data: login_form.serialize(),
             success: handleLoginResult
         }
     );
-}
-
-
-function EmployeeEntry()
-{
-    window.location.replace("EmployeeLogin.html");
 }
 
 // Bind the submit action of the form to a handler function
