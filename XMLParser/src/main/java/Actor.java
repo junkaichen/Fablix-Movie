@@ -4,17 +4,33 @@ public class Actor {
     private String name;
     private ArrayList<String> movies_played_in;
     private int dob;
+    private String id;
 
     public Actor()
     {
         this.name = "";
         this.movies_played_in = new ArrayList<String>();
         this.dob = 0;
+        this.id = "";
     }
 
     public void setName(String name)
     {
         this.name = name;
+        if(!name.equals(""))
+        {
+            this.id = this.name.substring(0,1) + this.name.hashCode();
+            this.id = "a" + this.id;
+            if(this.id.length() > 10)
+            {
+                this.id = this.id.substring(0,9);
+            }
+        }
+    }
+
+    public String getId()
+    {
+        return this.id;
     }
 
     public String getName()

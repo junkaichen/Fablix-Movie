@@ -1,6 +1,7 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.HashMap;
 
 
 public class MergeInfo{
@@ -11,6 +12,8 @@ public class MergeInfo{
     int countRemoved;
     int countRemovedMovies;
     List<String> allGenres;
+    HashMap<String,String> starsInMovie;
+
 
 
     public MergeInfo()
@@ -25,6 +28,7 @@ public class MergeInfo{
         actors = a.getActors();
         movieIds = new ArrayList<String>();
         allGenres = new ArrayList<String>();
+        starsInMovie = new HashMap<>();
     }
 
 
@@ -72,7 +76,7 @@ public class MergeInfo{
             }
             i++;
         }
-        System.out.println("total removed ids from actors for movies that dont exist is :" + countRemoved);
+        //System.out.println("total removed ids from actors for movies that dont exist is :" + countRemoved);
 
     }
 
@@ -138,30 +142,88 @@ public class MergeInfo{
         findMoviesWithNoActors();
         System.out.println("Total number of movies remaining is: " + movies.size());
         allGenresFromMovies();
+        movieAndStar();
         System.out.println("Total number of found Genres: " + allGenres.size());
-        System.out.println(allGenres.toString());
+    }
 
+    public void movieAndStar()
+    {
+
+        Iterator<Movie> m = movies.iterator();
+        while(m.hasNext())
+        {
+            Iterator<Actor> a = actors.iterator();
+            Movie mov = m.next();
+            while(a.hasNext())
+            {
+                Actor act = a.next();
+                if(act.getMovies().contains(mov.getId()))
+                {
+                    System.out.println("adding");
+                    starsInMovie.put(act.getId(),mov.getId());
+                }
+            }
+        }
     }
 
     public List<String> getAllGenres()
     {
+        System.out.println(allGenres);
         return allGenres;
     }
 
+    public List<Actor> getActors()
+    {
+        return actors;
+    }
+
+    public HashMap<String,String> getStarsInMovie()
+    {
+        System.out.println(starsInMovie.size());
+        return starsInMovie;
+    }
+
+    public List<Movie> getMovies()
+    {
+        return this.movies;
+    }
 
 
-
+    public void printNumberOfStarswithMovies()
+    {
+        int count = 0;
+        Iterator<Actor> it = actors.iterator();
+        while(it.hasNext())
+        {
+            if(!it.next().getMovies().isEmpty())
+            {
+                count++;
+            }
+        }
+        System.out.println("Out of " + actors.size() + " actors, " + count + " have movies");
+    }
 
 
 
 
     public static void main(String[] args)
     {
-        MergeInfo info = new MergeInfo();
-        info.run();
-        InsertGenres ig = new InsertGenres(info.getAllGenres());
+        MergeInfo m = new MergeInfo();
+        m.run();
+        InsertGenres ig = new InsertGenres();
+        InsertStars is = new InsertStars();
+        InsertMovies im = new InsertMovies();
+        InsertRatings ir = new InsertRatings();
+        InsertMovieGenreRelation mgr = new InsertMovieGenreRelation();
+        InsertMovieStarRelation msr = new InsertMovieStarRelation();
+
         try {
-            ig.run();
+            ig.run(m.getAllGenres());
+            is.run(m.getActors());
+            im.run(m.getMovies());
+            ir.run(m.getMovies());
+            mgr.run(m.getMovies());
+            msr.run(m.getStarsInMovie());
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -169,6 +231,9 @@ public class MergeInfo{
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        m.printNumberOfStarswithMovies();
+
+
     }
 
 

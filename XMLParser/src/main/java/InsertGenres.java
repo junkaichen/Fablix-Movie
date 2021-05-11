@@ -12,18 +12,13 @@ import java.util.List;
 
 public class InsertGenres {
 
-    private List<String> genres;
 
-    public InsertGenres(List<String> genres)
+    public InsertGenres()
     {
-        this.genres = genres;
     }
 
-    public void run()throws InstantiationException, IllegalAccessException, ClassNotFoundException
+    public void run(List<String> genres)throws InstantiationException, IllegalAccessException, ClassNotFoundException
     {
-        MergeInfo in = new MergeInfo();
-        in.run();
-
         Connection conn = null;
 
         try {
@@ -47,18 +42,16 @@ public class InsertGenres {
 
         sqlInsertRecord="INSERT IGNORE INTO genres(name) VALUES(?)";
         try {
-            conn.setAutoCommit(false);
-
             psInsertRecord=conn.prepareStatement(sqlInsertRecord);
 
-            for(String gen : in.getAllGenres())
+            Iterator<String> gen = genres.iterator();
+            while(gen.hasNext())
             {
-                psInsertRecord.setString(1,gen);
-                psInsertRecord.addBatch();
+                String ge = gen.next();
+                psInsertRecord.setString(1,ge);
+                psInsertRecord.execute();
             }
 
-            iNoRows=psInsertRecord.executeBatch();
-            conn.commit();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,6 +63,7 @@ public class InsertGenres {
         } catch(Exception e) {
             e.printStackTrace();
         }
+        System.out.println("New Genres have been inserted");
     }
 
 }
