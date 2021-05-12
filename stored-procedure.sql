@@ -55,7 +55,7 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE PROCEDURE add_movie(IN newId VARCHAR(10), newTitle VARCHAR(100), newYear INTEGER, newDirector VARCHAR(100), newGenre INTEGER, newStar VARCHAR(10), newStarYear INTEGER, dummyID VARCHAR(10))
+CREATE PROCEDURE add_movie(IN newId VARCHAR(10), newTitle VARCHAR(100), newYear INTEGER, newDirector VARCHAR(100), newGenre VARCHAR(32), newStar VARCHAR(100), newStarYear INTEGER, dummyID VARCHAR(10))
 BEGIN
     DECLARE mE INTEGER;
     DECLARE gE INTEGER;
@@ -77,7 +77,7 @@ BEGIN
                 SELECT CONCAT(newTitle, " tmovie was added...") as answer;
 
             ELSE
-                INSERT INTO stars (id,starname,birthYear) VALUES (dummyID,newStar,birthYear);
+                INSERT INTO stars (id,starname,birthYear) VALUES (dummyID,newStar,newStarYear);
                 SET sID = dummyID;
                 INSERT INTO movies(id,title,year,director)  VALUES(newID,newTitle,newYear,newDirector);
                 INSERT INTO stars_in_movies(starId,movieId)  VALUES(sID,newId);
@@ -97,7 +97,7 @@ BEGIN
                 SELECT CONCAT(newTitle, " tmovie was added...new genre") as answer;
 
             ELSE
-                INSERT INTO stars (id,starname,birthYear) VALUES (dummyID,newStar,birthYear);
+                INSERT INTO stars (id,starname,birthYear) VALUES (dummyID,newStar,newStarYear);
                 SET sID = dummyID;
                 INSERT INTO movies(id,title,year,director)  VALUES(newID,newTitle,newYear,newDirector);
                 INSERT INTO stars_in_movies(starId,movieId)  VALUES(newStar,newId);
