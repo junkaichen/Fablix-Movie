@@ -66,78 +66,11 @@ public class AddMovieServlet extends HttpServlet {
                 starId = starId.substring(0,9);
             }
 
-            // Generate a SQL query
-            String query = "SELECT * FROM movies WHERE title like ? AND director like ? and year = ?;";
-            PreparedStatement statement = dbCon.prepareStatement(query);
-            statement.setString(1, movie_title);
-            statement.setString(2, movie_director);
-            statement.setInt(3, Integer.parseInt(movie_year));
-            // Perform the query
-            ResultSet rs = statement.executeQuery();
-            if(rs.next())
-            {
-                responseJsonObject.addProperty("status", "fail");
-                responseJsonObject.addProperty("message", "Movie " + movie_title + " exist");
-            }
-            else
-            {
-                String query2 = "SELECT * FROM stars WHERE starname like ? AND birthYear = ?;";
-                PreparedStatement statement2 = dbCon.prepareStatement(query2);
-                statement2.setString(1, star_name);
-                statement2.setInt(2, Integer.parseInt(star_birthyear));
-                // Perform the query
-                ResultSet rs2 = statement2.executeQuery();
-                if(rs2.next())
-                {
-                    starId = rs2.getString("id");
-                    String query13 = "SELECT * FROM genres WHERE name like ? ;";
-                    PreparedStatement statement13 = dbCon.prepareStatement(query13);
-                    statement13.setString(1, movie_genre);
-                    // Perform the query
-                    ResultSet rs13 = statement13.executeQuery();
-                    if(rs13.next())
-                    {
-                        int genresid = rs13.getInt("id");
 
-                        String query14 = "CALL add_movie(?, ?, ?, ?, ?, ?);" ;
-                        PreparedStatement statement14 = dbCon.prepareStatement(query14);
-                        statement14.setString(1, moiveId);
-                        statement14.setString(2, movie_title);
-                        statement14.setInt(3, Integer.parseInt(movie_year));
-                        statement14.setString(4, movie_director);
-                        statement14.setInt(5, genresid);
-                        statement14.setString(6, star_name);
-                        statement14.executeQuery();
-                    }
-                    responseJsonObject.addProperty("message", "Star " + star_name + " exist");
-                }
-                else
-                {
-                    String query3 = "SELECT * FROM genres WHERE name like ? ;";
-                    PreparedStatement statement3 = dbCon.prepareStatement(query3);
-                    statement3.setString(1, movie_genre);
-                    // Perform the query
-                    ResultSet rs3 = statement3.executeQuery();
-                    if(rs3.next())
-                    {
-                        int genresid = rs3.getInt("id");
-                        String query20 = "CALL add_movie(?, ?, ?, ?, ?, ?);" ;
-                        PreparedStatement statement20 = dbCon.prepareStatement(query20);
-                        statement20.setString(1, moiveId);
-                        statement20.setString(2, movie_title);
-                        statement20.setInt(3, Integer.parseInt(movie_year));
-                        statement20.setString(4, movie_director);
-                        statement20.setInt(5, genresid);
-                        statement20.setString(6, star_name);
-                        statement20.executeQuery();
-                        responseJsonObject.addProperty("message", "Genres " + movie_genre + " exist");
-                    }
-                    else
-                    {
-
-                        String query7 = "CALL add_genre(?);" ;
-                        PreparedStatement statement7 = dbCon.prepareStatement(query7);
-                        statement7.setString(1, movie_genre);
+            String query7 = "CALL add_genre(?);" ;
+            PreparedStatement statement7 = dbCon.prepareStatement(query7);
+            statement7.setString(1, movie_genre);
+            statement7.executeQuery();
 
                         String query6 = "SELECT * FROM genres WHERE name like ?" ;
                         PreparedStatement statement6 = dbCon.prepareStatement(query6);
@@ -152,6 +85,7 @@ public class AddMovieServlet extends HttpServlet {
                         statement11.setString(1, starId);
                         statement11.setString(2, star_name);
                         statement11.setInt(3, Integer.parseInt(star_birthyear));
+                        statement11.executeQuery();
 
 
                         String query4 = "CALL add_movie(?, ?, ?, ?, ?, ?);" ;
@@ -162,20 +96,125 @@ public class AddMovieServlet extends HttpServlet {
                         statement4.setString(4, movie_director);
                         statement4.setInt(5, genresid2);
                         statement4.setString(6, star_name);
+                        statement4.executeQuery();
 
 
-                    }
-                }
 
-                // set this user into the session
-                responseJsonObject.addProperty("status", "success");
-                responseJsonObject.addProperty("message", "success");
-                // set response status to 200 (OK)
-                response.setStatus(200);
-                rs.close();
 
-            }
-            statement.close();
+
+
+//            String query = "SELECT * FROM movies WHERE title like ? AND director like ? and year = ?;";
+//            PreparedStatement statement = dbCon.prepareStatement(query);
+//            statement.setString(1, movie_title);
+//            statement.setString(2, movie_director);
+//            statement.setInt(3, Integer.parseInt(movie_year));
+//            // Perform the query
+//            ResultSet rs = statement.executeQuery();
+//            if(rs.next())
+//            {
+//                responseJsonObject.addProperty("status", "fail");
+//                responseJsonObject.addProperty("message", "Movie " + movie_title + " exist");
+//            }
+//            else
+//            {
+//                String query2 = "SELECT * FROM stars WHERE starname like ? AND birthYear = ?;";
+//                PreparedStatement statement2 = dbCon.prepareStatement(query2);
+//                statement2.setString(1, star_name);
+//                statement2.setInt(2, Integer.parseInt(star_birthyear));
+//                // Perform the query
+//                ResultSet rs2 = statement2.executeQuery();
+//                if(rs2.next())
+//                {
+//                    starId = rs2.getString("id");
+//                    String query13 = "SELECT * FROM genres WHERE name like ? ;";
+//                    PreparedStatement statement13 = dbCon.prepareStatement(query13);
+//                    statement13.setString(1, movie_genre);
+//                    // Perform the query
+//                    ResultSet rs13 = statement13.executeQuery();
+//                    if(rs13.next())
+//                    {
+//                        int genresid = rs13.getInt("id");
+//
+//                        String query14 = "CALL add_movie(?, ?, ?, ?, ?, ?);" ;
+//                        PreparedStatement statement14 = dbCon.prepareStatement(query14);
+//                        statement14.setString(1, moiveId);
+//                        statement14.setString(2, movie_title);
+//                        statement14.setInt(3, Integer.parseInt(movie_year));
+//                        statement14.setString(4, movie_director);
+//                        statement14.setInt(5, genresid);
+//                        statement14.setString(6, star_name);
+//                        statement14.executeQuery();
+//                    }
+//                    responseJsonObject.addProperty("message", "Star " + star_name + " exist");
+//                }
+//                else
+//                {
+//                    String query21 = "CALL add_star(?, ?, ?);" ;
+//                    PreparedStatement statement21 = dbCon.prepareStatement(query21);
+//                    statement21.setString(1, starId);
+//                    statement21.setString(2, star_name);
+//                    statement21.setInt(3, Integer.parseInt(star_birthyear));
+//
+//                    String query3 = "SELECT * FROM genres WHERE name like ? ;";
+//                    PreparedStatement statement3 = dbCon.prepareStatement(query3);
+//                    statement3.setString(1, movie_genre);
+//                    // Perform the query
+//                    ResultSet rs3 = statement3.executeQuery();
+//                    if(rs3.next())
+//                    {
+//                        int genresid = rs3.getInt("id");
+//                        String query20 = "CALL add_movie(?, ?, ?, ?, ?, ?);" ;
+//                        PreparedStatement statement20 = dbCon.prepareStatement(query20);
+//                        statement20.setString(1, moiveId);
+//                        statement20.setString(2, movie_title);
+//                        statement20.setInt(3, Integer.parseInt(movie_year));
+//                        statement20.setString(4, movie_director);
+//                        statement20.setInt(5, genresid);
+//                        statement20.setString(6, star_name);
+//                        statement20.executeQuery();
+//                        responseJsonObject.addProperty("message", "Genres " + movie_genre + " exist");
+//                    }
+//                    else
+//                    {
+//
+//                        String query7 = "CALL add_genre(?);" ;
+//                        PreparedStatement statement7 = dbCon.prepareStatement(query7);
+//                        statement7.setString(1, movie_genre);
+//
+//                        String query6 = "SELECT * FROM genres WHERE name like ?" ;
+//                        PreparedStatement statement6 = dbCon.prepareStatement(query6);
+//                        statement6.setString(1, movie_genre);
+//                        ResultSet rs6 = statement6.executeQuery();
+//                        rs6.next();
+//                        int genresid2 = rs6.getInt("id");
+//
+//
+//                        String query11 = "CALL add_star(?, ?, ?);" ;
+//                        PreparedStatement statement11 = dbCon.prepareStatement(query11);
+//                        statement11.setString(1, starId);
+//                        statement11.setString(2, star_name);
+//                        statement11.setInt(3, Integer.parseInt(star_birthyear));
+//
+//
+//                        String query4 = "CALL add_movie(?, ?, ?, ?, ?, ?);" ;
+//                        PreparedStatement statement4 = dbCon.prepareStatement(query4);
+//                        statement4.setString(1, moiveId);
+//                        statement4.setString(2, movie_title);
+//                        statement4.setInt(3, Integer.parseInt(movie_year));
+//                        statement4.setString(4, movie_director);
+//                        statement4.setInt(5, genresid2);
+//                        statement4.setString(6, star_name);
+//                        statement4.executeQuery();
+//
+//                    }
+//                }
+//
+//                // set this user into the session
+//                responseJsonObject.addProperty("status", "success");
+//                responseJsonObject.addProperty("message", "success");
+//                // set response status to 200 (OK)
+//                response.setStatus(200);
+//            }
             dbCon.close();
             response.getWriter().write(responseJsonObject.toString());
         } catch (Exception e){
