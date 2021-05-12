@@ -12,15 +12,6 @@ function handleLoginResult(resultDataString) {
     console.log(resultDataJson["status"]);
 
     // If login succeeds, it will redirect the user to index.html
-    if (resultDataJson["status"] === "success") {
-        window.location.replace("index.html");
-    } else {
-        // If login fails, the web page will display
-        // error messages on <div> with id "login_error_message"
-        console.log("show error message");
-        console.log(resultDataJson["message"]);
-        $("#login_error_message").text(resultDataJson["message"]);
-    }
 }
 
 /**
@@ -37,14 +28,17 @@ function submitLoginForm(formSubmitEvent) {
     formSubmitEvent.preventDefault();
 
     $.ajax(
-        "api/login", {
+        /* this will lead us to LoginServlet */
+        "api/addmovie", {
             method: "POST",
             // Serialize the login form to the data sent by POST request
             data: login_form.serialize(),
-            success: handleLoginResult
+            success: handleLoginResult,
         }
     );
 }
+
+
 
 // Bind the submit action of the form to a handler function
 login_form.submit(submitLoginForm);
