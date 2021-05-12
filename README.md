@@ -4,7 +4,7 @@ ALL CODE THAT WAS NOT PROVIDED BY Professor Chen Li WAS CREATED BY TEAM 54.
 
 LATEST UPDATE OF README: SATURDAY APRIL 10, 2021
 
-LINK FOR VIDEO =  https://drive.google.com/file/d/1T7uWEFlbPSZWWri8C84ojd-vF4ptQ_20/view?usp=sharing
+LINK FOR VIDEO =  https://drive.google.com/file/d/1X0FO-d5y43JDpe523US9PGvZhn3Mq1UR/view?usp=sharing
 
 REQUIREMENTS:
 Java 11
@@ -31,7 +31,7 @@ Then we will need to populate the database moviedb.
 When loading the movie-data.sql from Professor Chen Li
 
 mysql -u mytestuser -p --database=moviedb < /home/ubuntu/movie-data.sql
-
+mysql -u mytestuser -p < stored-procedure.sql
 mysql -u mytestuser -p -e  "USE moviedb; ALTER TABLE stars CHANGE name starname VARCHAR(100);"
 
 When loading the movie-data.sql from Professor Chen Li,
@@ -59,21 +59,66 @@ ls -lah /var/lib/tomcat9/webapps/
 
 The war file will appear 
 
-Finally, type in the url http://18.217.56.83:8080/CS122APROJECT1-1.0-SNAPSHOT/
+Finally, type in the url https://18.217.204.8:8443/CS122APROJECT1-1.0-SNAPSHOT/
 
 to get to the landing page of the web application. The landing page will be the MovieList Page.
 
 Once on the landing page, there will be options to search and browse within the home page. 
 Most data will render on the main page with 
 the exception of browsingby a genre when clicking a hyperlink from movie list table results.
-
 The option to search is done with writing all 
 possible parameters out the user wants to check from i.e. title,year,director and/or actor.
 
 Substring matches designed use was %user_input% This subsstring match is used 
 for title, director and stars. Year must be an exact match. 
 
+XML Parsing Process:
+	The parsing process involves 3 classes being called that each parse an individual XML file.
+	The data gathered for movies is placed into a list of Movies which have all movie information.
+	After the file is fully parsed, any movies without necessary information are removed from the list
+	Of movies. Actors are put into a list when both documents are being parsed. The first file to be
+	Parsed for Actors is the cast xml file which gathers all the movies the the actor has been in
+	as well as their name. Once a name is found, an unique Id for the actor is made using the first
+	letter of their name as well as a hashedCode version of their whole name truncated to be less than
+	10 characters long. After all the parsing is done for all the xmls files, the information is 
+	retrieved by the MergeInfo class where all movies without actors are removed from movie list.
+	After all movies that dont have valid actors are removed, the actors who have movies that dont exist
+	in the movie list have the movieIDs of non existing movies removed. This way actors can and movies have
+	relations while some actors may not have movies they are able to play roles later on. After this, 
+	All the possible genres are gathered from the movie list. After all of this is The information is sent 
+	through 6 sql injection classes that bring all the information together for new movies,actors,genres,ratings and 	relations. All of the java classes that send informaiton to sql for the movie data use a batch process with a 
+	size limit of 100 for all the new information. The runtime is around a minute of time. My approach to this
+	was to organize the data in MergeInfo as explained above and send the information needed for each java sql
+	class to run. This made a modularized attempt at inserting the data and ignoring data that was duplicated.
+	The results were 
+		
+	The size of Parse XML Movies size is :11216
+	The size of Parse XML Actors size is : 18684
+	all unique movie ids
+	Movies removed:2976
+	Total number of movies remaining is: 8240
+	Total number of found Genres: 26
+	New Genres have been inserted
+	New stars have been inserted
+	New movies has been inserted
+	Movie ratings have been inserted
+	Movie and Genre relations have been inserted
+	Movie and Star relations have been inserted
+	Out of 18684 actors, 16570 have movies
 
+
+Prepared Statements are in:
+
+BrowseServlet: 
+BrowseGenreServlet:
+XML Insert Classes:
+
+
+Search Servlet:
+Login Servlet:
+Add MovieServlet:
+Single Movie Servlet:
+Single Star Servlet:
 
 Contributions
 
@@ -103,4 +148,9 @@ Going back to the home page from Single movie page and Single Star page Jacob
 Payment pages Alex
 Confirmation pages Alex
 git repo organization Jacob
+XML Parser Jacob
+DashBoard and webpages associated with it Alex
+Stored-Procedure and servlet with stored procedure Jacob (Editted by: Alex)
+Encryption Alex
+Recaptcha Alex
 README Jacob (Editted by: Alex)
