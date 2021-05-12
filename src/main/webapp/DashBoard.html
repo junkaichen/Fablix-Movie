@@ -1,0 +1,226 @@
+<!-- This page will be redirected from any url if you are not logged in -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to Fablix</title>
+    <style>
+        option{
+            text-align: center;
+            position: center;
+
+        }
+        button {
+            background-color: grey; /* Green */
+            border: none;
+            color: white;
+            position: center;
+            padding: 10px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        select {
+            position: center;
+            width: 100%;
+            text-decoration: none;
+            padding: 10px;
+            text-align: center;
+        }
+        Body {
+            font-family: Calibri, Helvetica, sans-serif;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            background-color: #C9B7B7 ;
+        }
+        .search {
+            background-color: #aea5a5;
+            width: 100%;
+            color: black;
+            padding: 10px;
+            margin: 0px 0px;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type=text] {
+            width: 100%;
+            margin: 8px 0;
+            padding: 10px 10px;
+            display: inline-block;
+            border: 2px  #030101;
+            box-sizing: border-box;
+        }
+        button:hover {
+            opacity: 0.7;
+        }
+
+        .container {
+            padding: 10px;
+            background-color: #D7DBDD ;
+        }
+
+        h2{text-align: center;}
+
+        div {
+            height: auto;
+            width: auto;
+            padding: 20px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        table th, td {
+            padding: 20px;
+            text-align: center;
+        }
+        #search_form {
+            width: 50%;
+            display:none;
+            position: center;
+
+        }
+        .table {
+            font-size: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            position: center
+        }
+
+        .table > tbody > tr > td {
+            vertical-align: middle;
+        }
+
+        #movie_list_table2 {
+
+            display:none;
+        }
+
+
+        .Checkout {
+            background-color: white;
+            color: black;
+            border: 2px solid #008CBA;
+            padding: 12px 28px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+
+        #sorting_information{
+            display: none;
+        }
+        #buttonSortBy{
+
+            position: center;
+
+        }
+        #buttonTitle{
+
+            position: center;
+
+        }
+        #buttonRating{
+
+            position: center;
+        }
+        #buttonItems{
+
+            position: center;
+        }
+        #sort_by_first{
+
+            position: center;
+        }
+        #sort_by_title{
+
+            position: center;
+        }
+        #sort_by_rating{
+
+            position: center;
+        }
+        #sort_by_numbers{
+
+            position: center;
+        }
+        #nextTablePage
+        {
+            display: none;
+        }
+        #prevTablePage
+        {
+            display: none;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<h2>ADD A NEW MOVIE</h2>
+<!-- Set the method to POST to avoid showing the username/password in the URL
+     The default action is disabled to allow your own implementation. -->
+<button class=search onclick="myFunction()">Click Here to Add!</button>
+<div id="search_form" class="container">
+    <label><b>Movie Title</b></label>
+    <label>
+        <input id="movie_title" name="title" placeholder="Enter movietitle" type="text">
+    </label>
+
+    <label><b>Year</b></label>
+    <label>
+        <input id="movie_year" name="year" placeholder="Enter Year" type="text">
+    </label>
+
+    <label><b>Search by Director</b></label>
+    <label>
+        <input id="input_director" name="director" placeholder="Enter Director" type="text">
+    </label>
+
+    <label><b>Search by Star</b></label>
+    <label>
+        <input id="input_star" name="star" placeholder="Enter Star" type="text">
+    </label>
+    <button onclick="search()">Search</button>
+</div>
+
+<table id=movie_list_table2 class="table table-striped" >
+    <!-- Create a table header -->
+    <thead>
+    <tr>
+        <!-- Titles of each column-->
+        <th>Title</th>
+        <th>Year</th>
+        <th>Director</th>
+        <th>Genres</th>
+        <th>Stars</th>
+        <th>Rating</th>
+        <th><img src="https://cdn4.iconfinder.com/data/icons/simplicio/128x128/shoppingcart.png" width="35" height="35"></th>
+    </tr>
+    </thead>
+    <!-- Table body is left empty here, will be populated with the data retrieved with index.js -->
+    <!-- Again, id "star_table_body" is useful for jQuery to find this html element -->
+    <tbody id=movie_list_table_body2></tbody>
+</table>
+
+
+
+<!-- include jQuery-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<!-- include our own JS file -->
+<script src="./DashBoard.js"></script>
+
+
+
+</body>
+</html>
