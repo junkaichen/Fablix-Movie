@@ -55,7 +55,7 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE PROCEDURE new_movie(IN newId VARCHAR(10), newTitle VARCHAR(100), newYear INTEGER, newDirector VARCHAR(100), newGenre INTEGER, newStar VARCHAR(10), newStarYear INTEGER, dummyID VARCHAR(10))
+CREATE PROCEDURE add_movie(IN newId VARCHAR(10), newTitle VARCHAR(100), newYear INTEGER, newDirector VARCHAR(100), newGenre INTEGER, newStar VARCHAR(10), newStarYear INTEGER, dummyID VARCHAR(10))
 BEGIN
     DECLARE mE INTEGER;
     DECLARE gE INTEGER;
