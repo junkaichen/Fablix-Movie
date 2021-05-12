@@ -52,6 +52,20 @@ public class AddMovieServlet extends HttpServlet {
             String star_birthyear = request.getParameter("star_birthyear");
             JsonObject responseJsonObject = new JsonObject();
 
+            String moiveId = movie_title.substring(0,1) +  movie_title.hashCode();
+            moiveId = "m" + moiveId;
+            if(moiveId.length() > 10)
+            {
+                moiveId = moiveId.substring(0,9);
+            }
+
+            String starId = star_name.substring(0,1) +  star_name.hashCode();
+            starId = "a" + starId;
+            if(starId.length() > 10)
+            {
+                starId = starId.substring(0,9);
+            }
+
             // Generate a SQL query
             String query = "SELECT * FROM movies WHERE title like ? AND director like ? and year = ?;";
             PreparedStatement statement = dbCon.prepareStatement(query);
@@ -75,16 +89,30 @@ public class AddMovieServlet extends HttpServlet {
                 ResultSet rs2 = statement2.executeQuery();
                 if(rs2.next())
                 {
+                    starId = rs2.getString("id");
+                    String query13 = "SELECT * FROM genres WHERE name like ? ;";
+                    PreparedStatement statement13 = dbCon.prepareStatement(query13);
+                    statement13.setString(1, movie_genre);
+                    // Perform the query
+                    ResultSet rs13 = statement13.executeQuery();
+                    if(rs13.next())
+                    {
+                        int genresid = rs13.getInt("id");
+
+                        String query14 = "CALL add_movie(?, ?, ?, ?, ?, ?);" ;
+                        PreparedStatement statement14 = dbCon.prepareStatement(query14);
+                        statement14.setString(1, moiveId);
+                        statement14.setString(2, movie_title);
+                        statement14.setInt(3, Integer.parseInt(movie_year));
+                        statement14.setString(4, movie_director);
+                        statement14.setInt(5, genresid);
+                        statement14.setString(6, star_name);
+                        statement14.executeQuery();
+                    }
                     responseJsonObject.addProperty("message", "Star " + star_name + " exist");
                 }
                 else
                 {
-                    String starId = star_name.substring(0,1) +  star_name.hashCode();
-                    starId = "a" + starId;
-                    if(starId.length() > 10)
-                    {
-                        starId = starId.substring(0,9);
-                    }
                     String query3 = "SELECT * FROM genres WHERE name like ? ;";
                     PreparedStatement statement3 = dbCon.prepareStatement(query3);
                     statement3.setString(1, movie_genre);
@@ -92,6 +120,16 @@ public class AddMovieServlet extends HttpServlet {
                     ResultSet rs3 = statement3.executeQuery();
                     if(rs3.next())
                     {
+                        int genresid = rs3.getInt("id");
+                        String query20 = "CALL add_movie(?, ?, ?, ?, ?, ?);" ;
+                        PreparedStatement statement20 = dbCon.prepareStatement(query20);
+                        statement20.setString(1, moiveId);
+                        statement20.setString(2, movie_title);
+                        statement20.setInt(3, Integer.parseInt(movie_year));
+                        statement20.setString(4, movie_director);
+                        statement20.setInt(5, genresid);
+                        statement20.setString(6, star_name);
+                        statement20.executeQuery();
                         responseJsonObject.addProperty("message", "Genres " + movie_genre + " exist");
                     }
                     else
@@ -116,12 +154,6 @@ public class AddMovieServlet extends HttpServlet {
                         statement11.setInt(3, Integer.parseInt(star_birthyear));
 
 
-                        String moiveId = movie_title.substring(0,1) +  movie_title.hashCode();
-                        moiveId = "m" + moiveId;
-                        if(moiveId.length() > 10)
-                        {
-                            moiveId = moiveId.substring(0,9);
-                        }
                         String query4 = "CALL add_movie(?, ?, ?, ?, ?, ?);" ;
                         PreparedStatement statement4 = dbCon.prepareStatement(query4);
                         statement4.setString(1, moiveId);
