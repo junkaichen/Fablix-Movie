@@ -65,6 +65,7 @@ public class AddMovieServlet extends HttpServlet {
             {
                 starId = starId.substring(0,9);
             }
+            System.out.println("HI");
             String callFunc = "CALL add_movie(?,?,?,?,?,?,?,?);";
             PreparedStatement statement = dbCon.prepareStatement(callFunc);
             statement.setString(1,moiveId);
@@ -76,19 +77,20 @@ public class AddMovieServlet extends HttpServlet {
             statement.setInt(7,Integer.parseInt(star_birthyear));
             statement.setString(8,starId);
             ResultSet rs = statement.executeQuery();
-            rs.next();
-            if(rs.getString("answer").contains("exists"))
+            System.out.println("HI2");
+            if(rs.next())
             {
-                responseJsonObject.addProperty("status","failure");
-                responseJsonObject.addProperty("message","movie already exists!");
+                if(rs.getString("answer").contains("exists"))
+                {
+                    responseJsonObject.addProperty("status","failure");
+                    responseJsonObject.addProperty("message","movie already exists!");
+                }
             }
 
-
-
+            System.out.println("HI3");
             // set this user into the session
             responseJsonObject.addProperty("status", "success");
             responseJsonObject.addProperty("message", "success");
-            // set response status to 200 (OK)
             response.setStatus(200);
             rs.close();
             statement.close();
