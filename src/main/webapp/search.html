@@ -2,26 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Genre List</title>
+  <title>Search</title>
   <style>
-    option{
-      text-align: center;
-      position: center;
 
-    }
-    select {
-      position: center;
-      width: 100%;
-      padding: 10px;
-      text-align: center;
-    }
-    Body {
-      font-family: Calibri, Helvetica, sans-serif;
-      background-repeat: no-repeat;
-      background-size: cover;
-
-      background-color: #C9B7B7 ;
-    }
     button {
       background-color: grey; /* Green */
       border: none;
@@ -33,6 +16,29 @@
       display: inline-block;
       font-size: 16px;
       margin: 4px 2px;
+      cursor: pointer;
+    }
+    select {
+      position: center;
+      width: 100%;
+      text-decoration: none;
+      padding: 10px;
+      text-align: center;
+    }
+    Body {
+      font-family: Calibri, Helvetica, sans-serif;
+      background-repeat: no-repeat;
+      background-size: cover;
+
+      background-color: #C9B7B7 ;
+    }
+    .search {
+      background-color: #aea5a5;
+      width: 100%;
+      color: black;
+      padding: 10px;
+      margin: 0px 0px;
+      border: none;
       cursor: pointer;
     }
 
@@ -48,12 +54,16 @@
       opacity: 0.7;
     }
 
+    .container {
+      padding: 10px;
+      background-color: #D7DBDD ;
+    }
 
     h2{text-align: center;}
 
     div {
-      height: 320px;
-      width: 500px;
+      height: auto;
+      width: auto;
       padding: 20px;
       margin-left: auto;
       margin-right: auto;
@@ -63,19 +73,15 @@
       padding: 20px;
       text-align: center;
     }
-
-    .table {
-      font-size: 20px;
-      margin-left: auto;
-      margin-right: auto;
+    #search_form {
       width: 50%;
-      position: center
+      position: center;
+
     }
 
     .table > tbody > tr > td {
       vertical-align: middle;
     }
-
 
     .Checkout {
       background-color: white;
@@ -88,34 +94,40 @@
       right: 10px;
     }
 
-
-
   </style>
-
 </head>
 <body>
-
 <button class=Checkout onclick="ShoppingCart()">Checkout</button>
-
 <h1 onclick="window.location.href='index.html'">Fablix</h1>
-<h2>Available Genres</h2>
-<!-- Id "star_table" is useful for jQuery to find the html element with id, class here is mapping to Bootstrap defined class CSS -->
-<table id=genre_movie_list_table class="table table-striped">
-  <!-- Create a table header -->
-  <thead>
 
-  </thead>
-  <tbody id=genre_movie_list_table_body></tbody>
-</table>
+<div id="search_form" class="container">
+  <label><b>Search by Title</b></label>
+  <label>
+    <input id="input_title" name="title" placeholder="Enter movietitle" type="text">
+  </label>
 
+  <label><b>Search by Year</b></label>
+  <label>
+    <input id="input_year" name="year" placeholder="Enter Year" type="text">
+  </label>
 
+  <label><b>Search by Director</b></label>
+  <label>
+    <input id="input_director" name="director" placeholder="Enter Director" type="text">
+  </label>
 
+  <label><b>Search by Star</b></label>
+  <label>
+    <input id="input_star" name="star" placeholder="Enter Star" type="text">
+  </label>
+  <button onclick="search()">Search</button>
+</div>
 
+<!-- include jQuery-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="browsingGenre.js"></script>
+<!-- include our own JS file -->
+<script src="./search.js"></script>
 </body>
-
-
 </html>

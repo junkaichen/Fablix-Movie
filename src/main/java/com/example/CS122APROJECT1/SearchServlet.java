@@ -126,6 +126,7 @@ public class SearchServlet extends HttpServlet {
             String sortTitle = request.getParameter("sortTitle");
             String sortRating = request.getParameter("sortRating");
             int pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
+            System.out.println(pageNumber);
             int pageSize = Integer.parseInt(request.getParameter("pageSize"));
             if(input_title != null && !input_title.contains("%"))
             {

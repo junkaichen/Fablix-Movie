@@ -1,29 +1,184 @@
-<!-- This example is following frontend and backend separation.
-
-    This .html performs two steps:
-    1. Create a html template skeleton, with all the elements defined (some left empty) and named with ids.
-    2. Load index.js to populate the data into empty elements.
-    -->
-
-<!doctype html>
+<!-- This page will be redirected from any url if you are not logged in -->
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+    <title>Movie List</title>
+    <style>
+        option{
+            text-align: center;
+            position: center;
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        }
+        button {
+            background-color: grey; /* Green */
+            border: none;
+            color: white;
+            position: center;
+            padding: 10px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        select {
+            position: center;
+            width: 100%;
+            text-decoration: none;
+            padding: 10px;
+            text-align: center;
+        }
+        Body {
+            font-family: Calibri, Helvetica, sans-serif;
+            background-repeat: no-repeat;
+            background-size: cover;
 
-    <title>Star List</title>
+            background-color: #C9B7B7 ;
+        }
+
+
+        input[type=text] {
+            width: 100%;
+            margin: 8px 0;
+            padding: 10px 10px;
+            display: inline-block;
+            border: 2px  #030101;
+            box-sizing: border-box;
+        }
+        button:hover {
+            opacity: 0.7;
+        }
+
+        .container {
+            padding: 10px;
+            background-color: #D7DBDD ;
+        }
+
+        h2{text-align: center;}
+
+        div {
+            height: auto;
+            width: auto;
+            padding: 20px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        table th, td {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .table {
+            font-size: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            position: center
+        }
+
+        .table > tbody > tr > td {
+            vertical-align: middle;
+        }
+
+
+
+        .Checkout {
+            background-color: white;
+            color: black;
+            border: 2px solid #008CBA;
+            padding: 12px 28px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+
+        #buttonSortBy{
+
+            position: center;
+
+        }
+        #buttonTitle{
+
+            position: center;
+
+        }
+        #buttonRating{
+
+            position: center;
+        }
+        #buttonItems{
+
+            position: center;
+        }
+        #sort_by_first{
+
+            position: center;
+        }
+        #sort_by_title{
+
+            position: center;
+        }
+        #sort_by_rating{
+
+            position: center;
+        }
+        #sort_by_numbers{
+
+            position: center;
+        }
+        #nextTablePage
+        {
+            display: none;
+        }
+        #prevTablePage
+        {
+            display: none;
+        }
+
+
+    </style>
 </head>
 <body>
+<button class=Checkout onclick="ShoppingCart()">Checkout</button>
+<h1 onclick="window.location.href='index.html'">Fabflix</h1>
+<h2>Movie list</h2>
+<div id="sorting_information">
+    <select id="sort_by_rating" size="1" style="position: center">
+        <option  value = "DESC" selected>DESCENDING</option>
+        <option  value = "ASC">ASCENDING</option>
+    </select>
+    <button id="buttonRating" onclick="submitRating()" formmethod="get" formaction="?">Sort By Rating</button>
 
+    <select id="sort_by_title" size="1" style="position: center">
+        <option  value ="ASC"selected>ASCENDING</option>
+        <option  value ="DESC">DESCENDING</option>
+    </select>
+    <button id="buttonTitle"onclick="submitTitle()" formmethod="get" formaction="?">Sort By Title</button>
+    <select id="sort_by_numbers" size="1" style="position: center">
+        <option value=10>10</option>
+        <option value=25 selected>25</option>
+        <option value=50>50</option>
+        <option value=100>100</option>
+    </select>
+    <button id="buttonItems" onclick="submitNumberOfItems()" formmethod="get" formaction="?">Items Per Page</button>
 
-<h1>Movie list</h1>
-
+    <select id="sort_by_first" size="1" style="position: center">
+        <option  value ="Rating"selected>Rating</option>
+        <option  value ="Title">Title</option>
+    </select>
+    <button id="buttonSortBy"onclick="submitSort()" formmethod="get" formaction="?">Sort First By</button>
+</div>
+<div id="prevTablePage">
+    <button onclick="prevTPage()">Prev</button>
+</div>
+<div id="nextTablePage">
+    <button onclick="nextTPage()">Next</button>
+</div>
 <!-- Id "star_table" is useful for jQuery to find the html element with id, class here is mapping to Bootstrap defined class CSS -->
 <table id=movie_list_table class="table table-striped">
     <!-- Create a table header -->
@@ -49,11 +204,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
-<!-- Load our own JS file -->
-<!-- The path is relative to index.html, since these two files are in the same directory -->
-<!-- Note the url does not contain a "/" in the beginning, which means the url is relative to current path
-     otherwise the url is relative to the root path-->
 <script src="movielist.js"></script>
 </body>
 

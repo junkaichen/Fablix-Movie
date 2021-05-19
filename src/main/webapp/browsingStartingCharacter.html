@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Browsing</title>
+  <style>
+    option{
+      text-align: center;
+      position: center;
+
+    }
+    button {
+      background-color: grey; /* Green */
+      border: none;
+      color: white;
+      position: center;
+      padding: 10px 10px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+    select {
+      position: center;
+      width: 100%;
+      text-decoration: none;
+      padding: 10px;
+      text-align: center;
+    }
+    Body {
+      font-family: Calibri, Helvetica, sans-serif;
+      background-repeat: no-repeat;
+      background-size: cover;
+
+      background-color: #C9B7B7 ;
+    }
+
+
+    input[type=text] {
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px 10px;
+      display: inline-block;
+      border: 2px  #030101;
+      box-sizing: border-box;
+    }
+    button:hover {
+      opacity: 0.7;
+    }
+
+    .container {
+      padding: 10px;
+      background-color: #D7DBDD ;
+    }
+
+    h2{text-align: center;}
+
+    div {
+      height: auto;
+      width: auto;
+      padding: 20px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    table th, td {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .table {
+      font-size: 20px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
+      position: center
+    }
+
+    .table > tbody > tr > td {
+      vertical-align: middle;
+    }
+
+    .Checkout {
+      background-color: white;
+      color: black;
+      border: 2px solid #008CBA;
+      padding: 12px 28px;
+      cursor: pointer;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+
+  </style>
+</head>
+<body>
+<button class=Checkout onclick="ShoppingCart()">Checkout</button>
+<h1 onclick="window.location.href='index.html'">Fabflix</h1>
+
+<p style="text-align: left">Browse Alphabetically</p>
+<select id="alpha_list" size="1" style="position: center">
+  <option value="*">*</option>
+  <option value="A">A</option>
+  <option value="B">B</option>
+  <option value="C">C</option>
+  <option value="D">D</option>
+  <option value="E">E</option>
+  <option value="F">F</option>
+  <option value="G">G</option>
+  <option value="H">H</option>
+  <option value="I">I</option>
+  <option value="J">J</option>
+  <option value="K">K</option>
+  <option value="L">L</option>
+  <option value="M">M</option>
+  <option value="N">N</option>
+  <option value="O">O</option>
+  <option value="P">P</option>
+  <option value="Q">Q</option>
+  <option value="R">R</option>
+  <option value="S">S</option>
+  <option value="T">T</option>
+  <option value="U">U</option>
+  <option value="V">V</option>
+  <option value="W">W</option>
+  <option value="X">X</option>
+  <option value="Y">Y</option>
+  <option value="Z">Z</option>
+</select>
+<button onclick="browse_alpha()" formmethod="get" formaction="?">Browse</button>
+<br/>
+<p style="text-align: left">Browse Numerically</p>
+<select id="numeric_list" size="1" style="position: center">
+  <option value="0">0</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">5</option>
+  <option value="6">6</option>
+  <option value="7">7</option>
+  <option value="8">8</option>
+  <option value="9">9</option>
+</select>
+<button onclick="browse_numeric()" formmethod="get" formaction="?">Browse</button>
+<br/>
+<!-- include jQuery-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<!-- include our own JS file -->
+<script src="./browsingStartingCharacter.js"></script>
+</body>
+</html>

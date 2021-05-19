@@ -1,11 +1,14 @@
-<!-- This page will be redirected from any url if you are not logged in -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Welcome to Fablix</title>
+    <title>Browsing</title>
     <style>
+        option{
+            text-align: center;
+            position: center;
 
+        }
         button {
             background-color: grey; /* Green */
             border: none;
@@ -47,6 +50,10 @@
             opacity: 0.7;
         }
 
+        .container {
+            padding: 10px;
+            background-color: #D7DBDD ;
+        }
 
         h2{text-align: center;}
 
@@ -58,8 +65,22 @@
             margin-right: auto;
         }
 
+        table th, td {
+            padding: 20px;
+            text-align: center;
+        }
 
+        .table {
+            font-size: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            position: center
+        }
 
+        .table > tbody > tr > td {
+            vertical-align: middle;
+        }
 
         .Checkout {
             background-color: white;
@@ -72,21 +93,13 @@
             right: 10px;
         }
 
-
-
     </style>
 </head>
 <body>
-
-<h2>Welcome to Fablix</h2>
-<!-- Set the method to POST to avoid showing the username/password in the URL
-     The default action is disabled to allow your own implementation. -->
 <button class=Checkout onclick="ShoppingCart()">Checkout</button>
-<button onclick="window.location.href='search.html'">Search</button>
-</br>
-<button onclick="window.location.href='browse.html'">Browse</button>
-
-
+<h1 onclick="window.location.href='index.html'">Fabflix</h1>
+<button onclick="window.location.href='browsingGenre.html'">Browse By Genres</button>
+<button onclick="window.location.href='browsingStartingCharacter.html'">Browse By First Letter</button>
 
 
 
@@ -95,9 +108,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <!-- include our own JS file -->
-<script src="./index.js"></script>
-
-
-
+<script src="./browse.js"></script>
 </body>
 </html>

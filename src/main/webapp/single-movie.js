@@ -67,11 +67,11 @@ function handleResult(resultData) {
 
     for (let x = 0; x < resultData[0]['genres'].length; x++) {
         if (x + 1 == resultData[0]['genres'].length) {
-            rowHTML += '<a href="browsingGenre.html?genre=' + resultData[0]['genres'][x].split(",")[1] + '">'
+            rowHTML += '<a href="movielist.html?viewType=browseGenreView&genre=' + resultData[0]['genres'][x].split(",")[1] + '">'
                 + resultData[0]['genres'][x].split(",")[0] +
                 '</a>';
         } else {
-            rowHTML += '<a href="browsingGenre.html?genre=' + resultData[0]['genres'][x].split(",")[1] + '">'
+            rowHTML += '<a href="movielist.html?viewType=browseGenreView&genre=' + resultData[0]['genres'][x].split(",")[1] + '">'
                 + resultData[0]['genres'][x].split(",")[0] +
                 '</a>' + ", ";
         }
