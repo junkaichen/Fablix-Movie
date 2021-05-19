@@ -6,19 +6,7 @@
     <title>Welcome to Fablix</title>
     <style>
 
-        button {
-            background-color: grey; /* Green */
-            border: none;
-            color: white;
-            position: center;
-            padding: 10px 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-        }
+
         select {
             position: center;
             width: 100%;
@@ -30,19 +18,16 @@
             font-family: Calibri, Helvetica, sans-serif;
             background-repeat: no-repeat;
             background-size: cover;
-
             background-color: #C9B7B7 ;
         }
 
-
-        input[type=text] {
-            width: 100%;
-            margin: 8px 0;
-            padding: 10px 10px;
-            display: inline-block;
-            border: 2px  #030101;
-            box-sizing: border-box;
+        body{
+            font-family: Calibri, Helvetica, sans-serif;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-color: #C9B7B7 ;
         }
+
         button:hover {
             opacity: 0.7;
         }
@@ -59,8 +44,6 @@
         }
 
 
-
-
         .Checkout {
             background-color: white;
             color: black;
@@ -72,7 +55,27 @@
             right: 10px;
         }
 
+        .this-button{
+            position: center;
+            object-position: center;
+            vertical-align: center;
+            horiz-align: center;
+            width: auto;
+            height: auto;
+            size: auto;
+        }
 
+        .container{
+            position: center;
+        }
+
+        #browse{
+            position: center;
+        }
+
+        #search{
+            position: center;
+        }
 
     </style>
 </head>
@@ -82,10 +85,16 @@
 <!-- Set the method to POST to avoid showing the username/password in the URL
      The default action is disabled to allow your own implementation. -->
 <button class=Checkout onclick="ShoppingCart()">Checkout</button>
-<button onclick="window.location.href='search.html'">Search</button>
-</br>
-<button onclick="window.location.href='browse.html'">Browse</button>
 
+
+
+
+
+<div class="container">
+<button id="search" class="this-button" onclick="window.location.href='search.html'" style="position: center">Search</button>
+</br></br>
+<button id="browse" class="this-button" onclick="window.location.href='browse.html'" style="position: center">Browse</button>
+</div>
 
 
 
