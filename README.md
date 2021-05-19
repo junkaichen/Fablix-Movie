@@ -109,16 +109,22 @@ XML Parsing Process:
 
 Prepared Statements are in:
 
-BrowseServlet: 
-BrowseGenreServlet:
-XML Insert Classes:
+BrowseServlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/BrowseServlet.java
+BrowseGenreServlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/BrowseGenreServlet.java
+BrowseGenresServelt: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/BrowseGenreServlet.java
+XML Insert Classes:https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/XMLParser/src/main/java/InsertGenres.java , 
+https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/XMLParser/src/main/java/InsertMovieGenreRelation.java ,
+https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/XMLParser/src/main/java/InsertMovieStarRelation.java ,
+https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/XMLParser/src/main/java/InsertMovies.java ,
+https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/XMLParser/src/main/java/InsertRatings.java ,
+https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/XMLParser/src/main/java/InsertStars.java
 
 
-Search Servlet:
-Login Servlet:
-Add MovieServlet:
-Single Movie Servlet:
-Single Star Servlet:
+Search Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/SearchServlet.java
+Login Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/LoginServlet.java
+Add MovieServlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/AddMovieServlet.java
+Single Movie Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/SingleMovieServlet.java
+Single Star Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/SingleStarServlet.java
 
 Contributions
 
