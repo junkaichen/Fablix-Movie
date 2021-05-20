@@ -94,5 +94,12 @@ CREATE TABLE customers_backup (
     password	VARCHAR(20) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (ccId) REFERENCES creditcards(id) ON UPDATE CASCADE
+
 );
 
+DROP TABLE IF EXISTS ft;
+CREATE TABLE ft (
+                    movieID VARCHAR(10),
+                    title varchar(100),
+                    PRIMARY KEY (movieID),
+                    FULLTEXT (title));
