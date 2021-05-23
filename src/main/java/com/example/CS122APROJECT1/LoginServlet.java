@@ -36,6 +36,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println("Inside this program");
         PrintWriter out = response.getWriter();
 
         String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
