@@ -10,3 +10,17 @@
 /XMLParser/mains243.xml
 /XMLParser/actors63.xml
 /XMLParser/.idea/
+/lib
+/MobileFablix/*.iml
+/MobileFablix/.idea
+/MobileFablix/.gradle
+/MobileFablix/local.properties
+/MobileFablix/.DS_Store
+/MobileFablix/app/build
+/MobileFablix/captures
+/MobileFablix/app/libs/
+
+/MobileFablix/libs/
+/MobileFablix/app/captures
+/MobileFablix/app/captures/
+/MobileFablix/app/libs/
