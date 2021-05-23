@@ -502,6 +502,7 @@ public class SearchServlet extends HttpServlet {
 
             // write JSON string to output
             out.write(jsonArray.toString());
+            System.out.println("Request Passed");
             // set response status to 200 (OK)
             response.setStatus(200);
             rs.close();
@@ -514,7 +515,7 @@ public class SearchServlet extends HttpServlet {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("errorMessage", e.getMessage());
             out.write(jsonObject.toString());
-
+            System.out.println("Request Failed");
             // set reponse status to 500 (Internal Server Error)
             response.setStatus(500);
 
