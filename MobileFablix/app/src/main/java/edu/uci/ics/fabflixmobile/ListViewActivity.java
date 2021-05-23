@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class ListViewActivity extends Activity {
@@ -19,9 +21,24 @@ public class ListViewActivity extends Activity {
         setContentView(R.layout.listview);
         homeButton = findViewById(R.id.home_button);
         // TODO: this should be retrieved from the backend server
+        Intent intent = getIntent();
+        String jsonArray = intent.getStringExtra("jsonArray");
         final ArrayList<Movie> movies = new ArrayList<>();
-        movies.add(new Movie("The Terminal", (short) 2004,"Neil"));
-        movies.add(new Movie("The Final Season", (short) 2007,"Neil"));
+        try {
+            JSONArray array = new JSONArray(jsonArray);
+            System.out.println(array.toString(2));
+            JSONObject movietitle = array.getJSONObject(0);
+            String movietitle2 = movietitle.getString("movie_title");
+            System.out.println(movietitle2);
+            movies.add(new Movie(movietitle2, (short) 2004,"Neil"));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+
+
 
 
         MovieListViewAdapter adapter = new MovieListViewAdapter(movies, this);

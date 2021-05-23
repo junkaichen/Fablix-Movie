@@ -11,10 +11,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,9 +60,13 @@ public class MainPage extends ActionBarActivity {
 
                     System.out.println(response.toString());
 
+
                     Log.d("search.success", response);
                     // initialize the activity(page)/destination
                     Intent listPage = new Intent(MainPage.this, ListViewActivity.class);
+                    listPage.putExtra("jsonArray", response.toString());
+
+
                     // activate the list page.
                     startActivity(listPage);
                 },
