@@ -31,7 +31,7 @@ public class MainPage extends ActionBarActivity {
     private final String host = "10.0.2.2";
     private final String port = "8080";
     //CS122APROJECT1-war
-    private final String domain = "CS122APROJECT1-war/";
+    private final String domain = "CS122APROJECT1-war";
     private final String baseURL = "http://" + host + ":" + port + "/" + domain;
 
 
@@ -52,7 +52,7 @@ public class MainPage extends ActionBarActivity {
         final RequestQueue queue = NetworkManager.sharedManager(this).queue;
         final StringRequest searchRequest = new StringRequest(
                 Request.Method.GET,
-                baseURL + "api/search" +"?title="+searchBar.getText().toString()
+                baseURL + "/api/search" +"?title="+searchBar.getText().toString()
                         +"&RatingFirst=true&pageNumber=1&sortRating=DESC&sortTitle=ASC&pageSize=20",
                 response -> {
                     // TODO: should parse the json response to redirect to appropriate functions

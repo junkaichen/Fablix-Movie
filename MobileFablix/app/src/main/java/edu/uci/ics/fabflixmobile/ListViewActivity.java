@@ -28,6 +28,7 @@ public class ListViewActivity extends Activity {
     private Button homeButton;
     ListView listView;
     private Button nextButton;
+    private ArrayList<Movie> movies;
     Button prevButton;
     private int pageNumber;
     private String searchQuery;
@@ -35,7 +36,7 @@ public class ListViewActivity extends Activity {
     private final String host = "10.0.2.2";
     private final String port = "8080";
     //CS122APROJECT1-war
-    private final String domain = "CS122APROJECT1-war/";
+    private final String domain = "CS122APROJECT1-war";
     private final String baseURL = "http://" + host + ":" + port + "/" + domain;
 
     @Override
@@ -53,7 +54,7 @@ public class ListViewActivity extends Activity {
         searchQuery = intent.getStringExtra("searchQuery");
 
         String jsonArray = intent.getStringExtra("jsonArray");
-        final ArrayList<Movie> movies = parseMovieInfo(jsonArray);
+        movies = parseMovieInfo(jsonArray);
         if(movies.size() != 20) { preventNextPage = true; }
 //        try {
 //            JSONArray array = new JSONArray(jsonArray);
@@ -154,7 +155,7 @@ public class ListViewActivity extends Activity {
         final RequestQueue queue = NetworkManager.sharedManager(this).queue;
         final StringRequest searchRequest = new StringRequest(
                 Request.Method.GET,
-                baseURL + "api/search" +"?title="+searchQuery
+                baseURL + "/api/search" +"?title="+searchQuery
                         +"&RatingFirst=true&pageNumber="+ Integer.toString(pageNumber) + "&sortRating=DESC&sortTitle=ASC&pageSize=20",
                 response -> {
                     System.out.println(response.toString());
@@ -163,8 +164,9 @@ public class ListViewActivity extends Activity {
                     ArrayList<Movie> newMoviesToSee = parseMovieInfo(response);
                     if(newMoviesToSee.size() != 0)
                     {
+                        movies = newMoviesToSee;
                         Toast.makeText(getApplicationContext(),"Loading new set of movies",Toast.LENGTH_SHORT).show();
-                        MovieListViewAdapter adapter = new MovieListViewAdapter(newMoviesToSee, this);
+                        MovieListViewAdapter adapter = new MovieListViewAdapter(movies, this);
                         if(newMoviesToSee.size() != 20) { preventNextPage = true; }
                         else { preventNextPage = false; }
                         listView.setAdapter(adapter);
@@ -202,7 +204,7 @@ public class ListViewActivity extends Activity {
             final RequestQueue queue = NetworkManager.sharedManager(this).queue;
             final StringRequest searchRequest = new StringRequest(
                     Request.Method.GET,
-                    baseURL + "api/search" + "?title=" + searchQuery
+                    baseURL + "/api/search" + "?title=" + searchQuery
                             + "&RatingFirst=true&pageNumber=" + Integer.toString(pageNumber) + "&sortRating=DESC&sortTitle=ASC&pageSize=20",
                     response -> {
                         System.out.println(response.toString());
@@ -210,8 +212,9 @@ public class ListViewActivity extends Activity {
                         // initialize the activity(page)/destination
                         ArrayList<Movie> newMoviesToSee = parseMovieInfo(response);
                         if (newMoviesToSee.size() != 0) {
+                            movies = newMoviesToSee;
                             Toast.makeText(getApplicationContext(), "Loading previous set of movies", Toast.LENGTH_SHORT).show();
-                            MovieListViewAdapter adapter = new MovieListViewAdapter(newMoviesToSee, this);
+                            MovieListViewAdapter adapter = new MovieListViewAdapter(movies, this);
                             if (newMoviesToSee.size() != 20) {
                                 preventNextPage = true;
                             } else {

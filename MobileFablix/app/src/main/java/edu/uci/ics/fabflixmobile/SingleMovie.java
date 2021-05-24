@@ -29,7 +29,7 @@ public class SingleMovie extends Activity {
     private final String host = "10.0.2.2";
     private final String port = "8080";
     //CS122APROJECT1-war
-    private final String domain = "CS122APROJECT1-war/";
+    private final String domain = "CS122APROJECT1-war";
     private final String baseURL = "http://" + host + ":" + port + "/" + domain;
 
 
@@ -53,7 +53,7 @@ public class SingleMovie extends Activity {
         final RequestQueue queue = NetworkManager.sharedManager(this).queue;
         final StringRequest singlemovieRequest = new StringRequest(
                 Request.Method.GET,
-                baseURL + "api/single-movie" +"?id=" + MovieID,
+                baseURL + "/api/single-movie" +"?id=" + MovieID,
                 response -> {
                     // TODO: should parse the json response to redirect to appropriate functions
                     //  upon different response value.
