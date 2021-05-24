@@ -33,11 +33,11 @@ public class ListViewActivity extends Activity {
     private int pageNumber;
     private String searchQuery;
     private boolean preventNextPage;
-    private final String host = "10.0.2.2";
-    private final String port = "8080";
+    private final String host = "18.217.204.8";
+    private final String port = "8443";
     //CS122APROJECT1-war
-    private final String domain = "CS122APROJECT1-war";
-    private final String baseURL = "http://" + host + ":" + port + "/" + domain;
+    private final String domain = "CS122APROJECT1-1.0-SNAPSHOT";
+    private final String baseURL = "https://" + host + ":" + port + "/" + domain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
