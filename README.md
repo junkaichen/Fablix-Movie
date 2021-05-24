@@ -4,7 +4,7 @@ ALL CODE THAT WAS NOT PROVIDED BY Professor Chen Li WAS CREATED BY TEAM 54.
 
 LATEST UPDATE OF README: MONDAY MAY 24th, 2021
 
-LINK FOR VIDEO =  https://drive.google.com/file/d/1X0FO-d5y43JDpe523US9PGvZhn3Mq1UR/view?usp=sharing
+LINK FOR VIDEO =  <INSERT NEW LINK HERE>
 
 REQUIREMENTS:
 Java 11
@@ -160,4 +160,10 @@ DashBoard and webpages associated with it Alex
 Stored-Procedure and servlet with stored procedure Jacob (Editted by: Alex)
 Encryption Alex
 Recaptcha Alex
+Android Login development Jacob 
+Android Search Development Alex & Jacob 
+Android Single movie page Alex 
+Android ListViewActivity Jacob & Alex
+Full search implementation Alex
+Auto Complete Alex
 README Jacob (Editted by: Alex)
