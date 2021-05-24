@@ -65,6 +65,7 @@ public class MainPage extends ActionBarActivity {
                     // initialize the activity(page)/destination
                     Intent listPage = new Intent(MainPage.this, ListViewActivity.class);
                     listPage.putExtra("jsonArray", response.toString());
+                    listPage.putExtra("searchQuery",searchBar.getText().toString());
 
 
                     // activate the list page.
