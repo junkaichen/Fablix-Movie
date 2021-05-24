@@ -28,7 +28,7 @@ public class MainPage extends ActionBarActivity {
     private Button searchButton;
     private EditText searchBar;
 
-    private final String host = "18.217.204.8";
+    private final String host = "3.15.204.21";
     private final String port = "8443";
     //CS122APROJECT1-war
     private final String domain = "CS122APROJECT1-1.0-SNAPSHOT";
