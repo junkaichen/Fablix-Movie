@@ -1,4 +1,7 @@
+package XMLSAX;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class Movie {
     private String title;
@@ -6,6 +9,7 @@ public class Movie {
     private String director;
     private int year;
     private String id;
+    private boolean hasActors;
 
 
     public Movie()
@@ -15,11 +19,12 @@ public class Movie {
         this.genres = new ArrayList<String>();
         this.director = "";
         this.year = -1;
+        this.hasActors = false;
     }
 
     public boolean validMovie()
     {
-        if(!title.equals("") && !id.equals("") && !director.equals("") && year != -1 && !genres.isEmpty())
+        if(!title.equals("") && !id.equals("") && !director.equals("") && year != -1)
         {
             return true;
         }
@@ -239,4 +244,15 @@ public class Movie {
         sb.append("Genres: " + genres.toString().substring(1,genres.toString().length()-1));
         return sb.toString();
     }
+
+    public void confirmActors()
+    {
+        this.hasActors = true;
+    }
+
+    public boolean hasNoActors()
+    {
+        return !this.hasActors;
+    }
+
 }

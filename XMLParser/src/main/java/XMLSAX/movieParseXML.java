@@ -1,3 +1,5 @@
+package XMLSAX;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -84,33 +86,36 @@ public class movieParseXML extends DefaultHandler {
     public void endElement(String uri, String localName, String qName) throws SAXException{
         if(qName.equalsIgnoreCase("film"))
         {
+            if(tempMov.validMovie())
+            {
+                if(tempMov.getGenres().isEmpty())
+                {
+                    tempMov.addGenre("unknown");
+                }
+                Iterator<Movie> it = movies.iterator();
+                boolean found = false;
+                while(it.hasNext() && !found)
+                {
+                    Movie temper = it.next();
+                    if(temper.getTitle().equalsIgnoreCase(tempMov.getTitle()))
+                    {
+                        found = true;
+                    }
+                    if(temper.getId().equalsIgnoreCase(tempMov.getId()))
+                    {
+                        found = true;
+                    }
+                }
+                if(!found)
+                {
+                    if(tempMov.validMovie())
+                    {
+                        movies.add(tempMov);
+                    }
 
-            if(tempMov.getGenres().isEmpty())
-            {
-                tempMov.addGenre("unknown");
-            }
-            Iterator<Movie> it = movies.iterator();
-            boolean found = false;
-            while(it.hasNext() && !found)
-            {
-                Movie temper = it.next();
-                if(temper.getTitle().equalsIgnoreCase(tempMov.getTitle()))
-                {
-                    found = true;
-                }
-                if(temper.getId().equalsIgnoreCase(tempMov.getId()))
-                {
-                    found = true;
                 }
             }
-            if(!found)
-            {
-                if(tempMov.validMovie())
-                {
-                    movies.add(tempMov);
-                }
 
-            }
 
         }
         else if(qName.equalsIgnoreCase("fid"))

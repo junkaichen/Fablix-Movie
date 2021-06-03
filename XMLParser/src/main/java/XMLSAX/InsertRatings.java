@@ -1,24 +1,24 @@
+package XMLSAX;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Iterator;
 
-
-public class InsertMovies {
+public class InsertRatings {
 
     /*
-        | Field    | Type         | Null | Key | Default | Extra |
-        +----------+--------------+------+-----+---------+-------+
-        | id       | varchar(10)  | NO   | PRI | NULL    |       |
-        | title    | varchar(100) | NO   |     | NULL    |       |
-        | year     | int          | NO   |     | NULL    |       |
-        | director | varchar(100) | NO   |     | NULL    |       |
+    | Field    | Type        | Null | Key | Default | Extra |
+    +----------+-------------+------+-----+---------+-------+
+    | movieId  | varchar(10) | YES  | MUL | NULL    |       |
+    | rating   | float       | NO   |     | NULL    |       |
+    | numVotes | int         | NO   |     | NULL    |       |
      */
 
-    public InsertMovies(){}
+    public InsertRatings(){}
+
 
 
     public void run(List<Movie> movies)throws InstantiationException, IllegalAccessException, ClassNotFoundException
@@ -45,7 +45,7 @@ public class InsertMovies {
         int[] iNoRows=null;
 
 
-        sqlInsertRecord="INSERT IGNORE INTO movies(id,title,year,director) VALUES(?,?,?,?)";
+        sqlInsertRecord="INSERT IGNORE INTO ratings(movieId,rating,numVotes) VALUES(?,?,?)";
         try {
             conn.setAutoCommit(false);
 
@@ -56,9 +56,8 @@ public class InsertMovies {
             {
                 Movie m = it.next();
                 psInsertRecord.setString(1,m.getId());
-                psInsertRecord.setString(2,m.getTitle());
-                psInsertRecord.setInt(3,m.getYear());
-                psInsertRecord.setString(4,m.getDirector());
+                psInsertRecord.setFloat(2,(float)7.5);
+                psInsertRecord.setInt(3,341);
 
                 count++;
                 psInsertRecord.addBatch();
@@ -66,7 +65,6 @@ public class InsertMovies {
                 {
                     count = 0;
                     iNoRows=psInsertRecord.executeBatch();
-                    psInsertRecord.clearBatch();
                 }
             }
             if(count != 0)
@@ -86,6 +84,6 @@ public class InsertMovies {
         } catch(Exception e) {
             e.printStackTrace();
         }
-        System.out.println("New movies has been inserted");
+        System.out.println("XMLSAX.Movie ratings have been inserted");
     }
 }

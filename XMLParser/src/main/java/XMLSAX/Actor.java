@@ -1,3 +1,5 @@
+package XMLSAX;
+
 import java.util.ArrayList;
 
 public class Actor {
@@ -14,17 +16,12 @@ public class Actor {
         this.id = "";
     }
 
-    public void setName(String name)
+    public void setName(String Actorname)
     {
-        this.name = name;
+        this.name = Actorname;
         if(!name.equals(""))
         {
-            this.id = this.name.substring(0,1) + this.name.hashCode();
-            this.id = "a" + this.id;
-            if(this.id.length() > 10)
-            {
-                this.id = this.id.substring(0,9);
-            }
+            setId(Actorname);
         }
     }
 
@@ -53,7 +50,11 @@ public class Actor {
 
     public void setDob(String dob)
     {
-        if(numbersOnly(dob))
+        if(dob.equals(""))
+        {
+            this.dob = 0;
+        }
+        else if(numbersOnly(dob))
         {
             this.dob = Integer.parseInt(dob);
         }
@@ -84,6 +85,12 @@ public class Actor {
         }
     }
 
+    public String getFirstMovieId()
+    {
+        return movies_played_in.get(0);
+    }
+
+
     public boolean playedInMovie(String id)
     {
         if(movies_played_in.contains(id))
@@ -100,7 +107,7 @@ public class Actor {
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
-        sb.append("Actor Details - ");
+        sb.append("XMLSAX.Actor Details - ");
         sb.append("Name: " + this.name);
         sb.append(",");
         sb.append("MovieIDs of movies played in: " + movies_played_in.toString());
@@ -108,6 +115,41 @@ public class Actor {
         sb.append("DOB:" + dob);
 
         return sb.toString();
+    }
+
+    private void setId(String name)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("A");
+        sb.append(name.substring(0,1).toLowerCase());
+        int value = 0;
+        for(int i = 0; i < name.length(); i++)
+        {
+            value += name.charAt(i);
+        }
+        if( value % 10000 == 0) {
+            sb.append(sb.append(name.substring(0, name.length() / 2)));
+            if (sb.length() > 10) {
+                String newId = sb.toString().substring(0, 9);
+                this.id = newId;
+            }
+            else
+            {
+                this.id = sb.toString();
+            }
+        }
+        else
+        {
+            sb.append(value % 10000);
+            if (sb.length() > 10) {
+                String newId = sb.toString().substring(0, 9);
+                this.id = newId;
+            }
+            else
+            {
+                this.id = sb.toString();
+            }
+        }
     }
 
 }

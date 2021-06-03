@@ -1,20 +1,25 @@
+package XMLSAX;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 
-public class InsertMovieStarRelation {
+public class InsertStars {
 
-//    | starId  | varchar(10) | YES  | MUL | NULL    |       |
-//    | movieId | varchar(10) | YES  | MUL | NULL    |       |
+    /*
+    | Field     | Type         | Null | Key | Default | Extra |
+    +-----------+--------------+------+-----+---------+-------+
+    | id        | varchar(10)  | NO   | PRI | NULL    |       |
+    | starname  | varchar(100) | YES  |     | NULL    |       |
+    | birthYear | int          | YES  |     | NULL    |       |
+     */
 
-    public InsertMovieStarRelation()
-    {}
+    public InsertStars(){}
 
-    public void run(HashMap<String,String> starsInMovie)
+    public void run(List<Actor> actors)throws InstantiationException, IllegalAccessException, ClassNotFoundException
     {
         Connection conn = null;
 
@@ -37,16 +42,26 @@ public class InsertMovieStarRelation {
         int[] iNoRows=null;
 
 
-        sqlInsertRecord="INSERT IGNORE INTO stars_in_movies(starId,movieId) VALUES(?,?)";
+        sqlInsertRecord="INSERT IGNORE INTO stars(id,starname,birthYear) VALUES(?,?,?)";
         try {
             conn.setAutoCommit(false);
 
             psInsertRecord=conn.prepareStatement(sqlInsertRecord);
+            Iterator<Actor> it = actors.iterator();
             int count = 0;
-            for(Map.Entry<String,String> entry : starsInMovie.entrySet())
+            while(it.hasNext())
             {
-                psInsertRecord.setString(1,entry.getKey());
-                psInsertRecord.setString(2,entry.getValue());
+                Actor a = it.next();
+                psInsertRecord.setString(1,a.getId());
+                psInsertRecord.setString(2,a.getName());
+                if(a.getDob() == 0)
+                {
+                    psInsertRecord.setInt(3,java.sql.Types.INTEGER);
+                }
+                else
+                {
+                    psInsertRecord.setInt(3,a.getDob());
+                }
                 count++;
                 psInsertRecord.addBatch();
                 if(count == 100)
@@ -73,6 +88,6 @@ public class InsertMovieStarRelation {
         } catch(Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Movie and Star relations have been inserted");
+        System.out.println("New stars have been inserted");
     }
 }

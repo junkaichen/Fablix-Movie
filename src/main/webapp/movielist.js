@@ -124,13 +124,22 @@ function submitSearchForm() {
             method: "GET",
             data : param,
             url: "api/search",
-            success: (resultData) => handleSearchResult(resultData)
+            //success: (resultData) => handleSearchResult(resultData),
+            statusCode: {
+                500 : (resultData) => handleError(),
+                200 : (resultData) => handleSearchResult(resultData)
+            }
         }
     );
     let browse_url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + param;
     window.history.pushState({path:browse_url},'',browse_url);
 }
 
+function handleError()
+{
+    alert("There is no results for this search... Please try another input");
+    window.location.replace("index.html");
+}
 
 function submitTitle()
 {

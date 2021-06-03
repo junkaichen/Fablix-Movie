@@ -244,6 +244,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.StringTokenizer;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 @WebServlet(name = "SearchServlet", urlPatterns = "/api/search")
@@ -290,7 +291,7 @@ public class SearchServlet extends HttpServlet {
         The purpose for this is the organization of the SQL Query is when searching for a movie star, with the given,
         group concatenation starInfo.
      */
-    public String handleQuery(String[] searchInfo, String sortFirstBy,String sortRating, String sortTitle) {
+    public String handleQuery(String[] searchInfo, String sortFirstBy,String sortRating, String sortTitle,AtomicInteger atom) {
         String query = "SELECT S.movieId ,M.title, M.year, M.director," +
                 " R.rating, GROUP_CONCAT(DISTINCT CONCAT(G.name,',',I.genreId) ORDER BY G.name SEPARATOR ';') as allGenres," +
                 " GROUP_CONCAT(DISTINCT CONCAT(T.starname,',',T.starId) ORDER BY T.starMovieCount DESC," +
@@ -314,6 +315,8 @@ public class SearchServlet extends HttpServlet {
                     partOfQuery += "* ";
 
                 }
+
+                partOfQuery = partOfQuery.substring(0,partOfQuery.length()-1);
                 partOfQuery += "'";
                 String finalQuery = "SELECT * FROM ft WHERE MATCH (title) AGAINST (";
                 finalQuery += partOfQuery;
@@ -329,12 +332,15 @@ public class SearchServlet extends HttpServlet {
                 // Perform the query
                 ResultSet rs = statement.executeQuery(finalQuery);
 
-                while(rs.next())
+                while(rs.next() && userinputtitle.size() < 99)
                 {
                     String movieTitle = rs.getString("title");
                     userinputtitle.add(movieTitle);
                 }
-
+                if(userinputtitle.size() != 0)
+                {
+                    atom.set(1);
+                }
                 rs.close();
                 statement.close();
                 dbcon.close();
@@ -348,22 +354,28 @@ public class SearchServlet extends HttpServlet {
 
         if(!searchInfo[0].equals(""))
         {
-            for (int i = 0; i < userinputtitle.size(); i++)
+            if(userinputtitle.size() > 0)
             {
-                if(i == 0)
+                for (int i = 0; i < userinputtitle.size(); i++)
                 {
-                    query += " AND (M.title = '";
-                    query += userinputtitle.get(i);
-                    query += "'";
-                }
-                else
-                {
-                    query += " OR M.title = '";
-                    query += userinputtitle.get(i);
-                    query += "'";
+                    if(i == 0)
+                    {
+                        query += " AND (M.title = \"";
+                        query += userinputtitle.get(i);
+                        query += "\"";
+                    }
+                    else
+                    {
+                        query += " OR M.title = \"";
+                        query += userinputtitle.get(i);
+                        query += "\"";
+                    }
+                    if(i == userinputtitle.size()-1)
+                    {
+                        query += ")";
+                    }
                 }
             }
-            query += ")";
 //            query += " AND M.title like ? ";
 //            query += " AND M.title = '";
 //            query += searchInfo[0] + "'";
@@ -429,6 +441,7 @@ public class SearchServlet extends HttpServlet {
             String sortRating = request.getParameter("sortRating");
             int pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
             System.out.println(pageNumber);
+            AtomicInteger atomicInteger = new AtomicInteger(0);
             int pageSize = Integer.parseInt(request.getParameter("pageSize"));
             if(input_title != null && !input_title.contains("%"))
             {
@@ -451,8 +464,19 @@ public class SearchServlet extends HttpServlet {
                 input_count++;
             }
 
-            PreparedStatement preparedStatement = dbcon.prepareStatement(handleQuery(user_inputs,sortFirstBy,sortRating,sortTitle));
+            PreparedStatement preparedStatement = dbcon.prepareStatement(handleQuery(user_inputs,sortFirstBy,sortRating,sortTitle,atomicInteger));
             int prepPosition = 1;
+            int atom = atomicInteger.get();
+            System.out.println("The atomic integer is " + atom);
+            System.out.println(user_inputs[0]);
+            if(atom == 0)
+            {
+                if(!user_inputs[0].equals(""))
+                {
+                    preparedStatement.setString(prepPosition,"%" + user_inputs[0] + "%");
+                    prepPosition++;
+                }
+            }
             // The order is title, year, director, star
 //            if(!user_inputs[0].equals(""))
 //            {
@@ -476,8 +500,8 @@ public class SearchServlet extends HttpServlet {
             }
             preparedStatement.setInt(prepPosition,(pageNumber-1)*pageSize);
             preparedStatement.setInt(prepPosition+1,pageSize);
-            ResultSet rs = preparedStatement.executeQuery();
             System.out.println(preparedStatement.toString());
+            ResultSet rs = preparedStatement.executeQuery();
             JsonArray jsonArray = new JsonArray();
             while(rs.next())
             {

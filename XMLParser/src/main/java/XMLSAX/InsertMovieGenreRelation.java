@@ -1,4 +1,4 @@
-import com.mysql.cj.jdbc.Driver;
+package XMLSAX;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -66,7 +66,7 @@ public class InsertMovieGenreRelation {
                 Movie m = it.next();
                 for(String gen : m.getGenres())
                 {
-                    psInsertRecord.setInt(1,(int)genreInfo.get((Object)gen));
+                    psInsertRecord.setInt(1,genreInfo.get(gen));
                     psInsertRecord.setString(2,m.getId());
                     count++;
                     psInsertRecord.addBatch();
@@ -75,7 +75,6 @@ public class InsertMovieGenreRelation {
                 {
                     count = 0;
                     iNoRows=psInsertRecord.executeBatch();
-                    psInsertRecord.clearBatch();
                 }
             }
             if(count != 0)
@@ -95,7 +94,7 @@ public class InsertMovieGenreRelation {
         } catch(Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Movie and Genre relations have been inserted");
+        System.out.println("XMLSAX.Movie and Genre relations have been inserted");
     }
 
 }

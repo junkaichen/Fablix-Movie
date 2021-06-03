@@ -1,18 +1,23 @@
+package XMLSAX;
+
+
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.HashMap;
+
+
 
 
 public class MergeInfo{
 
-    List<Movie> movies;
-    List<Actor> actors;
-    List<String> movieIds;
-    int countRemoved;
-    int countRemovedMovies;
-    List<String> allGenres;
-    HashMap<String,String> starsInMovie;
+    private List<Movie> movies;
+    private List<Actor> actors;
+    private List<String> movieIds;
+    private int countRemoved;
+    private int countRemovedMovies;
+    private List<String> allGenres;
+    private List<PairMovieStar> starsInMovie;
 
 
 
@@ -24,95 +29,35 @@ public class MergeInfo{
         movieParseXML m = new movieParseXML();
         a.run();
         m.run();
+        movies = new ArrayList<Movie>();
+        actors  = new ArrayList<Actor>();
         movies = m.getMovies();
         actors = a.getActors();
         movieIds = new ArrayList<String>();
         allGenres = new ArrayList<String>();
-        starsInMovie = new HashMap<>();
+        starsInMovie = new ArrayList<>();
     }
-
-
-    private void generateMovieIDs(){
-        Iterator<Movie> it = movies.iterator();
-        while(it.hasNext())
-        {
-            Movie id = it.next();
-            if(!movieIds.contains(id.getId()))
-            {
-                movieIds.add(id.getId());
-            }
-
-        }
-        if(movieIds.size() == movies.size())
-        {
-            System.out.println("all unique movie ids");
-        }
-    }
-
-    //check to see if there is a movie within the actors that isnt in a movie title and remove it
-    private void compareMovieIDAgainstActors() {
-
-        int i = 0;
-        while(i < actors.size())
-        {
-            List<String> ids = actors.get(i).getMovies();
-            Iterator<String> it = ids.iterator();
-            List<String> idsToRemove = new ArrayList<String>();
-            while(it.hasNext())
-            {
-                String movieID = it.next();
-                if(!movieIds.contains(movieID))
-                {
-                    idsToRemove.add(movieID);
-                    countRemoved++;
-                }
-            }
-            if(!idsToRemove.isEmpty())
-            {
-                for(String id : idsToRemove)
-                {
-                    actors.get(i).removeMovieID(id);
-                }
-            }
-            i++;
-        }
-        //System.out.println("total removed ids from actors for movies that dont exist is :" + countRemoved);
-
-    }
-
 
     private void findMoviesWithNoActors()
     {
         int i = 0;
-
         while(i < movies.size())
         {
             Movie tempMovie = movies.get(i);
-            Iterator<Actor> it = actors.iterator();
-            boolean hasActors = false;
-            while(it.hasNext() && !hasActors)
-            {
-                if(it.next().playedInMovie(tempMovie.getId()))
-                {
-                    hasActors = true;
-                }
-            }
-            if(hasActors)
-            {
-                i++;
-            }
-            else
-            {
+            if(movies.get(i).hasNoActors()) {
                 countRemovedMovies++;
                 movies.remove(i);
-                if(i-2 < 0)
+                if (i > 1) {
+                    i -= 2;
+                }
+                else
                 {
                     i = 0;
                 }
-                else{
-                    i = i -2;
-                }
-
+            }
+            else
+            {
+                i++;
             }
         }
         System.out.println("Movies removed:" + countRemovedMovies);
@@ -137,33 +82,35 @@ public class MergeInfo{
     public void run(){
         System.out.println("The size of Parse XML Movies size is :" + movies.size());
         System.out.println("The size of Parse XML Actors size is : " + actors.size());
-        generateMovieIDs();
-        compareMovieIDAgainstActors();
+        confirmActors();
         findMoviesWithNoActors();
         System.out.println("Total number of movies remaining is: " + movies.size());
         allGenresFromMovies();
-        movieAndStar();
         System.out.println("Total number of found Genres: " + allGenres.size());
     }
 
-    public void movieAndStar()
+    public void confirmActors()
     {
-
-        Iterator<Movie> m = movies.iterator();
-        while(m.hasNext())
+        int i = 0;
+        while (i < movies.size())
         {
-            Iterator<Actor> a = actors.iterator();
-            Movie mov = m.next();
-            while(a.hasNext())
+            Iterator<Actor> ia = actors.iterator();
+            while(ia.hasNext())
             {
-                Actor act = a.next();
-                if(act.getMovies().contains(mov.getId()))
+                Actor tempAct = ia.next();
+                if(tempAct.playedInMovie(movies.get(i).getId()))
                 {
-                    starsInMovie.put(act.getId(),mov.getId());
+                    movies.get(i).confirmActors();
+                    starsInMovie.add(new PairMovieStar(tempAct.getId(),movies.get(i).getId()));
                 }
             }
+            i++;
         }
     }
+
+
+
+
 
     public List<String> getAllGenres()
     {
@@ -175,7 +122,7 @@ public class MergeInfo{
         return actors;
     }
 
-    public HashMap<String,String> getStarsInMovie()
+    public List<PairMovieStar> getStarsInMovie()
     {
         return starsInMovie;
     }

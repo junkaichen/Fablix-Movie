@@ -1,3 +1,5 @@
+package XMLSAX;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -78,13 +80,12 @@ public class actorParseXML extends DefaultHandler {
     public void endElement(String uri, String localName, String qName) throws SAXException{
         if(qName.equalsIgnoreCase("m"))
         {
-
             Iterator<Actor> it = actors.iterator();
             boolean found = false;
             int count_pos = 0;
             while(it.hasNext() && !found)
             {
-                if(it.next().getName().equals(tempAct.getName()))
+                if(it.next().getName().equalsIgnoreCase(tempAct.getName()))
                 {
                     found = true;
                 }
@@ -96,7 +97,7 @@ public class actorParseXML extends DefaultHandler {
             }
             if(found)
             {
-                actors.get(count_pos).addMovieID(tempAct.getMovies().toString().substring(1,tempAct.getMovies().toString().length()-1));
+                actors.get(count_pos).addMovieID(tempAct.getFirstMovieId());
             }
             else
             {
@@ -126,7 +127,7 @@ public class actorParseXML extends DefaultHandler {
 
 //    public static void main(String[] args)
 //    {
-//        actorParseXML a = new actorParseXML();
+//        XMLSAX.actorParseXML a = new XMLSAX.actorParseXML();
 //        a.run();
 //    }
 

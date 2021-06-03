@@ -1,28 +1,25 @@
+package XMLSAX;
+
+
+import java.util.List;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.ArrayList;
+
 import java.util.Iterator;
 
-public class InsertRatings {
 
-    /*
-    | Field    | Type        | Null | Key | Default | Extra |
-    +----------+-------------+------+-----+---------+-------+
-    | movieId  | varchar(10) | YES  | MUL | NULL    |       |
-    | rating   | float       | NO   |     | NULL    |       |
-    | numVotes | int         | NO   |     | NULL    |       |
-     */
+public class InsertMovieStarRelation {
 
-    public InsertRatings(){}
+//    | starId  | varchar(10) | YES  | MUL | NULL    |       |
+//    | movieId | varchar(10) | YES  | MUL | NULL    |       |
 
+    public InsertMovieStarRelation()
+    {}
 
-
-    public void run(List<Movie> movies)throws InstantiationException, IllegalAccessException, ClassNotFoundException
+    public void run(List<PairMovieStar> starsInMovies)
     {
-
         Connection conn = null;
 
         try {
@@ -44,27 +41,26 @@ public class InsertRatings {
         int[] iNoRows=null;
 
 
-        sqlInsertRecord="INSERT IGNORE INTO ratings(movieId,rating,numVotes) VALUES(?,?,?)";
+        sqlInsertRecord="INSERT IGNORE INTO stars_in_movies(starId,movieId) VALUES(?,?)";
         try {
             conn.setAutoCommit(false);
 
             psInsertRecord=conn.prepareStatement(sqlInsertRecord);
-            Iterator<Movie> it = movies.iterator();
             int count = 0;
+            Iterator<PairMovieStar> it = starsInMovies.iterator();
             while(it.hasNext())
             {
-                Movie m = it.next();
-                psInsertRecord.setString(1,m.getId());
-                psInsertRecord.setFloat(2,(float)7.5);
-                psInsertRecord.setInt(3,341);
-
+                PairMovieStar tempPair = it.next();
+                psInsertRecord.setString(1,tempPair.getFirst());
+                psInsertRecord.setString(2,tempPair.getSecond());
                 count++;
                 psInsertRecord.addBatch();
-                if(count == 100)
+                if(count >= 100)
                 {
+                    System.out.println("Adding a batch of movie star relations");
+                    System.out.println("Added relations");
                     count = 0;
                     iNoRows=psInsertRecord.executeBatch();
-                    psInsertRecord.clearBatch();
                 }
             }
             if(count != 0)
@@ -84,6 +80,6 @@ public class InsertRatings {
         } catch(Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Movie ratings have been inserted");
+        System.out.println("XMLSAX.Movie and Star relations have been inserted");
     }
 }
