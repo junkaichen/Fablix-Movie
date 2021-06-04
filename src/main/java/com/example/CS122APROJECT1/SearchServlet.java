@@ -348,10 +348,6 @@ public class SearchServlet extends HttpServlet {
                 System.out.println(e);
         }
 
-
-
-
-
         if(!searchInfo[0].equals(""))
         {
             if(userinputtitle.size() > 0)
@@ -375,6 +371,10 @@ public class SearchServlet extends HttpServlet {
                         query += ")";
                     }
                 }
+            }
+            else
+            {
+                query += " AND M.title like ? ";
             }
 //            query += " AND M.title like ? ";
 //            query += " AND M.title = '";
@@ -542,6 +542,8 @@ public class SearchServlet extends HttpServlet {
             System.out.println("Request Failed");
             // set reponse status to 500 (Internal Server Error)
             response.setStatus(500);
+        }
+        finally {
 
         }
         out.close();
