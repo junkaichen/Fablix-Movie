@@ -245,6 +245,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.io.*;
 
 
 @WebServlet(name = "SearchServlet", urlPatterns = "/api/search")
@@ -419,12 +420,13 @@ public class SearchServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        long startTime = System.nanoTime();
         response.setContentType("application/json"); // Response mime type
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
-
+        long elapsedTime = 0;
+        long elapsedTime2 = 0;
         try {
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
@@ -498,10 +500,14 @@ public class SearchServlet extends HttpServlet {
                 preparedStatement.setString(prepPosition,"%" + user_inputs[3] + "%");
                 prepPosition++;
             }
+
             preparedStatement.setInt(prepPosition,(pageNumber-1)*pageSize);
             preparedStatement.setInt(prepPosition+1,pageSize);
             System.out.println(preparedStatement.toString());
+            long startTime2 = System.nanoTime();
             ResultSet rs = preparedStatement.executeQuery();
+            long endTime2 = System.nanoTime();
+            elapsedTime2 = endTime2 - startTime2;
             JsonArray jsonArray = new JsonArray();
             while(rs.next())
             {
@@ -532,7 +538,8 @@ public class SearchServlet extends HttpServlet {
             rs.close();
             preparedStatement.close();
             dbcon.close();
-
+            long endTime = System.nanoTime();
+            elapsedTime = endTime - startTime;
         } catch (Exception e) {
 
             // write error message JSON object to output
@@ -543,11 +550,19 @@ public class SearchServlet extends HttpServlet {
             // set reponse status to 500 (Internal Server Error)
             response.setStatus(500);
         }
-        finally {
-
+        try{
+            FileWriter fw = new FileWriter("timeInfo", true);
+            BufferedWriter bf = new BufferedWriter(fw);
+            bf.write(elapsedTime + "," + elapsedTime2);
+            bf.newLine();
+            bf.close();
+            fw.close();
         }
+        catch (Exception e){}
         out.close();
 
     }
+
+
 }
 
