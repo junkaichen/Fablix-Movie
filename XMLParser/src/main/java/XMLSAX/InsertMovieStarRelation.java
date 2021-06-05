@@ -57,8 +57,6 @@ public class InsertMovieStarRelation {
                 psInsertRecord.addBatch();
                 if(count >= 100)
                 {
-                    System.out.println("Adding a batch of movie star relations");
-                    System.out.println("Added relations");
                     count = 0;
                     iNoRows=psInsertRecord.executeBatch();
                 }

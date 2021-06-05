@@ -551,12 +551,20 @@ public class SearchServlet extends HttpServlet {
             response.setStatus(500);
         }
         try{
-            FileWriter fw = new FileWriter("timeInfo", true);
+            System.out.println("Writing to test file");
+            //
+            FileWriter fw = new FileWriter("/tmp/timeInfo", true);
             BufferedWriter bf = new BufferedWriter(fw);
             bf.write(elapsedTime + "," + elapsedTime2);
             bf.newLine();
             bf.close();
             fw.close();
+            File f = new File("timeInfo");
+            System.out.println("Absolute file path " + f.getAbsolutePath());
+            System.out.println("Canonical Path " + f.getCanonicalPath());
+            System.out.println("Path " + f.getPath());
+            System.out.println("Wrote values to test file");
+
         }
         catch (Exception e){}
         out.close();
