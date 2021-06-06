@@ -143,20 +143,20 @@
 
 - # Connection Pooling
     - #### Include the filename/path of all code/configuration files in GitHub of using JDBC Connection Pooling.
-    Single Star Servlet:
-    Single Movie Servlet:
-    Search Servlet:
-    AddMovie Servlet:
-    Browse Genre Servlet:
-    Browse Servlet:
-    Browsing Genre Servlet:
-    Employee Login Servlet:
-    Login Servlet:
-    Login Mobile Servlet:
-    MovieList Servlet:
-    MovieSuggestion Servlet: 
-    Payment Servlet:
-    ShopCart Servlet:
+        Single Star Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/SingleStarServlet.java
+        Single Movie Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/SingleMovieServlet.java
+        Search Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/SearchServlet.java
+        AddMovie Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/AddMovieServlet.java
+        Browse Genre Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/BrowseGenreServlet.java
+        Browse Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/BrowseServlet.java
+        Browsing Genre Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/BrowsingGenreServlet.java
+        Employee Login Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/EmployeeLoginServlet.java
+        Login Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/LoginFilter.java
+        Login Mobile Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/LoginMobileServlet.java
+        MovieList Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/MovieListServlet.java
+        MovieSuggestion Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/MovieSuggestion.java
+        Payment Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/PaymentServlet.java
+        ShopCart Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/ShopCartServlet.java
 
 
     
@@ -173,21 +173,21 @@
 
 - # Master/Slave
     - #### Include the filename/path of all code/configuration files in GitHub of routing queries to Master/Slave SQL.
-    Single Star Servlet: routes to both =>
-    Single Movie Servlet: routes to both =>
-    Search Servlet: rooutes to both =>
-    AddMovie Servlet: routes to Master (writing purpsoses of a new movie) =>
-    Browse Genre Servlet: routes to both =>
-    Browse Servlet: routes to both =>
-    Browsing Genre Servlet: routes to both =>
-    Employee Login Servlet: routes to both =>
-    Login Servlet: routes to both =>
-    Login Mobile Servlet: routes to both =>
-    MovieList Servlet: routes to both =>
-    MovieSuggestion Servlet:  routes to both =>
-    Payment Servlet: routes to both =>
-    ShopCart Servlet: routes to both =>
-    context.xml : 
+        Single Star Servlet: routes to both => https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/SingleStarServlet.java
+        Single Movie Servlet: routes to both => https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/SingleMovieServlet.java
+        Search Servlet: rooutes to both => https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/SearchServlet.java
+        AddMovie Servlet: routes to Master (writing purpsoses of a new movie) => https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/AddMovieServlet.java
+        Browse Genre Servlet: routes to both => https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/BrowseGenreServlet.java
+        Browse Servlet: routes to both => https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/BrowseServlet.java
+        Browsing Genre Servlet: routes to both => https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/BrowsingGenreServlet.java
+        Employee Login Servlet: routes to both => https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/EmployeeLoginServlet.java
+        Login Servlet: routes to both => https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/LoginServlet.java
+        Login Mobile Servlet: routes to both => https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/LoginMobileServlet.java
+        MovieList Servlet: routes to both => https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/MovieListServlet.java
+        MovieSuggestion Servlet:  routes to both => https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/MovieSuggestion.java
+        Payment Servlet: routes to both => https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/PaymentServlet.java
+        ShopCart Servlet: routes to both => https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/java/com/example/CS122APROJECT1/ShopCartServlet.java
+        context.xml : https://github.com/UCI-Chenli-teaching/cs122b-spring21-team-54/blob/main/src/main/webapp/META-INF/context.xml
 
     - #### How read/write requests were routed to Master/Slave SQL?
     read requests are handled locally based on which server the load balancers decision to send to the master server or the slave server. 
