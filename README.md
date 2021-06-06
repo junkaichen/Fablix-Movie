@@ -3,7 +3,7 @@
     
     - #### Names: Jacob Martinez, JunkaiChen
     
-    - #### Project 5 Video Demo Link: <Insert Link>
+    - #### Project 5 Video Demo Link: https://drive.google.com/file/d/1I2HhraUoDmSMR1TCPUfomjtWv42t9hj1/view?usp=sharing
 
     - #### Project 5 URL Links for Fabflix:
         aws-lb : http://18.216.72.64:80/CS122APROJECT1-1.0-SNAPSHOT/login.html
